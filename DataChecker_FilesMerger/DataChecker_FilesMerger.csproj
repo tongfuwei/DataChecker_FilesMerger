@@ -51,47 +51,47 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AJEntity.cs" />
-    <Compile Include="DemergeSetting.cs">
+    <Compile Include="Entities\AJEntity.cs" />
+    <Compile Include="Dialog_Setting\DemergeSetting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DemergeSetting.Designer.cs">
+    <Compile Include="Dialog_Setting\DemergeSetting.Designer.cs">
       <DependentUpon>DemergeSetting.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExcelHelper.cs" />
-    <Compile Include="ExcelSaver.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="Helper\ExcelReader.cs" />
+    <Compile Include="Helper\ExcelSaver.cs" />
+    <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="JNEntity.cs" />
-    <Compile Include="OneToManyMatchSetting.cs">
+    <Compile Include="Entities\JNEntity.cs" />
+    <Compile Include="Dialog_Setting\OneToManyMatchSetting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OneToManyMatchSetting.Designer.cs">
+    <Compile Include="Dialog_Setting\OneToManyMatchSetting.Designer.cs">
       <DependentUpon>OneToManyMatchSetting.cs</DependentUpon>
     </Compile>
-    <Compile Include="OneToOneMatchSetting.cs">
+    <Compile Include="Dialog_Setting\OneToOneMatchSetting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OneToOneMatchSetting.Designer.cs">
+    <Compile Include="Dialog_Setting\OneToOneMatchSetting.Designer.cs">
       <DependentUpon>OneToOneMatchSetting.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="DemergeSetting.resx">
+    <EmbeddedResource Include="Dialog_Setting\DemergeSetting.resx">
       <DependentUpon>DemergeSetting.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="OneToManyMatchSetting.resx">
+    <EmbeddedResource Include="Dialog_Setting\OneToManyMatchSetting.resx">
       <DependentUpon>OneToManyMatchSetting.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="OneToOneMatchSetting.resx">
+    <EmbeddedResource Include="Dialog_Setting\OneToOneMatchSetting.resx">
       <DependentUpon>OneToOneMatchSetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

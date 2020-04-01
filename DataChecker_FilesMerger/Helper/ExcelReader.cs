@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataChecker_FilesMerger
 {
-    class ExcelHelper
+    class ExcelReader
     {
         private Workbook _workBook;
 

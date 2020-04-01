@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace DataChecker_FilesMerger
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         /// <summary>
         /// 打开文件窗体
@@ -24,11 +24,11 @@ namespace DataChecker_FilesMerger
         /// <summary>
         /// excel读取类
         /// </summary>
-        private ExcelHelper AJExcelHelper = new ExcelHelper();
+        private ExcelReader AJExcelHelper = new ExcelReader();
         /// <summary>
         /// excel读取类
         /// </summary>
-        private ExcelHelper JNExcelHelper = new ExcelHelper();
+        private ExcelReader JNExcelHelper = new ExcelReader();
 
         /// <summary>
         /// 保存案卷数据
@@ -158,7 +158,7 @@ namespace DataChecker_FilesMerger
             set;
         } = false;
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
             this.comboBox1.SelectedIndex = 0;
