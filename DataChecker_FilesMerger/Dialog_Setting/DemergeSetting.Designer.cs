@@ -1,4 +1,4 @@
-﻿namespace DataChecker_FilesMerger
+﻿namespace DataChecker_FilesMerger.Dialog_Setting
 {
     partial class DemergeSetting
     {

@@ -51,6 +51,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dialog_Setting\OneToManyMergeSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog_Setting\OneToManyMergeSetting.Designer.cs">
+      <DependentUpon>OneToManyMergeSetting.cs</DependentUpon>
+    </Compile>
     <Compile Include="Entities\AJEntity.cs" />
     <Compile Include="Dialog_Setting\DemergeSetting.cs">
       <SubType>Form</SubType>
@@ -83,6 +89,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Dialog_Setting\DemergeSetting.resx">
       <DependentUpon>DemergeSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog_Setting\OneToManyMergeSetting.resx">
+      <DependentUpon>OneToManyMergeSetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

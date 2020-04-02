@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DataChecker_FilesMerger
+namespace DataChecker_FilesMerger.Dialog_Setting
 {
 	public partial class DemergeSetting : Form
 	{

@@ -1,4 +1,5 @@
 ﻿using Aspose.Cells;
+using DataChecker_FilesMerger.Dialog_Setting;
 using Microsoft.VisualBasic.Devices;
 using System;
 using System.Collections.Generic;
@@ -82,7 +83,10 @@ namespace DataChecker_FilesMerger
         /// 目录构成,名称,规定长度
         /// </summary>
         private Dictionary<string, int> dirConstitute = new Dictionary<string, int>();
-
+        /// <summary>
+        /// pdf文件名规则
+        /// </summary>
+        public Dictionary<string, int> PdfNameRule = new Dictionary<string, int>();
 
         /// <summary>
         /// 根目录
@@ -137,7 +141,7 @@ namespace DataChecker_FilesMerger
         /// <summary>
         /// 是否完成匹配设置
         /// </summary>
-        private bool matchSetted
+        private bool MatchSetted
         {
             get;
             set;
@@ -146,7 +150,12 @@ namespace DataChecker_FilesMerger
         /// <summary>
         /// 是否完成拆分设置
         /// </summary>
-        private bool demergeSetted
+        private bool DemergeSetted
+        {
+            get;
+            set;
+        } = false;
+        private bool MergeSetted
         {
             get;
             set;
@@ -296,7 +305,7 @@ namespace DataChecker_FilesMerger
                         {
                             Rename();
                         }
-                        matchSetted = true;
+                        MatchSetted = true;
                     }
                 }
             }
@@ -312,7 +321,7 @@ namespace DataChecker_FilesMerger
                     {
                         Rename();
                     }
-                    matchSetted = true;
+                    MatchSetted = true;
                 }
             }
         }
@@ -348,7 +357,7 @@ namespace DataChecker_FilesMerger
 
         private void btnMatch_Click(object sender, EventArgs e)
         {
-            if (matchSetted == true)
+            if (MatchSetted)
             {
                 if (rbOneToMany.Checked)
                 {
@@ -359,7 +368,7 @@ namespace DataChecker_FilesMerger
                     this.btnMatchSetting.Enabled = false;
                     this.btnMatch.Enabled = false;
                     this.prepareAJ.RunWorkerAsync();
-                    this.match.DoWork += new System.ComponentModel.DoWorkEventHandler(this.Match_DoWork_OneToMany); ;
+                    this.match.DoWork += new System.ComponentModel.DoWorkEventHandler(this.Match_DoWork_OneToMany);
                     this.match.RunWorkerAsync();
                 }
                 else
@@ -371,7 +380,7 @@ namespace DataChecker_FilesMerger
                     this.btnMatchSetting.Enabled = false;
                     this.btnMatch.Enabled = false;
                     this.prepareAJ.RunWorkerAsync();
-                    this.match.DoWork += new System.ComponentModel.DoWorkEventHandler(this.Match_DoWork_OneToOne); ;
+                    this.match.DoWork += new System.ComponentModel.DoWorkEventHandler(this.Match_DoWork_OneToOne);
                     this.match.RunWorkerAsync();
                 }
             }
@@ -988,7 +997,7 @@ namespace DataChecker_FilesMerger
             if (demergeSetting.ShowDialog() == DialogResult.OK)
             {
                 saveColumn = demergeSetting.saveColumn;
-                demergeSetted = true;
+                DemergeSetted = true;
             }
         }
 
@@ -998,7 +1007,7 @@ namespace DataChecker_FilesMerger
             {
                 MessageBox.Show("请先完成检测");return;
             }
-            if(demergeSetted == true)
+            if(DemergeSetted)
             {
                 this.listView_Error.Items.Clear();
                 this.progressBar1.Value = 0;
@@ -1112,7 +1121,69 @@ namespace DataChecker_FilesMerger
 
         private void btnMerge_Click(object sender, EventArgs e)
         {
+            if (!prepareAJComplete)
+            {
+                MessageBox.Show("请先完成检测"); return;
+            }
+            if (MergeSetted)
+            {
+                if (rbOneToMany.Checked)
+                {
+                    this.listView_Error.Items.Clear();
+                    this.progressBar1.Value = 0;
+                    this.btnMatchSetting.Enabled = false;
+                    this.btnMatch.Enabled = false;
+                    this.btnMergeSetting.Enabled = false;
+                    this.btnMerge.Enabled = false;
+                    this.mergeFile.DoWork += new System.ComponentModel.DoWorkEventHandler(this.MergeFile_DoWork_OneToMany);
+                    this.mergeFile.RunWorkerAsync();
+                }
+                else
+                {
 
+                }
+            }
+            else
+            {
+                MessageBox.Show("请先完成合并设置!");
+            }
+        }
+
+        private void MergeFile_DoWork_OneToMany(object sender, DoWorkEventArgs e)
+        {
+
+        }
+
+        private void btnMergeSetting_Click(object sender, EventArgs e)
+        {
+            if (AJExcelColumns == null || AJExcelColumns.Count == 0)
+            {
+                MessageBox.Show("请先选择案卷文件"); return;
+            }
+            if (rootDir == null)
+            {
+                MessageBox.Show("请先选择扫描件目录"); return;
+            }
+            if (rbOneToMany.Checked)
+            {
+                if (JNExcelColumns == null || JNExcelColumns.Count == 0)
+                {
+                    MessageBox.Show("请先选择卷内文件"); return;
+                }
+                else
+                {
+                    OneToManyMergeSetting mergeSetting = new OneToManyMergeSetting( JNExcelColumns, PdfNameRule);
+                    if (mergeSetting.ShowDialog() == DialogResult.OK)
+                    {
+                        PdfNameRule = mergeSetting.PdfNameRule;
+                        MergeSetted = true;
+                    }
+                }
+            }
+            else
+            {
+
+            }
         }
     }
 }

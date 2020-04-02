@@ -66,6 +66,7 @@
             this.rbOneToOne = new System.Windows.Forms.RadioButton();
             this.cbJNSheets = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.mergeFile = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // tbAJFile
@@ -262,6 +263,7 @@
             this.btnMergeSetting.TabIndex = 35;
             this.btnMergeSetting.Text = "合并设置";
             this.btnMergeSetting.UseVisualStyleBackColor = true;
+            this.btnMergeSetting.Click += new System.EventHandler(this.btnMergeSetting_Click);
             // 
             // btnMerge
             // 
@@ -418,7 +420,11 @@
             this.label7.TabIndex = 48;
             this.label7.Text = "工作簿:";
             // 
-            // Form1
+            // mergeFile
+            // 
+            this.mergeFile.WorkerReportsProgress = true;
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -452,7 +458,7 @@
             this.Controls.Add(this.btnSelectAJExcel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbAJFile);
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "检测+案卷拆分+合并pdf";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -498,6 +504,7 @@
         private System.Windows.Forms.RadioButton rbOneToOne;
         private System.Windows.Forms.ComboBox cbJNSheets;
         private System.Windows.Forms.Label label7;
+        private System.ComponentModel.BackgroundWorker mergeFile;
     }
 }
 
