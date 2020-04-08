@@ -24,7 +24,7 @@ namespace DataChecker_FilesMerger
         /// <summary>
         /// 根据案卷-卷内对应关系拿到的关键值
         /// </summary>
-        public List<string> Key
+        public string Key
         {
             get;
             set;

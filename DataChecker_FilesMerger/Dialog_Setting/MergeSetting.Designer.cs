@@ -1,6 +1,6 @@
 ﻿namespace DataChecker_FilesMerger.Dialog_Setting
 {
-    partial class OneToManyMergeSetting
+    partial class MergeSetting
     {
         /// <summary>
         /// Required designer variable.
@@ -28,41 +28,43 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.cbJN1 = new System.Windows.Forms.ComboBox();
-            this.cbJN2 = new System.Windows.Forms.ComboBox();
-            this.cbJN3 = new System.Windows.Forms.ComboBox();
+            this.cb1 = new System.Windows.Forms.ComboBox();
+            this.cb2 = new System.Windows.Forms.ComboBox();
+            this.cb3 = new System.Windows.Forms.ComboBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.btnConfirm = new System.Windows.Forms.Button();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.cb4 = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
-            // cbJN1
+            // cb1
             // 
-            this.cbJN1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbJN1.FormattingEnabled = true;
-            this.cbJN1.Location = new System.Drawing.Point(12, 36);
-            this.cbJN1.Name = "cbJN1";
-            this.cbJN1.Size = new System.Drawing.Size(153, 23);
-            this.cbJN1.TabIndex = 44;
+            this.cb1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb1.FormattingEnabled = true;
+            this.cb1.Location = new System.Drawing.Point(12, 36);
+            this.cb1.Name = "cb1";
+            this.cb1.Size = new System.Drawing.Size(153, 23);
+            this.cb1.TabIndex = 44;
             // 
-            // cbJN2
+            // cb2
             // 
-            this.cbJN2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbJN2.FormattingEnabled = true;
-            this.cbJN2.Location = new System.Drawing.Point(171, 36);
-            this.cbJN2.Name = "cbJN2";
-            this.cbJN2.Size = new System.Drawing.Size(153, 23);
-            this.cbJN2.TabIndex = 45;
+            this.cb2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb2.FormattingEnabled = true;
+            this.cb2.Location = new System.Drawing.Point(171, 36);
+            this.cb2.Name = "cb2";
+            this.cb2.Size = new System.Drawing.Size(153, 23);
+            this.cb2.TabIndex = 45;
             // 
-            // cbJN3
+            // cb3
             // 
-            this.cbJN3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbJN3.FormattingEnabled = true;
-            this.cbJN3.Location = new System.Drawing.Point(330, 36);
-            this.cbJN3.Name = "cbJN3";
-            this.cbJN3.Size = new System.Drawing.Size(153, 23);
-            this.cbJN3.TabIndex = 46;
+            this.cb3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb3.FormattingEnabled = true;
+            this.cb3.Location = new System.Drawing.Point(330, 36);
+            this.cb3.Name = "cb3";
+            this.cb3.Size = new System.Drawing.Size(153, 23);
+            this.cb3.TabIndex = 46;
             // 
             // checkBox1
             // 
@@ -109,18 +111,39 @@
             this.btnConfirm.UseVisualStyleBackColor = true;
             this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click);
             // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Location = new System.Drawing.Point(489, 65);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(89, 19);
+            this.checkBox4.TabIndex = 52;
+            this.checkBox4.Text = "规定长度";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            // 
+            // cb4
+            // 
+            this.cb4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb4.FormattingEnabled = true;
+            this.cb4.Location = new System.Drawing.Point(489, 36);
+            this.cb4.Name = "cb4";
+            this.cb4.Size = new System.Drawing.Size(153, 23);
+            this.cb4.TabIndex = 51;
+            // 
             // OneToManyMergeSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.checkBox4);
+            this.Controls.Add(this.cb4);
             this.Controls.Add(this.btnConfirm);
             this.Controls.Add(this.checkBox3);
             this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.cbJN1);
-            this.Controls.Add(this.cbJN2);
-            this.Controls.Add(this.cbJN3);
+            this.Controls.Add(this.cb1);
+            this.Controls.Add(this.cb2);
+            this.Controls.Add(this.cb3);
             this.Name = "OneToManyMergeSetting";
             this.Text = "图片合并设置";
             this.ResumeLayout(false);
@@ -130,12 +153,14 @@
 
         #endregion
 
-        private System.Windows.Forms.ComboBox cbJN1;
-        private System.Windows.Forms.ComboBox cbJN2;
-        private System.Windows.Forms.ComboBox cbJN3;
+        private System.Windows.Forms.ComboBox cb1;
+        private System.Windows.Forms.ComboBox cb2;
+        private System.Windows.Forms.ComboBox cb3;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.Button btnConfirm;
+        private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.ComboBox cb4;
     }
 }

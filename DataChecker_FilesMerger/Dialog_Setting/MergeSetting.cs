@@ -6,10 +6,15 @@ using System.Windows.Forms;
 
 namespace DataChecker_FilesMerger.Dialog_Setting
 {
-	public partial class OneToManyMergeSetting : Form
+	public partial class MergeSetting : Form
 	{
-		private Dictionary<string, int> JNColumn = new Dictionary<string, int>(); 
+		private Dictionary<string, int> Column = new Dictionary<string, int>(); 
 		private Dictionary<Control, Control> dir_check = new Dictionary<Control, Control>();
+		public bool IsOneToMany
+		{
+			get;
+			set;
+		} = true;
 
 		public Dictionary<string,int> PdfNameRule
 		{
@@ -17,14 +22,16 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 			set;
 		}
 
-		public OneToManyMergeSetting(Dictionary<string, int> _JNColumns,Dictionary<string,int> _PdfNameRule = null)
+		public MergeSetting(Dictionary<string, int> _Columns,Dictionary<string,int> _PdfNameRule = null,bool _isOneToMany = true)
 		{
-			JNColumn = _JNColumns;
+			Column = _Columns;
 			PdfNameRule = _PdfNameRule;
+			IsOneToMany = _isOneToMany;
 			InitializeComponent();
-			dir_check.Add(cbJN1, checkBox1);
-			dir_check.Add(cbJN2, checkBox2);
-			dir_check.Add(cbJN3, checkBox3);
+			dir_check.Add(cb1, checkBox1);
+			dir_check.Add(cb2, checkBox2);
+			dir_check.Add(cb3, checkBox3);
+			dir_check.Add(cb4, checkBox4);
 			InitCombox();
 			InitControls();
 		}
@@ -36,7 +43,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 				if (control is ComboBox)
 				{
 					ComboBox combo = control as ComboBox;
-					foreach (string ColumnName in JNColumn.Keys)
+					foreach (string ColumnName in Column.Keys)
 					{
 						combo.Items.Add(ColumnName);
 					}
@@ -54,7 +61,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 					List<string> Keys = PdfNameRule.Keys.ToList();
 					List<int> Values = PdfNameRule.Values.ToList();
 					int num = i + 1;
-					string comboName = "cbJN" + num;
+					string comboName = "cb" + num;
 					foreach (Control control in (this.Controls.Find(comboName, false)))
 					{
 						ComboBox combo = control as ComboBox;
@@ -85,7 +92,8 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 				TextBox num = new TextBox
 				{
 					Name = ((System.Windows.Forms.CheckBox)sender).Name + "_Num",
-					Location = new Point(((System.Windows.Forms.CheckBox)sender).Location.X, ((System.Windows.Forms.CheckBox)sender).Location.Y + 20)
+					Location = new Point(((System.Windows.Forms.CheckBox)sender).Location.X, ((System.Windows.Forms.CheckBox)sender).Location.Y + 20),
+					Size = new Size(33,25)
 				};
 				num.TextChanged += new System.EventHandler(Text_TextChanged);
 				this.Controls.Add(num);
@@ -94,7 +102,8 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 				{
 					Name = ((System.Windows.Forms.CheckBox)sender).Name + "_Bit",
 					Text = "位",
-					Location = new Point(num.Location.X + num.Size.Width + 5, num.Location.Y + 5)
+					Location = new Point(num.Location.X + num.Size.Width + 5, num.Location.Y + 5),
+					AutoSize = true
 				};
 				this.Controls.Add(text);
 			}

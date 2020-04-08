@@ -423,6 +423,8 @@
             // mergeFile
             // 
             this.mergeFile.WorkerReportsProgress = true;
+            this.mergeFile.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.mergeFile_ProgressChanged);
+            this.mergeFile.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.mergeFile_RunWorkerCompleted);
             // 
             // MainForm
             // 

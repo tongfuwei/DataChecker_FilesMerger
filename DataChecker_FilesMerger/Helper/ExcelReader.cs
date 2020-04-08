@@ -89,10 +89,10 @@ namespace DataChecker_FilesMerger
             try
             {
                 Cells cells = _workSheet.Cells;
-                int row = cells[0].Row;
-                int row2 = cells[cells.Count - 1].Row;
-                int column = cells[0].Column;
-                int num = cells[cells.Count - 1].Column;
+                int row = 0;
+                int row2 = cells.MaxDataRow;
+                int column = 0;
+                int num = cells.MaxDataColumn;
                 if (num < 4)
                 {
                     num = 4;
