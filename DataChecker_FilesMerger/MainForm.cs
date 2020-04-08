@@ -524,10 +524,19 @@ namespace DataChecker_FilesMerger
                     string page = GetCellValue(i, AJExcelColumns[AJPageCount]);
                     if (!string.IsNullOrWhiteSpace(page))
                     {
-                        aj.Pages = int.Parse(page);
+                        try
+                        {
+                            aj.Pages = int.Parse(page);
+                        }
+                        catch(Exception ex)
+                        {
+                            WriteErrorInfo(location.ToString(), "-", ex.Message);
+                            continue;
+                        }
                     }
                     else
                     {
+                        WriteErrorInfo(location.ToString(), "-", "该行无法取到页号,将不被执行其余操作,若存在问题请检查");
                         continue;
                     }
 
@@ -540,6 +549,7 @@ namespace DataChecker_FilesMerger
                         }
                         else
                         {
+                            WriteErrorInfo(location.ToString(), "-", "该行无法取到件号,将不被执行其余操作,若存在问题请检查");
                             continue;
                         }
                     }
@@ -550,6 +560,7 @@ namespace DataChecker_FilesMerger
                     }
                     else
                     {
+                        WriteErrorInfo(location.ToString(), "-", "该行无法取到页号,将不被执行其余操作,若存在问题请检查");
                         continue;
                     }
                     DataTable AJ = DataTableBuilder(i);
@@ -714,7 +725,7 @@ namespace DataChecker_FilesMerger
                     else
                     {
                         WriteErrorInfo("[" + x.ToString() + "," + y.ToString() + "]", "-", "该单元格为空,拼接路径失败");
-                        break;
+                        return null;
                     }
                 }
                 if (partPath.Count != 0)
@@ -768,18 +779,18 @@ namespace DataChecker_FilesMerger
         }
 
         /// <summary>
-		/// 读取扫描件情况
-		/// </summary>
-		/// <param name="targetPage">目标页数</param>
-		/// <param name="path">指定路径</param>
-		/// <returns>信息</returns>
-		private string ReadDir(int targetPage, string path)
+        /// 读取扫描件情况
+        /// </summary>
+        /// <param name="targetPage">目标页数</param>
+        /// <param name="path">指定路径</param>
+        /// <returns>信息</returns>
+        private string ReadDir(int targetPage, string path)
         {
             string result;
             if (Directory.Exists(path))
             {
                 DirectoryInfo dirInfo = new DirectoryInfo(path);
-                int fileCount = GetFilesCount(dirInfo,fileFormat);
+                int fileCount = GetFilesCount(dirInfo, fileFormat);
                 if (fileCount == targetPage)
                 {
                     return null;
@@ -797,21 +808,73 @@ namespace DataChecker_FilesMerger
             }
         }
         /// <summary>
-		/// 递归读取所有文件
-		/// </summary>
-		/// <param name="dirInfo"></param>
-		/// <returns></returns>
-		public static int GetFilesCount(DirectoryInfo dirInfo,string fileFormat)
+        /// 递归读取所有文件
+        /// </summary>
+        /// <param name="dirInfo"></param>
+        /// <returns></returns>
+        private static int GetFilesCount(DirectoryInfo dirInfo, string fileFormat)
         {
 
             int totalFile = 0;
             totalFile += dirInfo.GetFiles(fileFormat).Length;//获取指定文件
             foreach (DirectoryInfo subdir in dirInfo.GetDirectories())
             {
-                totalFile += GetFilesCount(subdir,fileFormat);
+                totalFile += GetFilesCount(subdir, fileFormat);
             }
             return totalFile;
         }
+
+        //private string ReadDir(int targetPage,string path)
+        //{
+        //    string Result;
+        //    if (!Directory.Exists(path))
+        //    {
+        //        Result = "不存在给定的路径:" + path;
+        //        return Result;
+        //    }
+        //    else
+        //    {
+        //        List<FileInfo> scanFile = new List<FileInfo>();
+        //        List<FileInfo> fmFile = new List<FileInfo>();
+        //        List<FileInfo> mlFile = new List<FileInfo>();
+        //        List<FileInfo> fdFile = new List<FileInfo>();
+        //        //指定目录
+        //        DirectoryInfo directoryInfo = new DirectoryInfo(path);
+        //        //指定类型的文件
+        //        FileInfo[] files = directoryInfo.GetFiles(fileFormat);
+        //        IOrderedEnumerable<FileInfo> orderedEnumerable = files.OrderBy((FileInfo c) => c.Name);
+        //        foreach (FileInfo item in orderedEnumerable)
+        //        {
+        //            if (item.Name.Contains("FM")) //封面
+        //            {
+        //                fmFile.Add(item);
+        //            }
+        //            else if (item.Name.Contains("ML") || item.Name.Contains("JN")) //卷内目录。
+        //            {
+        //                mlFile.Add(item);
+        //            }
+        //            else if (item.Name.Contains("BK") || item.Name.Contains("FD")) //备考表，封面。
+        //            {
+        //                fdFile.Add(item);
+        //            }
+        //            else //扫描的卷内目录图片文件。
+        //            {
+        //                scanFile.Add(item);
+        //            }
+        //        }
+        //        if (scanFile.Count != targetPage)
+        //        {
+        //            Result = "页数与扫描件数量不匹配";
+        //            return Result;
+        //        }
+        //        else
+        //        {
+        //            return null;
+        //        }
+        //    }
+        //}
+
+        
 
         private void btnExportError_Click(object sender, EventArgs e)
         {
@@ -959,7 +1022,6 @@ namespace DataChecker_FilesMerger
             JNs.Columns.Add("序号");
             JNs.Columns.Add("题名");
             JNs.Columns.Add("页数");
-            JNs.Columns.Add("起始页号");
             object[] obj = new object[JNs.Columns.Count];
             foreach (AJEntity aj in ajEntities_List)
             {
@@ -974,14 +1036,7 @@ namespace DataChecker_FilesMerger
 
         private void demergeExcel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (listView_Error.Items.Count != 0)
-            {
-                MessageBox.Show("存在问题,请检查");
-            }
-            else
-            {
-                ExcelSaver.SaveToExcel(JNs);
-            }
+            ExcelSaver.SaveToExcel(JNs);
             AdjustControlEnable(true);
         }
 
@@ -996,7 +1051,6 @@ namespace DataChecker_FilesMerger
             JN.Columns.Add("序号");
             JN.Columns.Add("题名");
             JN.Columns.Add("页数");
-            JN.Columns.Add("起始页号");
             try
             {
                 int orderNum = 1;
@@ -1011,16 +1065,28 @@ namespace DataChecker_FilesMerger
                         }
                         row["序号"] = orderNum;
                         row["题名"] = turnRow[i];
-                        string[] pageNum = AJ.Rows[0][turnRow[i]].ToString().Split('-');
-                        if (pageNum.Length > 1)
-                        {
-                            row["页数"] = int.Parse(pageNum[1].Trim()) - int.Parse(pageNum[0].Trim()) + 1;
-                        }
-                        else if (pageNum.Length == 1)
+                        if (AJ.Rows[0][turnRow[i]].ToString().Length == 1)
                         {
                             row["页数"] = 1;
                         }
-                        row["起始页号"] = pageNum[0].Trim();
+                        else
+                        {
+                            string[] pageNum = AJ.Rows[0][turnRow[i]].ToString().Split('-');
+                            if (pageNum.Length > 1)
+                            {
+                                row["页数"] = int.Parse(pageNum[1].Trim()) - int.Parse(pageNum[0].Trim()) + 1;
+                            }
+                            else if (pageNum.Length == 1)
+                            {
+                                if (!int.TryParse(pageNum[0], out int num))
+                                {
+                                    continue;
+                                }
+                                WriteErrorInfo(AJEntity.Location.ToString(), turnRow[i], "该位置页号存在问题");
+                                row["页数"] = "-";
+                            }
+                        }
+
                         JN.Rows.Add(row);
                         orderNum++;
                     }
@@ -1292,7 +1358,13 @@ namespace DataChecker_FilesMerger
         {
             foreach(Control control in this.Controls)
             {
-                control.Enabled = enable;
+                if (control.Name == "btnSelectJNExcel")
+                    continue;
+                
+                if (control is Button)
+                {
+                    control.Enabled = enable;
+                }
             }
         }
     }

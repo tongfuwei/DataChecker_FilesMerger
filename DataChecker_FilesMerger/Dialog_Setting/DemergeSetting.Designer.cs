@@ -99,7 +99,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(210, 30);
             this.label1.TabIndex = 3;
-            this.label1.Text = "可以为空,为空时仅添加基本列\n序号|题名|页数|页号";
+            this.label1.Text = "可以为空,为空时仅添加基本列\n序号|题名|页数";
             // 
             // cbColumn1
             // 
