@@ -141,7 +141,10 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 						int num = 0;
 						foreach (Control control in (this.Controls.Find(ckb.Name + "_Num", false)))
 						{
-							num = int.Parse(control.Text.Trim());
+							if (!string.IsNullOrWhiteSpace(control.Text))
+							{
+								num = int.Parse(control.Text.Trim());
+							}
 						}
 						dirConstitute.Add(folder.SelectedItem.ToString(), num);
 					}

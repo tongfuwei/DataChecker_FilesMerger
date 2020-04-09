@@ -69,7 +69,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 		private Dictionary<Control, Control> dir_check = new Dictionary<Control, Control>();
 		private Dictionary<Control, Control> cbAJ_cbJN = new Dictionary<Control, Control>();
 
-		public OneToManyMatchSetting(Dictionary<string, int> _AJColumns, Dictionary<string, int> _JNColumns, Dictionary<string, int> _dirConstitute = null, string _AJPageCount = null, string _JNPageCount = null,string _JNCount = null, bool _renameFolder = false)
+		public OneToManyMatchSetting(Dictionary<string, int> _AJColumns, Dictionary<string, int> _JNColumns, Dictionary<string, int> _dirConstitute = null, Dictionary<string, string> _AJ_JN = null, string _AJPageCount = null, string _JNPageCount = null,string _JNCount = null, bool _renameFolder = false)
 		{
 			InitializeComponent();
 			AJColumn = _AJColumns;
@@ -79,6 +79,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 			JNPageCount = _JNPageCount;
 			JNCount = _JNCount;
 			renameFolder = _renameFolder;
+			AJ_JN = _AJ_JN;
 			dir_check.Add(cbFolder1, checkBox1);
 			dir_check.Add(cbFolder2, checkBox2);
 			dir_check.Add(cbFolder3, checkBox3);
@@ -177,6 +178,33 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 					}
 				}
 			}
+
+			if(AJ_JN != null)
+			{
+				List<string> AJ = AJ_JN.Keys.ToList();
+				for (int i = 0; i < AJ_JN.Count; i++)
+				{
+					int num = i + 1;
+					string comboName = "cbAJ" + num;
+					foreach (Control control in (AJColumns.Controls.Find(comboName, false)))
+					{
+						ComboBox combo = control as ComboBox;
+						combo.SelectedItem = AJ[i];
+					}
+				}
+				List<string> JN = AJ_JN.Values.ToList();
+				for (int i = 0; i < AJ_JN.Count; i++)
+				{
+					int num = i + 1;
+					string comboName = "cbJN" + num;
+					foreach (Control control in (JNColumns.Controls.Find(comboName, false)))
+					{
+						ComboBox combo = control as ComboBox;
+						combo.SelectedItem = JN[i];
+					}
+				}
+			}
+
 			if (renameFolder != false)
 			{
 				foreach (Control control in (tabPage1.Controls.Find("folderRename", false)))
@@ -219,7 +247,10 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 						int num = 0;
 						foreach (Control control in (tabPage1.Controls.Find(ckb.Name + "_Num", false)))
 						{
-							num = int.Parse(control.Text.Trim());
+							if (!string.IsNullOrWhiteSpace(control.Text))
+							{
+								num = int.Parse(control.Text.Trim());
+							}
 						}
 						dirConstitute.Add(folder.SelectedItem.ToString(), num);
 					}
