@@ -1434,7 +1434,7 @@ namespace DataChecker_FilesMerger
                 }
                 else
                 {
-                    MergeSetting mergeSetting = new MergeSetting( JNExcelColumns, PdfNameRule, FolderNameRule,AJExcelColumns);
+                    MergeSetting mergeSetting = new MergeSetting( JNExcelColumns, PdfNameRule, FolderNameRule,true,AJExcelColumns);
                     if (mergeSetting.ShowDialog() == DialogResult.OK)
                     {
                         PdfNameRule = mergeSetting.PdfNameRule;
