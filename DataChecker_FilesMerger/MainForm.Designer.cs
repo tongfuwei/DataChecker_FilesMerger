@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.tbAJFile = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnSelectAJExcel = new System.Windows.Forms.Button();
@@ -55,8 +55,8 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.btnExportError = new System.Windows.Forms.Button();
             this.lblPercent = new System.Windows.Forms.Label();
-            this.prepareAJ = new System.ComponentModel.BackgroundWorker();
-            this.match = new System.ComponentModel.BackgroundWorker();
+            this.bgwPrepareAJ = new System.ComponentModel.BackgroundWorker();
+            this.bgwMatch = new System.ComponentModel.BackgroundWorker();
             this.renameFolder = new System.ComponentModel.BackgroundWorker();
             this.demergeExcel = new System.ComponentModel.BackgroundWorker();
             this.label5 = new System.Windows.Forms.Label();
@@ -106,7 +106,6 @@
             this.cbAJSheets.Name = "cbAJSheets";
             this.cbAJSheets.Size = new System.Drawing.Size(114, 23);
             this.cbAJSheets.TabIndex = 24;
-            this.cbAJSheets.SelectedIndexChanged += new System.EventHandler(this.cbAJSheets_SelectedIndexChanged);
             // 
             // label6
             // 
@@ -322,30 +321,31 @@
             this.lblPercent.TabIndex = 41;
             this.lblPercent.Text = "工作进度";
             // 
-            // prepareAJ
+            // bgwPrepareAJ
             // 
-            this.prepareAJ.WorkerReportsProgress = true;
-            this.prepareAJ.DoWork += new System.ComponentModel.DoWorkEventHandler(this.PrepareAJ_DoWork);
-            this.prepareAJ.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.Prepare_ProgressChanged);
-            this.prepareAJ.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.Prepare_RunWorkerCompleted);
+            this.bgwPrepareAJ.WorkerReportsProgress = true;
+            this.bgwPrepareAJ.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwPrepareAJ_DoWork);
+            this.bgwPrepareAJ.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.ProgressChanged);
+            this.bgwPrepareAJ.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwPrepareAJ_RunWorkerCompleted);
             // 
-            // match
+            // bgwMatch
             // 
-            this.match.WorkerReportsProgress = true;
-            this.match.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.Match_RunWorkerCompleted);
+            this.bgwMatch.WorkerReportsProgress = true;
+            this.bgwMatch.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwMatch_DoWork);
+            this.bgwMatch.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwMatch_RunWorkerCompleted);
             // 
             // renameFolder
             // 
             this.renameFolder.WorkerReportsProgress = true;
             this.renameFolder.DoWork += new System.ComponentModel.DoWorkEventHandler(this.renameFolder_DoWork);
-            this.renameFolder.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.Prepare_ProgressChanged);
+            this.renameFolder.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.ProgressChanged);
             this.renameFolder.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.renameFolder_RunWorkerCompleted);
             // 
             // demergeExcel
             // 
             this.demergeExcel.WorkerReportsProgress = true;
             this.demergeExcel.DoWork += new System.ComponentModel.DoWorkEventHandler(this.demergeExcel_DoWork);
-            this.demergeExcel.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.Prepare_ProgressChanged);
+            this.demergeExcel.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.ProgressChanged);
             this.demergeExcel.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.demergeExcel_RunWorkerCompleted);
             // 
             // label5
@@ -409,7 +409,6 @@
             this.cbJNSheets.Name = "cbJNSheets";
             this.cbJNSheets.Size = new System.Drawing.Size(114, 23);
             this.cbJNSheets.TabIndex = 49;
-            this.cbJNSheets.SelectedIndexChanged += new System.EventHandler(this.cbJNSheets_SelectedIndexChanged);
             // 
             // label7
             // 
@@ -423,7 +422,7 @@
             // mergeFile
             // 
             this.mergeFile.WorkerReportsProgress = true;
-            this.mergeFile.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.mergeFile_ProgressChanged);
+            this.mergeFile.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.ProgressChanged);
             this.mergeFile.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.mergeFile_RunWorkerCompleted);
             // 
             // MainForm
@@ -495,8 +494,8 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button btnExportError;
         private System.Windows.Forms.Label lblPercent;
-        private System.ComponentModel.BackgroundWorker prepareAJ;
-        private System.ComponentModel.BackgroundWorker match;
+        private System.ComponentModel.BackgroundWorker bgwPrepareAJ;
+        private System.ComponentModel.BackgroundWorker bgwMatch;
         private System.ComponentModel.BackgroundWorker renameFolder;
         private System.ComponentModel.BackgroundWorker demergeExcel;
         private System.Windows.Forms.Label label5;
@@ -507,6 +506,7 @@
         private System.Windows.Forms.ComboBox cbJNSheets;
         private System.Windows.Forms.Label label7;
         private System.ComponentModel.BackgroundWorker mergeFile;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
     }
 }
 

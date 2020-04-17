@@ -7,9 +7,6 @@ using System.Threading.Tasks;
 
 namespace DataChecker_FilesMerger
 {
-    /// <summary>
-    /// 以案卷为单位存储卷内数据
-    /// </summary>
     public class JNEntity
     {
         /// <summary>
@@ -19,7 +16,7 @@ namespace DataChecker_FilesMerger
         {
             get;
             set;
-        }
+        } = new DataTable();
 
         /// <summary>
         /// 根据案卷-卷内对应关系拿到的关键值
@@ -31,21 +28,41 @@ namespace DataChecker_FilesMerger
         }
 
         /// <summary>
-        /// 卷内总页数
+        /// 当前卷内的页数
         /// </summary>
-        public int TotalPage
+        public int Pages
         {
             get;
             set;
         }
 
-        /// <summary>
-        /// 卷内条目总数
-        /// </summary>
-        public int JNCount
+        public string LoadProperty(string PageColumn,string key)
         {
-            get;
-            set;
+            string errorInfo;
+            try
+            {
+                var objPage = Value.Rows[0][PageColumn];
+                if (objPage == null || string.IsNullOrWhiteSpace(objPage.ToString()))
+                {
+                    errorInfo = "指定的页数列不存在数据";
+                    return errorInfo;
+                }
+                else if (!int.TryParse(objPage.ToString(), out int num))
+                {
+                    errorInfo = "指定的页数列的值不为数字";
+                    return errorInfo;
+                }
+                else
+                {
+                    Pages = int.Parse(objPage.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                errorInfo = "[JN/LoadProperty/ReadPage]";
+                return errorInfo + ex.Message;
+            }
+            return null;
         }
     }
 }

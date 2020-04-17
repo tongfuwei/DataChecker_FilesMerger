@@ -59,7 +59,7 @@ namespace DataChecker_FilesMerger
 
                 return _workSheet.Cells;
             }
-            catch (Exception ex)
+            catch
             {
                 return null;
             }
@@ -74,7 +74,7 @@ namespace DataChecker_FilesMerger
 
                 return _workSheet.Cells;
             }
-            catch (Exception ex)
+            catch 
             {
                 return null;
             }
@@ -83,13 +83,13 @@ namespace DataChecker_FilesMerger
         /// <summary>
         /// 取出列名及列号
         /// </summary>
-        /// <param name="iStartRow"></param>      
-        public void Caculate_Columns(int iStartRow)
+        /// <param name="columnNameRow"></param>      
+        public void Caculate_Columns(int columnNameRow)
         {
             try
             {
                 Cells cells = _workSheet.Cells;
-                int row = 0;
+                //int row = 0;
                 int row2 = cells.MaxDataRow;
                 int column = 0;
                 int num = cells.MaxDataColumn;
@@ -103,7 +103,7 @@ namespace DataChecker_FilesMerger
                 {
                     try
                     {
-                        string a = (cells[iStartRow, i].Value == null) ? "" : cells[iStartRow, i].Value.ToString();
+                        string a = (cells[columnNameRow, i].Value == null) ? "" : cells[columnNameRow, i].Value.ToString();
                         ExcelColumns.Add(a, i);
                     }
                     catch
@@ -111,7 +111,7 @@ namespace DataChecker_FilesMerger
                     }
                 }
             }
-            catch (Exception ex)
+            catch 
             {
                 //Commons.ShowMessage_Info(DialogType.Warring, ex.Message);
             }

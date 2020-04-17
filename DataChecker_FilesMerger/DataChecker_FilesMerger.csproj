@@ -57,6 +57,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComboBox_Length.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ComboBox_Length.Designer.cs">
+      <DependentUpon>ComboBox_Length.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialog_Setting\MergeSetting.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,6 +99,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ComboBox_Length.resx">
+      <DependentUpon>ComboBox_Length.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialog_Setting\DemergeSetting.resx">
       <DependentUpon>DemergeSetting.cs</DependentUpon>
     </EmbeddedResource>
