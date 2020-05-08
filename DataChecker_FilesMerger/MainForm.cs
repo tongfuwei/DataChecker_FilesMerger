@@ -235,6 +235,14 @@ namespace DataChecker_FilesMerger
                 cbJNSheets.DataSource = JNExcelHelper.SheetsName;
             }
         }
+        private void cbAJSheets_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AJCells = AJExcelHelper.Load_Excel(tbAJFile.Text.Trim(),cbAJSheets.SelectedItem.ToString());
+        }
+        private void cbJNSheets_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AJCells = JNExcelHelper.Load_Excel(tbJNFile.Text.Trim(), cbJNSheets.SelectedItem.ToString());
+        }
         #endregion
         #region 设置扫描件目录
         private void btnSearch_Click(object sender, EventArgs e)
@@ -409,16 +417,21 @@ namespace DataChecker_FilesMerger
                     if (columnNameValue != null && !string.IsNullOrWhiteSpace(columnNameValue.ToString()))
                     {
                         string columnName = columnNameValue.ToString();
+                        if(AJ.Columns.Contains(columnName))
+                        {
+                            WriteErrorInfo("", "", "存在重复的列名,请调整");
+                            return null;
+                        }
                         AJ.Columns.Add(columnName);
                         AJ.Rows[0][columnName] = currentCellValue.ToString();
                     }
-                    //单元格无列名时输出,并放弃该案卷
+                    //单元格无列名时放弃该单元格
                     else
                     {
                         int x = i + 1;
                         int y = j + 1;
-                        WriteErrorInfo("[" + x + "," + y + "]", "", "该单元格无列名,请检查数据");
-                        return null;
+                        WriteErrorInfo("[" + x + "," + y + "]", "", "该单元格无列名,已被放弃,若存在问题请检查数据");
+                        continue;
                     }
                 }
             }
@@ -1222,5 +1235,7 @@ namespace DataChecker_FilesMerger
         {
             AdjustProgress(e.ProgressPercentage);
         }
+
+        
     }
 }

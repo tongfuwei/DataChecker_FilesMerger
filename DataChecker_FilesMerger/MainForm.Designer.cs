@@ -106,6 +106,7 @@
             this.cbAJSheets.Name = "cbAJSheets";
             this.cbAJSheets.Size = new System.Drawing.Size(114, 23);
             this.cbAJSheets.TabIndex = 24;
+            this.cbAJSheets.SelectedIndexChanged += new System.EventHandler(this.cbAJSheets_SelectedIndexChanged);
             // 
             // label6
             // 
@@ -409,6 +410,7 @@
             this.cbJNSheets.Name = "cbJNSheets";
             this.cbJNSheets.Size = new System.Drawing.Size(114, 23);
             this.cbJNSheets.TabIndex = 49;
+            this.cbJNSheets.SelectedIndexChanged += new System.EventHandler(this.cbJNSheets_SelectedIndexChanged);
             // 
             // label7
             // 
