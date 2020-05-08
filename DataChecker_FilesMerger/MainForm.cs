@@ -708,6 +708,8 @@ namespace DataChecker_FilesMerger
             int nowJNrow = 1;
             foreach (var dic in Entities_Dic)
             {
+                //当前卷内起始页
+                int nowPage = 0;
                 #region 是否新建文件夹保存
                 if (FolderNameRule != null)
                 {
@@ -735,8 +737,7 @@ namespace DataChecker_FilesMerger
                 #endregion
                 foreach (JNEntity jn in dic.Value)
                 {
-                    //当前卷内起始页
-                    int nowPage = 0;
+                    
                     //对每个卷内行执行合并操作
                     for (int i = 0; i < jn.Value.Rows.Count; i++)
                     {
