@@ -241,7 +241,7 @@ namespace DataChecker_FilesMerger
         }
         private void cbJNSheets_SelectedIndexChanged(object sender, EventArgs e)
         {
-            AJCells = JNExcelHelper.Load_Excel(tbJNFile.Text.Trim(), cbJNSheets.SelectedItem.ToString());
+            JNCells = JNExcelHelper.Load_Excel(tbJNFile.Text.Trim(), cbJNSheets.SelectedItem.ToString());
         }
         #endregion
         #region 设置扫描件目录
