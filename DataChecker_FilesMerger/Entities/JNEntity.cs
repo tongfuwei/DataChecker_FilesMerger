@@ -64,5 +64,50 @@ namespace DataChecker_FilesMerger
             }
             return null;
         }
+
+        public string GetDate(string PageColumn)
+        {
+            string errorInfo;
+            try
+            {
+                var objPage = Value.Rows[0][PageColumn];
+                if (objPage == null || string.IsNullOrWhiteSpace(objPage.ToString()))
+                {
+                    errorInfo = "指定的日期列不存在数据";
+                    return errorInfo;
+                }
+                else if (!DateTime.TryParse(objPage.ToString(), out DateTime num))
+                {
+                    errorInfo = "指定的日期列格式有问题";
+                    return errorInfo;
+                }
+                return objPage.ToString();
+            }
+            catch (Exception ex)
+            {
+                errorInfo = "[JN/LoadProperty/ReadPage]";
+                return errorInfo + ex.Message;
+            }
+        }
+
+        public string GetDH(string dh)
+        {
+            string errorInfo;
+            try
+            {
+                var objPage = Value.Rows[0][dh];
+                if (objPage == null || string.IsNullOrWhiteSpace(objPage.ToString()))
+                {
+                    errorInfo = "指定的日期列不存在数据";
+                    return errorInfo;
+                }
+                return objPage.ToString();
+            }
+            catch (Exception ex)
+            {
+                errorInfo = "[JN/LoadProperty/ReadPage]";
+                return errorInfo + ex.Message;
+            }
+        }
     }
 }

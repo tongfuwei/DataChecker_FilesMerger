@@ -27,7 +27,14 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 			get;
 			set;
 		}
-
+		/// <summary>
+		/// 是否合成封面封底卷内
+		/// </summary>
+		public bool IsMergeFM;
+		/// <summary>
+		/// 封面封底卷内的追加名称
+		/// </summary>
+		public string Addition;
 		public MergeSetting(Dictionary<string, int> _Columns, Dictionary<string, int> _PdfNameRule = null,Dictionary<string,int> _FolderNameRule = null, bool _isOneToMany = true, Dictionary<string, int> _AJColumns = null)
 		{
 			Column = _Columns;
@@ -201,6 +208,11 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 				FolderNameRule = new Dictionary<string, int>();
 				GetFolderControlValue(checkBox.Name);
 			}
+			if (checkBoxFM.Checked)
+			{
+				IsMergeFM = true;
+				Addition = tbAddition.Text;
+			}
 		}
 
 		private void IntFolderControl(string controlName, List<string> Keys, List<int> Values, int i = 0)
@@ -362,6 +374,18 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 				{
 					control.Dispose();
 				}
+			}
+		}
+
+		private void checkBoxFM_CheckedChanged(object sender, EventArgs e)
+		{
+			if(checkBoxFM.Checked)
+			{
+				tbAddition.Visible = true;
+			}
+			else
+			{
+				tbAddition.Visible = false;
 			}
 		}
 	}

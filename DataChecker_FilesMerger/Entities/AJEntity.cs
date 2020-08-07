@@ -82,6 +82,9 @@ namespace DataChecker_FilesMerger
             set;
         } = new List<FileInfo>();
 
+        /// <summary>
+        /// FMJNFD
+        /// </summary>
         public List<FileInfo> Additional
         {
             get;
@@ -250,15 +253,15 @@ namespace DataChecker_FilesMerger
                     List<FileInfo> fdFile = new List<FileInfo>();
                     foreach (FileInfo item in orderedEnumerable)
                     {
-                        if (item.Name.Contains("FM")) //封面
+                        if (item.Name.Contains("FM") || item.Name.Contains("fm")) //封面
                         {
                             fmFile.Add(item);
                         }
-                        else if (item.Name.Contains("ML") || item.Name.Contains("JN")) //卷内目录。
+                        else if (item.Name.Contains("ML") || item.Name.Contains("JN") || item.Name.Contains("ml") || item.Name.Contains("jn")) //卷内目录。
                         {
                             mlFile.Add(item);
                         }
-                        else if (item.Name.Contains("BK") || item.Name.Contains("FD")) //备考表，封面。
+                        else if (item.Name.Contains("BK") || item.Name.Contains("FD") || item.Name.Contains("fd") || item.Name.Contains("bk")) //备考表，封面。
                         {
                             fdFile.Add(item);
                         }

@@ -146,7 +146,11 @@ namespace DataChecker_FilesMerger
         /// 案卷组装完毕
         /// </summary>
         private bool prepareAJComplete = false;
-
+        /// <summary>
+        /// 是否合并封面卷内和封底
+        /// </summary>
+        public bool IsMergeFM;
+        public string Addition;
         /// <summary>
         /// 保存数据
         /// </summary>
@@ -620,6 +624,11 @@ namespace DataChecker_FilesMerger
             int JNCount = jnsTable.Rows.Count;
             if (JNCount != 0)
             {
+                DateTime MaxDate = DateTime.Parse("1000-01-01");
+                DateTime MinDate = DateTime.Parse("3000-01-01");
+                string dh = "";
+                ///是否启用提取日期和件数
+                bool boo = false;
                 for (int i = 0; i < JNCount; i++)
                 {
                     try
@@ -637,7 +646,20 @@ namespace DataChecker_FilesMerger
                             Value = jnTable,
                         };
                         string result = jn.LoadProperty(JNPageColumn,Findable);
-                        if(!string.IsNullOrWhiteSpace(result))
+                        if (boo == true)
+                        {
+                            string date = jn.GetDate("文件日期");
+                            if (DateTime.TryParse(date.ToString(), out DateTime num))
+                            {
+                                DateTime date1 = DateTime.Parse(date);
+                                if (MaxDate < date1)
+                                    MaxDate = date1;
+                                if (MinDate > date1)
+                                    MinDate = date1;
+                            }
+                             dh = jn.GetDH("案卷号");
+                        }
+                        if (!string.IsNullOrWhiteSpace(result))
                         {
                             WriteErrorInfo(aj.Location.ToString(), "[JN/LoadProperty]" + i, result);
                         }
@@ -649,6 +671,8 @@ namespace DataChecker_FilesMerger
                         continue;
                     }
                 }
+                if (boo == true)
+                    WriteErrorInfo(aj.Location.ToString(), Findable, "案卷号—" + dh+ "—" + MinDate.ToString("yyyy-MM-dd") + "—" + MaxDate.ToString("yyyy-MM-dd") + "—" + JNCount.ToString());
                 return jNEntities;
             }
             else
@@ -705,6 +729,7 @@ namespace DataChecker_FilesMerger
         private void MergeFile_DoWork_OneToMany(object sender, DoWorkEventArgs e)
         {
             string SavePath = fileSaveFolder;
+            string AJSavePath = SavePath;
             int nowJNrow = 1;
             foreach (var dic in Entities_Dic)
             {
@@ -732,9 +757,14 @@ namespace DataChecker_FilesMerger
                         folderName_List.Add(partName);
                     }
                     string folderName = string.Join("-", folderName_List);
-                    SavePath += folderName + "\\";
+                    AJSavePath = SavePath + folderName + "\\";
+                }
+                if (!Directory.Exists(AJSavePath))
+                {
+                    Directory.CreateDirectory(AJSavePath);
                 }
                 #endregion
+                List<string> adittionalName = new List<string>();
                 foreach (JNEntity jn in dic.Value)
                 {
                     
@@ -779,17 +809,18 @@ namespace DataChecker_FilesMerger
                                 }
                                 fileName_List.Add(partName);
                             }
+                            adittionalName.AddRange(fileName_List.ToArray());
                             string fileName = string.Join("-", fileName_List);
                             #endregion
                             #region 合并
                             if (inputFiles.Count != 0)
-                            {
-                                if (File.Exists(SavePath + "\\" + fileName + ".pdf"))
+                            {                                
+                                if (File.Exists(AJSavePath + "\\" + fileName + ".pdf"))
                                 {
                                     WriteErrorInfo(dic.Key.Location.ToString(), fileName, "该pdf已存在,请检查");
                                     continue;
                                 }
-                                op.MergerFile(SavePath + "\\" + fileName + ".pdf", "pdf", inputFiles.ToArray(), null);
+                                op.MergerFile(AJSavePath + "\\" + fileName + ".pdf", "pdf", inputFiles.ToArray(), null);
                                 float temp = ((float)(nowJNrow) / (float)(JNCells.MaxDataRow - ColumnNameRow)) * 100;
                                 int percent = (int)temp;
                                 mergeFile.ReportProgress(percent);
@@ -807,6 +838,16 @@ namespace DataChecker_FilesMerger
                         }
                     }
                 }
+
+                #region
+                if (IsMergeFM)
+                {
+                    adittionalName.Remove(adittionalName[adittionalName.Count - 1]);
+                    string aditionalName = string.Join("-", adittionalName);
+                    string FmJnFdPath = AJSavePath + "\\" + aditionalName + "-" + Addition + ".pdf";
+                    MergeAdditional(dic.Key.Additional, FmJnFdPath);
+                }
+                #endregion
             }
 
         }
@@ -874,7 +915,11 @@ namespace DataChecker_FilesMerger
                     #region 合并
                     if (inputFiles.Count != 0)
                     {
-                        if(File.Exists(SavePath + "\\" + fileName + ".pdf"))
+                        if (!Directory.Exists(SavePath))
+                        {
+                            Directory.CreateDirectory(SavePath);
+                        }
+                        if (File.Exists(SavePath + "\\" + fileName + ".pdf"))
                         {
                             WriteErrorInfo(aj.Location.ToString(), fileName, "该pdf已存在,请检查");
                             continue;
@@ -898,6 +943,21 @@ namespace DataChecker_FilesMerger
                     continue;
                 }
             }
+        }
+
+        /// <summary>
+        /// 合并FMJNFD
+        /// </summary>
+        /// <param name="list">附件集合</param>
+        /// <param name="fileSavePath">文件fullName</param>
+        private void MergeAdditional(List<FileInfo> list,string fileSavePath)
+        {
+            List<string> inputFiles = new List<string>();
+            foreach(FileInfo fileInfo in list)
+            {
+                inputFiles.Add(fileInfo.FullName);
+            }
+            op.MergerFile(fileSavePath, "pdf", inputFiles.ToArray(), null);
         }
 
         private List<FileInfo> GetFileInfo(string path)
@@ -954,6 +1014,8 @@ namespace DataChecker_FilesMerger
                         PdfNameRule = mergeSetting.PdfNameRule;
                         FolderNameRule = mergeSetting.FolderNameRule;
                         MergeSetted = true;
+                        IsMergeFM = mergeSetting.IsMergeFM;
+                        Addition = mergeSetting.Addition;
                     }
                 }
             }
@@ -965,6 +1027,7 @@ namespace DataChecker_FilesMerger
                     PdfNameRule = mergeSetting.PdfNameRule;
                     FolderNameRule = mergeSetting.FolderNameRule;
                     MergeSetted = true;
+                    IsMergeFM = mergeSetting.IsMergeFM;
                 }
             }
         }

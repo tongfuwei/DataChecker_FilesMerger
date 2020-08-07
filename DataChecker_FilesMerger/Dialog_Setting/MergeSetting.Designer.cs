@@ -43,38 +43,44 @@
             this.cb6 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.checkBox = new System.Windows.Forms.CheckBox();
+            this.checkBoxFM = new System.Windows.Forms.CheckBox();
+            this.tbAddition = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // cb1
             // 
             this.cb1.FormattingEnabled = true;
-            this.cb1.Location = new System.Drawing.Point(12, 27);
+            this.cb1.Location = new System.Drawing.Point(9, 22);
+            this.cb1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cb1.Name = "cb1";
-            this.cb1.Size = new System.Drawing.Size(120, 23);
+            this.cb1.Size = new System.Drawing.Size(91, 20);
             this.cb1.TabIndex = 44;
             // 
             // cb2
             // 
             this.cb2.FormattingEnabled = true;
-            this.cb2.Location = new System.Drawing.Point(138, 27);
+            this.cb2.Location = new System.Drawing.Point(104, 22);
+            this.cb2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cb2.Name = "cb2";
-            this.cb2.Size = new System.Drawing.Size(120, 23);
+            this.cb2.Size = new System.Drawing.Size(91, 20);
             this.cb2.TabIndex = 45;
             // 
             // cb3
             // 
             this.cb3.FormattingEnabled = true;
-            this.cb3.Location = new System.Drawing.Point(264, 27);
+            this.cb3.Location = new System.Drawing.Point(198, 22);
+            this.cb3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cb3.Name = "cb3";
-            this.cb3.Size = new System.Drawing.Size(120, 23);
+            this.cb3.Size = new System.Drawing.Size(91, 20);
             this.cb3.TabIndex = 46;
             // 
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(12, 56);
+            this.checkBox1.Location = new System.Drawing.Point(9, 45);
+            this.checkBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(89, 19);
+            this.checkBox1.Size = new System.Drawing.Size(72, 16);
             this.checkBox1.TabIndex = 47;
             this.checkBox1.Text = "规定长度";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -83,9 +89,10 @@
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(138, 56);
+            this.checkBox2.Location = new System.Drawing.Point(104, 45);
+            this.checkBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(89, 19);
+            this.checkBox2.Size = new System.Drawing.Size(72, 16);
             this.checkBox2.TabIndex = 48;
             this.checkBox2.Text = "规定长度";
             this.checkBox2.UseVisualStyleBackColor = true;
@@ -94,9 +101,10 @@
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(264, 56);
+            this.checkBox3.Location = new System.Drawing.Point(198, 45);
+            this.checkBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(89, 19);
+            this.checkBox3.Size = new System.Drawing.Size(72, 16);
             this.checkBox3.TabIndex = 49;
             this.checkBox3.Text = "规定长度";
             this.checkBox3.UseVisualStyleBackColor = true;
@@ -105,10 +113,10 @@
             // btnConfirm
             // 
             this.btnConfirm.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnConfirm.Location = new System.Drawing.Point(554, 290);
-            this.btnConfirm.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnConfirm.Location = new System.Drawing.Point(416, 232);
+            this.btnConfirm.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnConfirm.Name = "btnConfirm";
-            this.btnConfirm.Size = new System.Drawing.Size(82, 25);
+            this.btnConfirm.Size = new System.Drawing.Size(62, 20);
             this.btnConfirm.TabIndex = 50;
             this.btnConfirm.Text = "确认";
             this.btnConfirm.UseVisualStyleBackColor = true;
@@ -117,9 +125,10 @@
             // checkBox4
             // 
             this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(390, 56);
+            this.checkBox4.Location = new System.Drawing.Point(292, 45);
+            this.checkBox4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(89, 19);
+            this.checkBox4.Size = new System.Drawing.Size(72, 16);
             this.checkBox4.TabIndex = 52;
             this.checkBox4.Text = "规定长度";
             this.checkBox4.UseVisualStyleBackColor = true;
@@ -128,17 +137,19 @@
             // cb4
             // 
             this.cb4.FormattingEnabled = true;
-            this.cb4.Location = new System.Drawing.Point(390, 27);
+            this.cb4.Location = new System.Drawing.Point(292, 22);
+            this.cb4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cb4.Name = "cb4";
-            this.cb4.Size = new System.Drawing.Size(120, 23);
+            this.cb4.Size = new System.Drawing.Size(91, 20);
             this.cb4.TabIndex = 51;
             // 
             // checkBox5
             // 
             this.checkBox5.AutoSize = true;
-            this.checkBox5.Location = new System.Drawing.Point(516, 56);
+            this.checkBox5.Location = new System.Drawing.Point(387, 45);
+            this.checkBox5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(89, 19);
+            this.checkBox5.Size = new System.Drawing.Size(72, 16);
             this.checkBox5.TabIndex = 54;
             this.checkBox5.Text = "规定长度";
             this.checkBox5.UseVisualStyleBackColor = true;
@@ -147,17 +158,19 @@
             // cb5
             // 
             this.cb5.FormattingEnabled = true;
-            this.cb5.Location = new System.Drawing.Point(516, 27);
+            this.cb5.Location = new System.Drawing.Point(387, 22);
+            this.cb5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cb5.Name = "cb5";
-            this.cb5.Size = new System.Drawing.Size(120, 23);
+            this.cb5.Size = new System.Drawing.Size(91, 20);
             this.cb5.TabIndex = 53;
             // 
             // checkBox6
             // 
             this.checkBox6.AutoSize = true;
-            this.checkBox6.Location = new System.Drawing.Point(642, 56);
+            this.checkBox6.Location = new System.Drawing.Point(482, 45);
+            this.checkBox6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.checkBox6.Name = "checkBox6";
-            this.checkBox6.Size = new System.Drawing.Size(89, 19);
+            this.checkBox6.Size = new System.Drawing.Size(72, 16);
             this.checkBox6.TabIndex = 56;
             this.checkBox6.Text = "规定长度";
             this.checkBox6.UseVisualStyleBackColor = true;
@@ -166,36 +179,61 @@
             // cb6
             // 
             this.cb6.FormattingEnabled = true;
-            this.cb6.Location = new System.Drawing.Point(642, 27);
+            this.cb6.Location = new System.Drawing.Point(482, 22);
+            this.cb6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cb6.Name = "cb6";
-            this.cb6.Size = new System.Drawing.Size(120, 23);
+            this.cb6.Size = new System.Drawing.Size(91, 20);
             this.cb6.TabIndex = 55;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Location = new System.Drawing.Point(9, 7);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(91, 15);
+            this.label1.Size = new System.Drawing.Size(71, 12);
             this.label1.TabIndex = 57;
             this.label1.Text = "Pdf命名规则";
             // 
             // checkBox
             // 
             this.checkBox.AutoSize = true;
-            this.checkBox.Location = new System.Drawing.Point(12, 127);
+            this.checkBox.Location = new System.Drawing.Point(9, 102);
+            this.checkBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.checkBox.Name = "checkBox";
-            this.checkBox.Size = new System.Drawing.Size(149, 19);
+            this.checkBox.Size = new System.Drawing.Size(120, 16);
             this.checkBox.TabIndex = 58;
             this.checkBox.Text = "每个案卷独立保存";
             this.checkBox.UseVisualStyleBackColor = true;
             this.checkBox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged_1);
             // 
+            // checkBoxFM
+            // 
+            this.checkBoxFM.AutoSize = true;
+            this.checkBoxFM.Location = new System.Drawing.Point(198, 102);
+            this.checkBoxFM.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxFM.Name = "checkBoxFM";
+            this.checkBoxFM.Size = new System.Drawing.Size(144, 16);
+            this.checkBoxFM.TabIndex = 58;
+            this.checkBoxFM.Text = "封面封底卷内是否合并";
+            this.checkBoxFM.UseVisualStyleBackColor = true;
+            this.checkBoxFM.CheckedChanged += new System.EventHandler(this.checkBoxFM_CheckedChanged);
+            // 
+            // tbAddition
+            // 
+            this.tbAddition.Location = new System.Drawing.Point(347, 97);
+            this.tbAddition.Name = "tbAddition";
+            this.tbAddition.Size = new System.Drawing.Size(100, 21);
+            this.tbAddition.TabIndex = 59;
+            this.tbAddition.Visible = false;
+            // 
             // MergeSetting
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(774, 328);
+            this.ClientSize = new System.Drawing.Size(580, 262);
+            this.Controls.Add(this.tbAddition);
+            this.Controls.Add(this.checkBoxFM);
             this.Controls.Add(this.checkBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.checkBox6);
@@ -211,6 +249,7 @@
             this.Controls.Add(this.cb1);
             this.Controls.Add(this.cb2);
             this.Controls.Add(this.cb3);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "MergeSetting";
             this.Text = "图片合并设置";
             this.ResumeLayout(false);
@@ -235,5 +274,7 @@
         private System.Windows.Forms.ComboBox cb6;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox checkBox;
+        private System.Windows.Forms.CheckBox checkBoxFM;
+        private System.Windows.Forms.TextBox tbAddition;
     }
 }
