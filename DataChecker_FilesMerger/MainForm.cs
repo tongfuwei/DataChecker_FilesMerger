@@ -729,10 +729,10 @@ namespace DataChecker_FilesMerger
         private void MergeFile_DoWork_OneToMany(object sender, DoWorkEventArgs e)
         {
             string SavePath = fileSaveFolder;
-            string AJSavePath = SavePath;
             int nowJNrow = 1;
             foreach (var dic in Entities_Dic)
             {
+                string AJSavePath = SavePath;
                 //当前卷内起始页
                 int nowPage = 0;
                 #region 是否新建文件夹保存
@@ -809,6 +809,7 @@ namespace DataChecker_FilesMerger
                                 }
                                 fileName_List.Add(partName);
                             }
+                            adittionalName.Clear();
                             adittionalName.AddRange(fileName_List.ToArray());
                             string fileName = string.Join("-", fileName_List);
                             #endregion
