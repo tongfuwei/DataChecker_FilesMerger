@@ -959,7 +959,8 @@ namespace DataChecker_FilesMerger
             {
                 inputFiles.Add(fileInfo.FullName);
             }
-            op.MergerFile(fileSavePath, "pdf", inputFiles.ToArray(), null);
+            //op.MergerFile(fileSavePath, "pdf", inputFiles.ToArray(), null);
+            MergeUtil.MergeToPDF(inputFiles, fileSavePath);
         }
 
         private List<FileInfo> GetFileInfo(string path)
