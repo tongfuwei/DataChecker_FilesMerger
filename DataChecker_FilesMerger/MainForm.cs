@@ -1,5 +1,6 @@
 ﻿using Aspose.Cells;
 using DataChecker_FilesMerger.Dialog_Setting;
+using DataChecker_FilesMerger.Helper;
 using FileHelper;
 using Microsoft.VisualBasic.Devices;
 using System;
@@ -821,7 +822,8 @@ namespace DataChecker_FilesMerger
                                     WriteErrorInfo(dic.Key.Location.ToString(), fileName, "该pdf已存在,请检查");
                                     continue;
                                 }
-                                op.MergerFile(AJSavePath + "\\" + fileName + ".pdf", "pdf", inputFiles.ToArray(), null);
+                                //op.MergerFile(AJSavePath + "\\" + fileName + ".pdf", "pdf", inputFiles.ToArray(), null);
+                                MergeUtil.MergeToPDF(inputFiles, AJSavePath + "\\" + fileName + ".pdf");
                                 float temp = ((float)(nowJNrow) / (float)(JNCells.MaxDataRow - ColumnNameRow)) * 100;
                                 int percent = (int)temp;
                                 mergeFile.ReportProgress(percent);
@@ -925,7 +927,8 @@ namespace DataChecker_FilesMerger
                             WriteErrorInfo(aj.Location.ToString(), fileName, "该pdf已存在,请检查");
                             continue;
                         }
-                        op.MergerFile(SavePath + "\\" + fileName + ".pdf", "pdf", inputFiles, null);
+                        //op.MergerFile(SavePath + "\\" + fileName + ".pdf", "pdf", inputFiles, null);
+                        MergeUtil.MergeToPDF(inputFiles, SavePath + "\\" + fileName + ".pdf");
 
                         float temp = nowRow / (float)(ajEntities_List.Count) * 100;
                         int percent = (int)temp;

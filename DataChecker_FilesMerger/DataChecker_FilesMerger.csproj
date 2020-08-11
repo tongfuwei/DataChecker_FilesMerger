@@ -45,6 +45,10 @@
       <HintPath>DLL\ItextSharp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="O2S.Components.PDF4NET, Version=4.7.3.0, Culture=neutral, PublicKeyToken=096a9279a87304f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLL\O2S.Components.PDF4NET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -79,6 +83,7 @@
     </Compile>
     <Compile Include="Helper\ExcelReader.cs" />
     <Compile Include="Helper\ExcelSaver.cs" />
+    <Compile Include="Helper\MergeUtil.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -141,6 +146,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DLL\Aspose.Cells.dll" />
+    <Content Include="DLL\FileHelper.dll" />
+    <Content Include="DLL\ItextSharp.dll" />
+    <Content Include="DLL\O2S.Components.PDF4NET.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
