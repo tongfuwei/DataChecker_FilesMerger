@@ -16,36 +16,39 @@ namespace DataChecker_FilesMerger
         private Worksheet _workSheet;
 
         /// <summary>
-        /// 列名及其所在行号
+        /// <列名,索引号>
         /// </summary>
-        public Dictionary<string, int> ExcelColumns
+        public IndexDictionary<string> ExcelColumns
         {
             get; set;
         }
 
         /// <summary>
-        /// 列名
+        /// sheets名称
         /// </summary>
         public List<string> SheetsName
         {
-            get;set;
+            get; set;
         }
 
+        private bool Loaded = false;
 
-        /// <summary>
-        /// 将excel转换为datatable
-        /// </summary>
-        public DataTable Table
+        public Cells Cells
         {
             get
             {
-                Cells cells = _workSheet.Cells;
-                DataTable dataTable = cells.ExportDataTableAsString(0, 0, cells.MaxDataRow + 1, cells.MaxColumn, true);
-                return dataTable;
+                if(Loaded)
+                {
+                    return _workSheet.Cells;
+                }
+                else
+                {                    
+                    return null;
+                }
             }
         }
 
-        public Cells Load_Excel(string sFileName, int sheetIndex = 0)
+        public void Load_Excel(string sFileName, int sheetIndex = 0)
         {
             try
             {
@@ -56,27 +59,24 @@ namespace DataChecker_FilesMerger
                     SheetsName.Add(sheet.Name);
                 }
                 _workSheet = _workBook.Worksheets[sheetIndex];
-
-                return _workSheet.Cells;
+                Loaded = true;
             }
-            catch
+            catch(Exception ex)
             {
-                return null;
+                MainForm.CreateInstrance().WriteErrorInfo("打开Excel", "[Load_Excel]", ex.Message);
             }
         }
 
-        public Cells Load_Excel(string sFileName, string sheetName)
+        public void ResetSheet(string sheetName)
         {
             try
             {
-                _workBook = new Workbook(sFileName);
                 _workSheet = _workBook.Worksheets[sheetName];
-
-                return _workSheet.Cells;
+                Loaded = true;
             }
-            catch 
+            catch (Exception ex)
             {
-                return null;
+                MainForm.CreateInstrance().WriteErrorInfo("打开Excel", "[Load_Excel]", ex.Message);
             }
         }
 
@@ -86,34 +86,18 @@ namespace DataChecker_FilesMerger
         /// <param name="columnNameRow"></param>      
         public void Caculate_Columns(int columnNameRow)
         {
-            try
-            {
-                Cells cells = _workSheet.Cells;
-                //int row = 0;
-                int row2 = cells.MaxDataRow;
-                int column = 0;
-                int num = cells.MaxDataColumn;
-                if (num < 4)
-                {
-                    num = 4;
-                }
+            Cells cells = _workSheet.Cells;
+            int num = cells.MaxDataColumn;
+            this.ExcelColumns = new IndexDictionary<string>();
 
-                this.ExcelColumns = new Dictionary<string, int>();
-                for (int i = column; i <= num; i++)
-                {
-                    try
-                    {
-                        string a = (cells[columnNameRow, i].Value == null) ? "" : cells[columnNameRow, i].Value.ToString();
-                        ExcelColumns.Add(a, i);
-                    }
-                    catch
-                    {
-                    }
-                }
-            }
-            catch 
+            for (int i = 0; i <= num; i++)
             {
-                //Commons.ShowMessage_Info(DialogType.Warring, ex.Message);
+                if (cells[columnNameRow, i].Value != null && (!string.IsNullOrWhiteSpace( cells[columnNameRow, i].Value.ToString())))
+                {
+                    string a = cells[columnNameRow, i].Value.ToString();
+                    if (!ExcelColumns.Keys.Contains(a))
+                        ExcelColumns.Add(a);
+                }
             }
         }
     }

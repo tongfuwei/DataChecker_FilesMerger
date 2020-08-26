@@ -1,113 +1,114 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
+using System.Dynamic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DataChecker_FilesMerger
 {
-    public class JNEntity
+    public class JNEntity : DynamicObject
     {
         /// <summary>
-        /// 该目录的完整数据
+        /// 该目录的数据[列名,值]
         /// </summary>
-        public DataTable Value
-        {
-            get;
-            set;
-        } = new DataTable();
-
-        /// <summary>
-        /// 根据案卷-卷内对应关系拿到的关键值
-        /// </summary>
-        public string Key
+        public Dictionary<string, string> Value
         {
             get;
             set;
         }
+
+        /// <summary>
+        /// 该目录的行号
+        /// </summary>
+        public int Location
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 页数所在列名
+        /// </summary>
+        private string PageColumn = null;
 
         /// <summary>
         /// 当前卷内的页数
         /// </summary>
         public int Pages
         {
+            get
+            {
+                try
+                {
+                    if (PageColumn != null)
+                    {
+                        int pages;
+                        if (int.TryParse(Value[PageColumn].Trim(), out pages))
+                            return pages;
+                        else
+                        {
+                            StackTrace trace = new StackTrace();
+                            MethodBase methodName = trace.GetFrame(1).GetMethod();
+                            MainForm.CreateInstrance().WriteErrorInfo("JN行号:" + Location.ToString(), "[" + methodName.Name + "]", "页数调用的值[" + Value[PageColumn] + "]不是数字");
+                            return -1;
+                        }
+                    }
+                    else
+                    {
+                        StackTrace trace = new StackTrace();
+                        MethodBase methodName = trace.GetFrame(1).GetMethod();
+                        MainForm.CreateInstrance().WriteErrorInfo("", "", "页数所在列未设定");
+                        return -2;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MainForm.CreateInstrance().WriteErrorInfo("JN行号:" + Location.ToString(), "读取件数出现问题", ex.Message);
+                    return -3;
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// 扫描件
+        /// </summary>
+        public List<FileInfo> ScanFiles
+        {
             get;
             set;
-        }
+        } = new List<FileInfo>();
 
-        public string LoadProperty(string PageColumn,string key)
+        #region 构造
+        public JNEntity(Dictionary<string, string> _value, int _location, string _PageColumn = null)
         {
-            string errorInfo;
-            try
-            {
-                var objPage = Value.Rows[0][PageColumn];
-                if (objPage == null || string.IsNullOrWhiteSpace(objPage.ToString()))
-                {
-                    errorInfo = "指定的页数列不存在数据";
-                    return errorInfo;
-                }
-                else if (!int.TryParse(objPage.ToString(), out int num))
-                {
-                    errorInfo = "指定的页数列的值不为数字";
-                    return errorInfo;
-                }
-                else
-                {
-                    Pages = int.Parse(objPage.ToString());
-                }
-            }
-            catch (Exception ex)
-            {
-                errorInfo = "[JN/LoadProperty/ReadPage]";
-                return errorInfo + ex.Message;
-            }
-            return null;
+            this.Value = _value;
+            this.Location = _location;
+            this.PageColumn = _PageColumn;
         }
+        #endregion
 
-        public string GetDate(string PageColumn)
-        {
-            string errorInfo;
-            try
-            {
-                var objPage = Value.Rows[0][PageColumn];
-                if (objPage == null || string.IsNullOrWhiteSpace(objPage.ToString()))
-                {
-                    errorInfo = "指定的日期列不存在数据";
-                    return errorInfo;
-                }
-                else if (!DateTime.TryParse(objPage.ToString(), out DateTime num))
-                {
-                    errorInfo = "指定的日期列格式有问题";
-                    return errorInfo;
-                }
-                return objPage.ToString();
-            }
-            catch (Exception ex)
-            {
-                errorInfo = "[JN/LoadProperty/ReadPage]";
-                return errorInfo + ex.Message;
-            }
-        }
+        Dictionary<string, object> Properties = new Dictionary<string, object>();
 
-        public string GetDH(string dh)
+        public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            string errorInfo;
-            try
+            if (!Properties.Keys.Contains(binder.Name))
             {
-                var objPage = Value.Rows[0][dh];
-                if (objPage == null || string.IsNullOrWhiteSpace(objPage.ToString()))
-                {
-                    errorInfo = "指定的日期列不存在数据";
-                    return errorInfo;
-                }
-                return objPage.ToString();
+                //在此可以做一些小动作
+                //if (binder.Name == "Col")
+                //　　Properties.Add(binder.Name + (Properties.Count), value.ToString());
+                //else
+                //　　Properties.Add(binder.Name, value.ToString());
+
+
+                Properties.Add(binder.Name, value.ToString());
             }
-            catch (Exception ex)
-            {
-                errorInfo = "[JN/LoadProperty/ReadPage]";
-                return errorInfo + ex.Message;
-            }
+            return true;
         }
     }
 }

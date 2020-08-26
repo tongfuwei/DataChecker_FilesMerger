@@ -67,6 +67,8 @@
             this.cbJNSheets = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.mergeFile = new System.ComponentModel.BackgroundWorker();
+            this.btnLoadData = new System.Windows.Forms.Button();
+            this.lblTimer = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // tbAJFile
@@ -182,7 +184,7 @@
             this.listView_Error.GridLines = true;
             this.listView_Error.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listView_Error.HideSelection = false;
-            this.listView_Error.Location = new System.Drawing.Point(11, 131);
+            this.listView_Error.Location = new System.Drawing.Point(11, 173);
             this.listView_Error.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.listView_Error.Name = "listView_Error";
             this.listView_Error.Size = new System.Drawing.Size(846, 246);
@@ -217,13 +219,13 @@
             this.btnMatchSetting.Name = "btnMatchSetting";
             this.btnMatchSetting.Size = new System.Drawing.Size(82, 25);
             this.btnMatchSetting.TabIndex = 31;
-            this.btnMatchSetting.Text = "检测设置";
+            this.btnMatchSetting.Text = "关联设置";
             this.btnMatchSetting.UseVisualStyleBackColor = true;
-            this.btnMatchSetting.Click += new System.EventHandler(this.btnMatchSetting_Click);
+            this.btnMatchSetting.Click += new System.EventHandler(this.btnRelationSetting_Click);
             // 
             // btnMatch
             // 
-            this.btnMatch.Location = new System.Drawing.Point(414, 99);
+            this.btnMatch.Location = new System.Drawing.Point(414, 130);
             this.btnMatch.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnMatch.Name = "btnMatch";
             this.btnMatch.Size = new System.Drawing.Size(82, 25);
@@ -234,7 +236,7 @@
             // 
             // btnSplitSetting
             // 
-            this.btnSplitSetting.Location = new System.Drawing.Point(504, 99);
+            this.btnSplitSetting.Location = new System.Drawing.Point(594, 99);
             this.btnSplitSetting.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnSplitSetting.Name = "btnSplitSetting";
             this.btnSplitSetting.Size = new System.Drawing.Size(82, 25);
@@ -245,7 +247,7 @@
             // 
             // btnSplit
             // 
-            this.btnSplit.Location = new System.Drawing.Point(594, 99);
+            this.btnSplit.Location = new System.Drawing.Point(594, 130);
             this.btnSplit.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnSplit.Name = "btnSplit";
             this.btnSplit.Size = new System.Drawing.Size(82, 25);
@@ -256,7 +258,7 @@
             // 
             // btnMergeSetting
             // 
-            this.btnMergeSetting.Location = new System.Drawing.Point(684, 99);
+            this.btnMergeSetting.Location = new System.Drawing.Point(504, 101);
             this.btnMergeSetting.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnMergeSetting.Name = "btnMergeSetting";
             this.btnMergeSetting.Size = new System.Drawing.Size(82, 25);
@@ -267,7 +269,7 @@
             // 
             // btnMerge
             // 
-            this.btnMerge.Location = new System.Drawing.Point(774, 99);
+            this.btnMerge.Location = new System.Drawing.Point(504, 130);
             this.btnMerge.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnMerge.Name = "btnMerge";
             this.btnMerge.Size = new System.Drawing.Size(82, 25);
@@ -297,14 +299,14 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(12, 415);
+            this.progressBar1.Location = new System.Drawing.Point(12, 457);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(845, 23);
             this.progressBar1.TabIndex = 39;
             // 
             // btnExportError
             // 
-            this.btnExportError.Location = new System.Drawing.Point(774, 384);
+            this.btnExportError.Location = new System.Drawing.Point(774, 426);
             this.btnExportError.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnExportError.Name = "btnExportError";
             this.btnExportError.Size = new System.Drawing.Size(82, 25);
@@ -316,7 +318,7 @@
             // lblPercent
             // 
             this.lblPercent.AutoSize = true;
-            this.lblPercent.Location = new System.Drawing.Point(12, 397);
+            this.lblPercent.Location = new System.Drawing.Point(12, 431);
             this.lblPercent.Name = "lblPercent";
             this.lblPercent.Size = new System.Drawing.Size(67, 15);
             this.lblPercent.TabIndex = 41;
@@ -427,11 +429,33 @@
             this.mergeFile.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.ProgressChanged);
             this.mergeFile.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.mergeFile_RunWorkerCompleted);
             // 
+            // btnLoadData
+            // 
+            this.btnLoadData.Location = new System.Drawing.Point(324, 130);
+            this.btnLoadData.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnLoadData.Name = "btnLoadData";
+            this.btnLoadData.Size = new System.Drawing.Size(82, 25);
+            this.btnLoadData.TabIndex = 50;
+            this.btnLoadData.Text = "读取数据";
+            this.btnLoadData.UseVisualStyleBackColor = true;
+            this.btnLoadData.Click += new System.EventHandler(this.btnLoadData_Click);
+            // 
+            // lblTimer
+            // 
+            this.lblTimer.AutoSize = true;
+            this.lblTimer.Location = new System.Drawing.Point(268, 431);
+            this.lblTimer.Name = "lblTimer";
+            this.lblTimer.Size = new System.Drawing.Size(67, 15);
+            this.lblTimer.TabIndex = 51;
+            this.lblTimer.Text = "当前耗时";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(869, 448);
+            this.ClientSize = new System.Drawing.Size(869, 495);
+            this.Controls.Add(this.lblTimer);
+            this.Controls.Add(this.btnLoadData);
             this.Controls.Add(this.cbJNSheets);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.rbOneToOne);
@@ -509,6 +533,8 @@
         private System.Windows.Forms.Label label7;
         private System.ComponentModel.BackgroundWorker mergeFile;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.Button btnLoadData;
+        private System.Windows.Forms.Label lblTimer;
     }
 }
 
