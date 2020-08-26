@@ -132,7 +132,6 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(97, 23);
             this.comboBox1.TabIndex = 29;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // btnSelectFolder
             // 
@@ -334,7 +333,6 @@
             // bgwMatch
             // 
             this.bgwMatch.WorkerReportsProgress = true;
-            this.bgwMatch.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwMatch_DoWork);
             this.bgwMatch.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwMatch_RunWorkerCompleted);
             // 
             // renameFolder
