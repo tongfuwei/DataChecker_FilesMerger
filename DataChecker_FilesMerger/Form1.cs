@@ -108,7 +108,7 @@ namespace DataChecker_FilesMerger
             Quefd.Add(fd4);
             Quefd.Add(fd5);
             Quefd.Add(fd6);
-            QueueThreadBase<DownLoadFile> thfd = new QueueThreadBase<DownLoadFile>(Quefd,Rename);
+            ThreadBaseControl<DownLoadFile> thfd = new ThreadBaseControl<DownLoadFile>(Quefd,Rename);
             thfd.OneStart += ShowOneStartMsg;
             thfd.OneCompleted += ShowOneDoneMsg;
             thfd.AllCompleted += ShowAllDoneMsg;

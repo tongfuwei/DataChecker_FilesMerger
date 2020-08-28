@@ -40,11 +40,11 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 		/// <summary>
 		/// 目录构成,名称,规定长度
 		/// </summary>
-		public Dictionary<string,int> dirConstitute
+		public Dictionary<string, int> dirConstitute
 		{
 			get;
 			set;
-		}
+		} = new Dictionary<string, int>();
 
 		/// <summary>
 		/// 是否对文件夹名称应用规定长度
@@ -89,12 +89,12 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 
 		public DialogResult CheckSave()
 		{
-			dirConstitute = new Dictionary<string, int>();
+			Dictionary<string,int> dir = new Dictionary<string, int>();
 			foreach (ComboBox folder in dir_check.Keys)
 			{
 				if (folder.SelectedItem != null && !string.IsNullOrWhiteSpace(folder.SelectedItem.ToString()))
 				{
-					if (dirConstitute.ContainsKey(folder.SelectedItem.ToString()))
+					if (dir.ContainsKey(folder.SelectedItem.ToString()))
 					{
 						MessageBox.Show("请勿重复填写!");
 						return DialogResult.Cancel;
@@ -112,30 +112,26 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 									num = int.Parse(control.Text.Trim());
 								}
 							}
-							dirConstitute.Add(folder.SelectedItem.ToString(), num);
+							dir.Add(folder.SelectedItem.ToString(), num);
 						}
 						else
 						{
-							dirConstitute.Add(folder.SelectedItem.ToString(), 0);
+							dir.Add(folder.SelectedItem.ToString(), 0);
 						}
 					}
 				}
 			}
+
+			if (dir.Count != 0)
+				dirConstitute = dir;
 
 			if (cbRename.Checked == true)
 				renameFolder = true;
 			else
 				renameFolder = false;
 
-			if (dirConstitute.Count == 0)
-			{
-				MessageBox.Show("请填写扫描件目录结构!");
-				return DialogResult.Cancel;
-			}
-			else
-			{
-			 	return DialogResult.OK;
-			}
+			return DialogResult.OK;
+
 		}
 
 		private void checkBox_CheckedChanged(object sender, EventArgs e)

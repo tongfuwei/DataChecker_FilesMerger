@@ -10,8 +10,7 @@ namespace DataChecker_FilesMerger.Helper
 {
     class ThreadHelper
     {
-
-        public class QueueThreadBase<T>
+        public class ThreadBaseControl<T>
         {
             #region 变量&属性
             /// <summary>
@@ -149,7 +148,7 @@ namespace DataChecker_FilesMerger.Helper
             /// </summary>
             /// <param name="collection">任务项</param>
             /// <param name="callBack">对任务操作的方法</param>
-            public QueueThreadBase(IEnumerable<T> collection,CallBackHanlder callBack)
+            public ThreadBaseControl(IEnumerable<T> collection,CallBackHanlder callBack)
             {
                 m_InnerQueue = new Queue<T>(collection);
                 this.m_QueueCount = m_InnerQueue.Count;
@@ -159,7 +158,7 @@ namespace DataChecker_FilesMerger.Helper
             /// <summary>
             /// 无参数的构造函数需要向队列中填充元素,需要追加操作方法
             /// </summary>
-            public QueueThreadBase()
+            public ThreadBaseControl()
             {
                 m_InnerQueue = new Queue<T>();
                 this.m_QueueCount = m_InnerQueue.Count;
@@ -309,7 +308,7 @@ namespace DataChecker_FilesMerger.Helper
                     callBack(pendingValue);
                     return DoWorkResult.ContinueThread;//没有异常让线程继续跑..
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     return DoWorkResult.AbortCurrentThread;//有异常,可以终止当前线程.当然.也可以继续,
                     //return  DoWorkResult.AbortAllThread; //特殊情况下 ,有异常终止所有的线程...

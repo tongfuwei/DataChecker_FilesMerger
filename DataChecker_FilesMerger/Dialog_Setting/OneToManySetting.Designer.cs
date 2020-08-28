@@ -29,15 +29,15 @@
         private void InitializeComponent()
         {
             this.AJColumns = new System.Windows.Forms.Panel();
-            this.cbAJ1 = new System.Windows.Forms.ComboBox();
-            this.cbAJ2 = new System.Windows.Forms.ComboBox();
-            this.cbAJ3 = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.JNColumns = new System.Windows.Forms.Panel();
             this.cbJN1 = new System.Windows.Forms.ComboBox();
             this.cbJN2 = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.cbJN3 = new System.Windows.Forms.ComboBox();
+            this.cbAJ1 = new System.Windows.Forms.ComboBox();
+            this.cbAJ2 = new System.Windows.Forms.ComboBox();
+            this.cbAJ3 = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.AJColumns.SuspendLayout();
             this.JNColumns.SuspendLayout();
             this.SuspendLayout();
@@ -45,52 +45,15 @@
             // AJColumns
             // 
             this.AJColumns.AutoSize = true;
-            this.AJColumns.Controls.Add(this.JNColumns);
             this.AJColumns.Controls.Add(this.cbAJ1);
             this.AJColumns.Controls.Add(this.cbAJ2);
             this.AJColumns.Controls.Add(this.cbAJ3);
             this.AJColumns.Controls.Add(this.label3);
-            this.AJColumns.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AJColumns.Dock = System.Windows.Forms.DockStyle.Left;
             this.AJColumns.Location = new System.Drawing.Point(0, 0);
             this.AJColumns.Name = "AJColumns";
-            this.AJColumns.Size = new System.Drawing.Size(512, 293);
+            this.AJColumns.Size = new System.Drawing.Size(266, 293);
             this.AJColumns.TabIndex = 46;
-            // 
-            // cbAJ1
-            // 
-            this.cbAJ1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbAJ1.FormattingEnabled = true;
-            this.cbAJ1.Location = new System.Drawing.Point(35, 37);
-            this.cbAJ1.Name = "cbAJ1";
-            this.cbAJ1.Size = new System.Drawing.Size(175, 23);
-            this.cbAJ1.TabIndex = 37;
-            // 
-            // cbAJ2
-            // 
-            this.cbAJ2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbAJ2.FormattingEnabled = true;
-            this.cbAJ2.Location = new System.Drawing.Point(35, 80);
-            this.cbAJ2.Name = "cbAJ2";
-            this.cbAJ2.Size = new System.Drawing.Size(175, 23);
-            this.cbAJ2.TabIndex = 38;
-            // 
-            // cbAJ3
-            // 
-            this.cbAJ3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbAJ3.FormattingEnabled = true;
-            this.cbAJ3.Location = new System.Drawing.Point(35, 123);
-            this.cbAJ3.Name = "cbAJ3";
-            this.cbAJ3.Size = new System.Drawing.Size(175, 23);
-            this.cbAJ3.TabIndex = 39;
-            // 
-            // label3
-            // 
-            this.label3.Location = new System.Drawing.Point(3, 9);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(260, 15);
-            this.label3.TabIndex = 41;
-            this.label3.Text = "案卷";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // JNColumns
             // 
@@ -141,16 +104,52 @@
             this.cbJN3.Size = new System.Drawing.Size(175, 23);
             this.cbJN3.TabIndex = 43;
             // 
+            // cbAJ1
+            // 
+            this.cbAJ1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAJ1.FormattingEnabled = true;
+            this.cbAJ1.Location = new System.Drawing.Point(35, 37);
+            this.cbAJ1.Name = "cbAJ1";
+            this.cbAJ1.Size = new System.Drawing.Size(175, 23);
+            this.cbAJ1.TabIndex = 37;
+            // 
+            // cbAJ2
+            // 
+            this.cbAJ2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAJ2.FormattingEnabled = true;
+            this.cbAJ2.Location = new System.Drawing.Point(35, 80);
+            this.cbAJ2.Name = "cbAJ2";
+            this.cbAJ2.Size = new System.Drawing.Size(175, 23);
+            this.cbAJ2.TabIndex = 38;
+            // 
+            // cbAJ3
+            // 
+            this.cbAJ3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAJ3.FormattingEnabled = true;
+            this.cbAJ3.Location = new System.Drawing.Point(35, 123);
+            this.cbAJ3.Name = "cbAJ3";
+            this.cbAJ3.Size = new System.Drawing.Size(175, 23);
+            this.cbAJ3.TabIndex = 39;
+            // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(3, 9);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(260, 15);
+            this.label3.TabIndex = 41;
+            this.label3.Text = "案卷";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // OneToManySetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(512, 293);
+            this.Controls.Add(this.JNColumns);
             this.Controls.Add(this.AJColumns);
             this.Name = "OneToManySetting";
             this.Text = "案卷-卷内匹配";
             this.AJColumns.ResumeLayout(false);
-            this.AJColumns.PerformLayout();
             this.JNColumns.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

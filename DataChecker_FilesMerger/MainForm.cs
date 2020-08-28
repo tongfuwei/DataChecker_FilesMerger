@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Forms;
 using static DataChecker_FilesMerger.Helper.ThreadHelper;
 
@@ -31,31 +32,142 @@ namespace DataChecker_FilesMerger
             return mainForm;
         }
 
+        #region 规则
 
         /// <summary>
-        /// excel读取类
+        /// 传统案卷
         /// </summary>
-        private ExcelReader AJReader = new ExcelReader();
-
-        /// <summary>
-        /// excel读取类
-        /// </summary>
-        private ExcelReader JNReader = new ExcelReader();
+        private bool IsOneToMany
+        {
+            get;
+            set;
+        } = true;
 
         /// <summary>
         /// 列名所在行
         /// </summary>
-        int ColumnNameRow = 0;
+        private int ColumnNameRow
+        {
+            get;
+            set;
+        } = 0;
 
         /// <summary>
         /// 根目录
         /// </summary>
-        private string rootDir;
+        private string rootDir
+        {
+            get;
+            set;
+        } = null;
 
         /// <summary>
         /// 筛选文件类型
         /// </summary>
-        private string fileFormat;
+        private string fileFormat
+        {
+            get;
+            set;
+        } = null;
+
+        /// <summary>
+        /// 案卷页数所在列
+        /// </summary>
+        private string AJPageColumn
+        {
+            get;
+            set;
+        } = null;
+
+        /// <summary>
+        /// 卷内页数所在列
+        /// </summary>
+        private string JNPageColumn
+        {
+            get;
+            set;
+        } = null;
+
+        /// <summary>
+        /// 件数所在列
+        /// </summary>
+        private string JNCountColumn
+        {
+            get;
+            set;
+        } = null;
+
+        /// <summary>
+        /// 案卷筛选列
+        /// </summary>
+        private List<string> AJFilter
+        {
+            get;
+            set;
+        } = new List<string>();
+
+        /// <summary>
+        /// 卷内筛选列
+        /// </summary>
+        public List<string> JNFilter
+        {
+            get;
+            set;
+        } = new List<string>();
+
+        /// <summary>
+        /// 目录构成[名称,规定长度]
+        /// </summary>
+        private Dictionary<string, int> dirConstitute
+        {
+            get;
+            set;
+        } = new Dictionary<string, int>();
+
+        /// <summary>
+        /// pdf文件名规则
+        /// </summary>
+        private Dictionary<string, int> PdfNameRule
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// pdf保存文件夹规则
+        /// </summary>
+        private Dictionary<string, int> FolderNameRule
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 是否合并封面卷内和封底
+        /// </summary>
+        public bool IsMergeFM;
+
+        #endregion
+
+        #region 数据
+
+        /// <summary>
+        /// excel读取类
+        /// </summary>
+        private ExcelReader AJReader
+        {
+            get;
+            set;
+        } = new ExcelReader();
+
+        /// <summary>
+        /// excel读取类
+        /// </summary>
+        private ExcelReader JNReader
+        {
+            get;
+            set;
+        } = new ExcelReader();
 
         /// <summary>
         /// 案卷列名及其所在列号
@@ -68,47 +180,6 @@ namespace DataChecker_FilesMerger
         private IndexDictionary<string> JNExcelColumns = new IndexDictionary<string>();
 
         /// <summary>
-        /// 案卷页数所在列
-        /// </summary>
-        private string AJPageColumn;
-
-        /// <summary>
-        /// 卷内页数所在列
-        /// </summary>
-        private string JNPageColumn;
-
-        /// <summary>
-        /// 件数所在列
-        /// </summary>
-        private string JNCountColumn;
-
-        /// <summary>
-        /// 案卷筛选列
-        /// </summary>
-        private List<string> AJFilter = new List<string>();
-
-        /// <summary>
-        /// 卷内筛选列
-        /// </summary>
-        public List<string> JNFilter = new List<string>();
-
-        /// <summary>
-        /// 目录构成[名称,规定长度]
-        /// </summary>
-        private Dictionary<string, int> dirConstitute = new Dictionary<string, int>();
-
-        /// <summary>
-        /// pdf文件名规则
-        /// </summary>
-        private Dictionary<string, int> PdfNameRule;
-
-        /// <summary>
-        /// pdf保存文件夹规则
-        /// </summary>
-        private Dictionary<string, int> FolderNameRule;
-
-
-        /// <summary>
         /// 集合存放案卷实体
         /// </summary>
         private List<AJEntity> ajEntities_List = new List<AJEntity>();
@@ -117,6 +188,8 @@ namespace DataChecker_FilesMerger
         /// 集合存放卷内实体
         /// </summary>
         public volatile List<JNEntity> jnEntities_List = new List<JNEntity>();
+
+        #endregion
 
         /// <summary>
         /// 锁
@@ -132,44 +205,70 @@ namespace DataChecker_FilesMerger
         /// </summary>
         List<string> turnRow = new List<string>();
 
-        /// <summary>
-        /// 是否对文件夹名称应用规定长度
-        /// </summary>
-        public bool shouldRename;
-        /// <summary>
-        /// pdf保存路径
-        /// </summary>
-        string fileSaveFolder;
 
-        /// <summary>
-        /// 是否完成匹配设置
-        /// </summary>
-        private bool MatchSetted = false;
-        /// <summary>
-        /// 是否完成拆分设置
-        /// </summary>
-        private bool DemergeSetted = false;
-        /// <summary>
-        /// 是否完成合并设置
-        /// </summary>
-        private bool MergeSetted = false;
-        /// <summary>
-        /// 案卷组装完毕
-        /// </summary>
-        private bool prepareAJComplete = false;
-        /// <summary>
-        /// 是否合并封面卷内和封底
-        /// </summary>
-        public bool IsMergeFM;
 
         public string Addition;
 
 
-        private bool IsOneToMany
+
+        #region 状态标志
+
+        /// <summary>
+        /// 是否读取数据
+        /// </summary>
+        private bool DataLoaded = false;
+
+        /// <summary>
+        /// 是否完成拆分设置
+        /// </summary>
+        private bool DemergeSetted = false;
+
+        /// <summary>
+        /// 是否完成合并设置
+        /// </summary>
+        private bool MergeSetted = false;
+
+        #endregion
+
+        #region 跳过标志
+
+        /// <summary>
+        /// 是否跳过件数检查
+        /// </summary>
+        public bool JumpJNCount
         {
             get;
             set;
-        } = true;
+        }
+
+        /// <summary>
+        /// 是否跳过页数检查
+        /// </summary>
+        public bool JumpPageCount
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 是否跳过扫描件
+        /// </summary>
+        public bool JumpScanFiles
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 是否跳过卷内部分
+        /// </summary>
+        public bool JumpJN
+        {
+            get;
+            set;
+        }
+
+        #endregion
 
         public MainForm()
         {
@@ -177,9 +276,10 @@ namespace DataChecker_FilesMerger
             this.comboBox1.SelectedIndex = 0;
             UnAdjustList_ADD();
             AdjustByRb_ADD();
+            UpdatePercent.Stop();
         }
 
-        #region 控件状态调整
+        #region 状态调整
 
         /// <summary>
         /// 不被调整的控件
@@ -190,23 +290,32 @@ namespace DataChecker_FilesMerger
         /// </summary>
         private List<string> AdjustByRb = new List<string>();
 
+        private delegate void Enable_FlushClient(bool enable);
         /// <summary>
         /// 调整控件可用性
         /// </summary>
         /// <param name="enable">是否可用</param>
         private void AdjustControlEnable(bool enable)
         {
-            foreach (Control control in this.Controls)
+            if (progressBar1.InvokeRequired)
             {
-                if (!UnAdjustByRb.Contains(control.Name))
+                Enable_FlushClient fc = new Enable_FlushClient(AdjustControlEnable);
+                BeginInvoke(fc, new object[] { enable });
+            }
+            else
+            {
+                foreach (Control control in this.Controls)
                 {
-                    if (AdjustByRb.Contains(control.Name) && enable)
+                    if (!UnAdjustByRb.Contains(control.Name))
                     {
-                        control.Enabled = IsOneToMany;
-                    }
-                    else
-                    {
-                        control.Enabled = enable;
+                        if (AdjustByRb.Contains(control.Name) && enable)
+                        {
+                            control.Enabled = IsOneToMany;
+                        }
+                        else
+                        {
+                            control.Enabled = enable;
+                        }
                     }
                 }
             }
@@ -224,27 +333,85 @@ namespace DataChecker_FilesMerger
             AdjustByRb.Add(cbJNSheets.Name);
         }
 
-        Stopwatch stopwatch = new Stopwatch();
+        private void ResetState()
+        {
+            if (DataLoaded)
+            {
+                if (MessageBox.Show("是否用原有设置重新加载数据?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    LoadData();
+                }
+                else
+                {
+                    DataLoaded = false;
+                }
+            }
+            DemergeSetted = false;
+            MergeSetted = false;
+        }
 
+        #endregion
+
+        #region 调整进度
+
+        int nowPercent;
+
+        private delegate void Progress_FlushClient(int i);
         /// <summary>
         /// 调整进度状态
         /// </summary>
         /// <param name="i"></param>
         private void AdjustProgress(int i)
         {
-            this.progressBar1.Value = i;
-            this.lblPercent.Text = @"已完成：" + i.ToString() + @"%";
-            this.lblTimer.Text = "当前耗时:" + stopwatch.Elapsed.TotalMinutes.ToString();
-            if(i == 100)
+            if (progressBar1.InvokeRequired)
             {
-                stopwatch.Stop();
+                Progress_FlushClient fc = new Progress_FlushClient(AdjustProgress);
+                BeginInvoke(fc, new object[] { i });
+            }
+            else
+            {
+                this.progressBar1.Value = i;
+                if (i == 100)
+                {
+                    this.lblPercent.Text = i.ToString() + "%";
+                }
+                else
+                    nowPercent = i;
             }
         }
 
+        private void UpdatePercent_work(object sender, EventArgs e)
+        {
+            this.lblPercent.Text = nowPercent.ToString() + "%";
+        }
+
+        /// <summary>
+        /// 开始工作,调整控件状态和进度状态
+        /// </summary>
         private void StartProgress()
         {
-            stopwatch.Restart();
+            UpdatePercent.Start();
             AdjustProgress(0);
+            AdjustControlEnable(false);
+        }
+
+        private delegate void EndProgress_FlushClient();
+        /// <summary>
+        /// 结束工作,调整控件状态和进度状态
+        /// </summary>
+        private void EndProgress()
+        {
+            if (progressBar1.InvokeRequired)
+            {
+                EndProgress_FlushClient fc = new EndProgress_FlushClient(EndProgress);
+                BeginInvoke(fc);
+            }
+            else
+            {
+                UpdatePercent.Stop();
+                AdjustProgress(100);
+                AdjustControlEnable(true);
+            }
         }
 
         #endregion
@@ -258,6 +425,7 @@ namespace DataChecker_FilesMerger
                 tbAJFile.Text = openFileDialog.FileName;
                 AJReader.Load_Excel(tbAJFile.Text.Trim());
                 cbAJSheets.DataSource = AJReader.SheetsName;
+                ResetState();
             }
         }
 
@@ -268,17 +436,20 @@ namespace DataChecker_FilesMerger
                 tbJNFile.Text = openFileDialog.FileName;
                 JNReader.Load_Excel(tbJNFile.Text.Trim());
                 cbJNSheets.DataSource = JNReader.SheetsName;
+                ResetState();
             }
         }
 
         private void cbAJSheets_SelectedIndexChanged(object sender, EventArgs e)
         {
             AJReader.ResetSheet(cbAJSheets.SelectedItem.ToString());
+            ResetState();
         }
 
         private void cbJNSheets_SelectedIndexChanged(object sender, EventArgs e)
         {
             JNReader.ResetSheet(cbJNSheets.SelectedItem.ToString());
+            ResetState();
         }
 
         #endregion
@@ -299,8 +470,18 @@ namespace DataChecker_FilesMerger
             {
                 tbFilesPath.Text = folderBrowserDialog.SelectedPath;
                 rootDir = tbFilesPath.Text;
+                if (JumpScanFiles)
+                {
+                    MessageBox.Show("扫描件路径追加完成,将重新读取数据!");
+                    LoadData();
+                }
                 fileFormat = "*" + this.comboBox1.SelectedItem.ToString();
             }
+        }
+
+        private void selectedChanged(object sender, EventArgs e)
+        {
+            fileFormat = "*" + this.comboBox1.SelectedItem.ToString();
         }
 
         #endregion
@@ -372,14 +553,22 @@ namespace DataChecker_FilesMerger
 
         #region 组装案卷
 
-        private void btnLoadData_Click(object sender, EventArgs e)
+        private void LoadData()
         {
             ajEntities_List.Clear();
             jnEntities_List.Clear();
             this.listView_Error.Items.Clear();
-            AdjustControlEnable(false);
             StartProgress();
+            ReSetJump();
             bgwPrepareAJ.RunWorkerAsync();
+        }
+
+        private void ReSetJump()
+        {
+            JumpPageCount = false;
+            JumpJNCount = false;
+            JumpScanFiles = false;
+            JumpJN = false;
         }
 
         /// <summary>
@@ -389,53 +578,91 @@ namespace DataChecker_FilesMerger
         /// <param name="e"></param>
         private void bgwPrepareAJ_DoWork(object sender, DoWorkEventArgs e)
         {
-            int complete = 0;
-            prepareAJComplete = false;
-
-            int AJCount = AJReader.Cells.MaxDataRow;
-            int JNCount = JNReader.Cells.MaxDataRow;
-
-            int total = AJCount;
-
+            if (string.IsNullOrWhiteSpace(AJPageColumn))
+            {
+                WriteErrorInfo("", "", "案卷页数未设置,将跳过相关工作");
+                JumpScanFiles = true;
+                JumpPageCount = true;
+            }
+            if (string.IsNullOrWhiteSpace(JNCountColumn))
+            {
+                WriteErrorInfo("", "", "案卷件数未设置,将跳过相关工作");
+                JumpJNCount = true;
+            }
+            if (string.IsNullOrWhiteSpace(rootDir))
+            {
+                WriteErrorInfo("", "", "文件路径未设置,将跳过相关工作");
+                JumpScanFiles = true;
+            }
             if (IsOneToMany)
             {
+                if (string.IsNullOrWhiteSpace(JNPageColumn))
+                {
+                    WriteErrorInfo("", "", "卷内页数未设置,将跳过相关工作");
+                    JumpPageCount = true;
+                }
+                if (AJFilter == null || AJFilter.Count == 0)
+                {
+                    WriteErrorInfo("", "", "案卷与卷内关系未设置,将跳过相关工作");
+                    JumpJN = true;
+                }
+            }
+
+            int complete = 0;
+            int AJCount = AJReader.Cells.MaxDataRow;
+            int total = AJCount;
+
+            InitColumns();
+            if (IsOneToMany)
+            {
+                int JNCount = JNReader.Cells.MaxDataRow;
                 total += JNCount;
                 for (int i = ColumnNameRow + 1; i < JNCount + 1; i++)
                 {
+                    int location = i + 1;
                     try
                     {
-                        int percent = complete * 100 / total;
-                        bgwPrepareAJ.ReportProgress(percent);
                         var value = DataBuilder(i, JNReader);
-                        JNEntity jn = new JNEntity(value, i, JNPageColumn);
+                        JNEntity jn = new JNEntity(value, location, JNPageColumn);
                         jnEntities_List.Add(jn);
                         complete++;
+                        int percent = complete * 100 / total;
+                        bgwPrepareAJ.ReportProgress(percent);
                     }
                     catch (Exception ex)
                     {
-                        WriteErrorInfo("JN行号:" + i.ToString(), "[PrepareAJ/JN]", ex.Message);
+                        WriteErrorInfo("JN行号:" + location.ToString(), "[PrepareAJ/JN]", ex.Message);
                         continue;
                     }
                 }
             }
             for (int i = ColumnNameRow + 1; i < AJCount + 1; i++)
             {
+                int location = i + 1;
                 try
                 {
-                    int percent = complete * 100 / total;
-                    bgwPrepareAJ.ReportProgress(percent);
                     var value = DataBuilder(i, AJReader);
-                    AJEntity aj = new AJEntity(value, i, rootDir, AJPageColumn, dirConstitute);
+                    AJEntity aj = new AJEntity(value, location, rootDir, AJPageColumn, dirConstitute);
                     if (IsOneToMany)
                         aj.OneToManyAppend(JNCountColumn, AJFilter);
+                    ajEntities_List.Add(aj);
                     complete++;
+                    int percent = complete * 100 / total;
+                    bgwPrepareAJ.ReportProgress(percent);
                 }
                 catch (Exception ex)
                 {
-                    WriteErrorInfo("AJ行号:" + i.ToString(), "[PrepareAJ/AJ]", ex.Message);
+                    WriteErrorInfo("AJ行号:" + location.ToString(), "[PrepareAJ/AJ]", ex.Message);
                     continue;
                 }
             }
+        }
+
+        private void bgwPrepareAJ_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            DataLoaded = true;
+            EndProgress();
+            MessageBox.Show("读取完成");
         }
 
         /// <summary>
@@ -444,16 +671,28 @@ namespace DataChecker_FilesMerger
         /// <param name="i"></param>
         /// <param name="reader"></param>
         /// <returns></returns>
-        private Dictionary<string, string> DataBuilder(int i,ExcelReader reader)
+        private Dictionary<string, string> DataBuilder(int i, ExcelReader reader)
         {
-            Dictionary<string,string> archive = new Dictionary<string, string>();
+            Dictionary<string, string> archive = new Dictionary<string, string>();
             for (int j = 0; j <= reader.Cells.Rows[i].LastCell.Column; j++)
             {
-                var currentCellValue = reader.Cells[i, j].Value;
-                //将不为空的单元格取出
-                if (currentCellValue != null && !string.IsNullOrWhiteSpace(currentCellValue.ToString()))
+                try
                 {
-                    archive.Add(reader.ExcelColumns[j], currentCellValue.ToString());
+                    var currentCellValue = reader.Cells[i, j].Value;
+                    //将不为空的单元格取出
+                    if (currentCellValue != null && !string.IsNullOrWhiteSpace(currentCellValue.ToString()))
+                    {
+                        if (archive.Count != 0 && archive.Keys.Contains(reader.ExcelColumns[j]))
+                        {
+                            WriteErrorInfo("AJ行号:" + i.ToString() + "|列号:" + j.ToString(), "[DataBuilder]", "列名[" + reader.ExcelColumns[j] + "]已重复,将放弃");
+                            continue;
+                        }
+                        archive.Add(reader.ExcelColumns[j], currentCellValue.ToString());
+                    }
+                }
+                catch (Exception ex)
+                {
+
                 }
             }
             return archive;
@@ -483,10 +722,6 @@ namespace DataChecker_FilesMerger
             {
                 MessageBox.Show("请先选择案卷文件"); return;
             }
-            if (string.IsNullOrWhiteSpace(rootDir))
-            {
-                MessageBox.Show("请先选择扫描件目录"); return;
-            }
             var columnsetting = ColumnSetting.CreateInstrance();
             var foldersetting = FolderSetting.CreateInstrance();
             var oneTomany = OneToManySetting.CreateInstrance();
@@ -498,7 +733,7 @@ namespace DataChecker_FilesMerger
                 }
                 InitColumns();
 
-                List<Form> forms = new List<Form> { columnsetting, foldersetting, oneTomany };
+                List<Form> forms = new List<Form> { foldersetting, columnsetting, oneTomany };
                 columnsetting.Upload(AJReader.ExcelColumns, JNReader.ExcelColumns);
                 foldersetting.Upload(AJReader.ExcelColumns);
                 oneTomany.Upload(AJReader.ExcelColumns, JNReader.ExcelColumns);
@@ -516,13 +751,14 @@ namespace DataChecker_FilesMerger
                     {
                         //Rename();
                     }
-                    MatchSetted = true;
+                    MessageBox.Show("设置完成,将开始读取数据!");
+                    //LoadData();
                 }
             }
             else
             {
                 InitColumns();
-                List<Form> forms = new List<Form> { columnsetting, foldersetting };
+                List<Form> forms = new List<Form> { foldersetting, columnsetting };
                 columnsetting.Upload(AJReader.ExcelColumns);
                 foldersetting.Upload(AJReader.ExcelColumns);
 
@@ -535,33 +771,36 @@ namespace DataChecker_FilesMerger
                     {
                         //Rename();
                     }
-                    MatchSetted = true;
+                    MessageBox.Show("设置完成,将开始读取数据!");
+                    //LoadData();
                 }
             }
-        }        
+        }
 
         private void btnMatch_Click(object sender, EventArgs e)
         {
-            if (MatchSetted)
+            if (!DataLoaded)
             {
-                this.listView_Error.Items.Clear();
-                StartProgress();
-                AdjustControlEnable(false);
-
-                QueueThreadBase<AJEntity> thfd = new QueueThreadBase<AJEntity>(ajEntities_List, Match);
-                thfd.OneCompleted += ShowOneDoneMsg;
-                thfd.AllCompleted += ShowAllDoneMsg;
-                thfd.Start();
+                MessageBox.Show("请先完成数据读取!");
             }
             else
             {
-                MessageBox.Show("请先完成检测设置");
+                StartProgress();
+                ThreadBaseControl<AJEntity> thfd = new ThreadBaseControl<AJEntity>(ajEntities_List, Match);
+                thfd.OneCompleted += ShowOneDoneMsg;
+                thfd.AllCompleted += ShowAllDoneMsg;
+                thfd.Start();
             }
         }
 
         private void Match(AJEntity aj)
         {
-            aj.MatchInfo();
+            if (!JumpJNCount && !JumpJN)
+                aj.MatchCount();
+            if (!JumpPageCount && !JumpJN)
+                aj.MatchPages();
+            if (!JumpScanFiles)
+                aj.MatchScanfile();
         }
 
         private void ShowOneDoneMsg(AJEntity x, CompetedEventArgs args)
@@ -571,8 +810,9 @@ namespace DataChecker_FilesMerger
 
         private void ShowAllDoneMsg(CompetedEventArgs args)
         {
-            AdjustProgress(args.CompetedPrecent);
-        }       
+            EndProgress();
+            MessageBox.Show("检测完成");
+        }
 
         #endregion
 
@@ -580,44 +820,44 @@ namespace DataChecker_FilesMerger
 
         private void btnMerge_Click(object sender, EventArgs e)
         {
-            if (!prepareAJComplete)
-            {
-                MessageBox.Show("请先完成检测"); return;
-            }
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-            folderBrowserDialog.Description = "选择目录";
-            folderBrowserDialog.RootFolder = Environment.SpecialFolder.MyComputer;
-            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
-            {
-                fileSaveFolder = folderBrowserDialog.SelectedPath + "\\";
-            }
-            else
-            {
-                return;
-            }
-            if (MergeSetted)
-            {
-                if (IsOneToMany)
-                {
-                    this.listView_Error.Items.Clear();
-                    AdjustProgress(0);
-                    AdjustControlEnable(false);
-                    this.mergeFile.DoWork += new System.ComponentModel.DoWorkEventHandler(this.MergeFile_DoWork_OneToMany);
-                    this.mergeFile.RunWorkerAsync();
-                }
-                else
-                {
-                    this.listView_Error.Items.Clear();
-                    AdjustProgress(0);
-                    AdjustControlEnable(false);
-                    this.mergeFile.DoWork += new System.ComponentModel.DoWorkEventHandler(this.MergeFile_DoWork_OneToOne);
-                    this.mergeFile.RunWorkerAsync();
-                }
-            }
-            else
-            {
-                MessageBox.Show("请先完成合并设置!");
-            }
+            //    if (!prepareAJComplete)
+            //    {
+            //        MessageBox.Show("请先完成检测"); return;
+            //    }
+            //    FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            //    folderBrowserDialog.Description = "选择目录";
+            //    folderBrowserDialog.RootFolder = Environment.SpecialFolder.MyComputer;
+            //    if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            //    {
+            //        fileSaveFolder = folderBrowserDialog.SelectedPath + "\\";
+            //    }
+            //    else
+            //    {
+            //        return;
+            //    }
+            //    if (MergeSetted)
+            //    {
+            //        if (IsOneToMany)
+            //        {
+            //            this.listView_Error.Items.Clear();
+            //            AdjustProgress(0);
+            //            AdjustControlEnable(false);
+            //            this.mergeFile.DoWork += new System.ComponentModel.DoWorkEventHandler(this.MergeFile_DoWork_OneToMany);
+            //            this.mergeFile.RunWorkerAsync();
+            //        }
+            //        else
+            //        {
+            //            this.listView_Error.Items.Clear();
+            //            AdjustProgress(0);
+            //            AdjustControlEnable(false);
+            //            this.mergeFile.DoWork += new System.ComponentModel.DoWorkEventHandler(this.MergeFile_DoWork_OneToOne);
+            //            this.mergeFile.RunWorkerAsync();
+            //        }
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show("请先完成合并设置!");
+            //    }
         }
 
         Operater op = new Operater();
@@ -662,7 +902,7 @@ namespace DataChecker_FilesMerger
         //        List<string> adittionalName = new List<string>();
         //        foreach (JNEntity jn in dic.Value)
         //        {
-                    
+
         //            //对每个卷内行执行合并操作
         //            for (int i = 0; i < jn.Value.Rows.Count; i++)
         //            {
@@ -846,10 +1086,10 @@ namespace DataChecker_FilesMerger
         /// </summary>
         /// <param name="list">附件集合</param>
         /// <param name="fileSavePath">文件fullName</param>
-        private void MergeAdditional(List<FileInfo> list,string fileSavePath)
+        private void MergeAdditional(List<FileInfo> list, string fileSavePath)
         {
             List<string> inputFiles = new List<string>();
-            foreach(FileInfo fileInfo in list)
+            foreach (FileInfo fileInfo in list)
             {
                 inputFiles.Add(fileInfo.FullName);
             }
@@ -893,10 +1133,6 @@ namespace DataChecker_FilesMerger
             {
                 MessageBox.Show("请先选择案卷文件"); return;
             }
-            if (rootDir == null)
-            {
-                MessageBox.Show("请先选择扫描件目录"); return;
-            }
             if (IsOneToMany)
             {
                 if (JNExcelColumns == null || JNExcelColumns.Count == 0)
@@ -905,32 +1141,30 @@ namespace DataChecker_FilesMerger
                 }
                 else
                 {
-                    MergeSetting mergeSetting = new MergeSetting(JNExcelColumns, PdfNameRule, FolderNameRule, true, AJExcelColumns);
-                    if (mergeSetting.ShowDialog() == DialogResult.OK)
-                    {
-                        PdfNameRule = mergeSetting.PdfNameRule;
-                        FolderNameRule = mergeSetting.FolderNameRule;
-                        MergeSetted = true;
-                        IsMergeFM = mergeSetting.IsMergeFM;
-                        Addition = mergeSetting.Addition;
-                    }
+                    //MergeSetting mergeSetting = new MergeSetting(JNExcelColumns, PdfNameRule, FolderNameRule, true, AJExcelColumns);
+                    //if (mergeSetting.ShowDialog() == DialogResult.OK)
+                    //{
+                    //    PdfNameRule = mergeSetting.PdfNameRule;
+                    //    FolderNameRule = mergeSetting.FolderNameRule;
+                    //    MergeSetted = true;
+                    //    IsMergeFM = mergeSetting.IsMergeFM;
+                    //    Addition = mergeSetting.Addition;
+                    //}
                 }
             }
             else
             {
-                MergeSetting mergeSetting = new MergeSetting(AJExcelColumns, PdfNameRule, FolderNameRule, false);
-                if (mergeSetting.ShowDialog() == DialogResult.OK)
-                {
-                    PdfNameRule = mergeSetting.PdfNameRule;
-                    FolderNameRule = mergeSetting.FolderNameRule;
-                    MergeSetted = true;
-                    IsMergeFM = mergeSetting.IsMergeFM;
-                }
+                //MergeSetting mergeSetting = new MergeSetting(AJExcelColumns, PdfNameRule, FolderNameRule, false);
+                //if (mergeSetting.ShowDialog() == DialogResult.OK)
+                //{
+                //    PdfNameRule = mergeSetting.PdfNameRule;
+                //    FolderNameRule = mergeSetting.FolderNameRule;
+                //    MergeSetted = true;
+                //    IsMergeFM = mergeSetting.IsMergeFM;
+                //}
             }
         }
         #endregion
-
-
 
         #region 重命名文件夹
         public void Rename()
@@ -946,18 +1180,18 @@ namespace DataChecker_FilesMerger
         {
             DirectoryInfo rootDir = new DirectoryInfo(this.rootDir);
             List<int> bits = dirConstitute.Values.ToList();
-            float Count = (float)GetFolderCount(rootDir, 0,bits.Count);
+            float Count = (float)GetFolderCount(rootDir, 0, bits.Count);
             GetDirectory(rootDir, 0, bits, Count);
         }
 
         float nowNum = 0;
-        private void GetDirectory(DirectoryInfo parent,int layer,List<int> bits,float count)
+        private void GetDirectory(DirectoryInfo parent, int layer, List<int> bits, float count)
         {
             if (layer < bits.Count)
             {
                 foreach (DirectoryInfo item in parent.GetDirectories())
                 {
-                    string newFullName = RewriteFolderName(item, bits[layer],count);
+                    string newFullName = RewriteFolderName(item, bits[layer], count);
                     if (newFullName != null)
                     {
                         int nextLayer = layer + 1;
@@ -967,7 +1201,7 @@ namespace DataChecker_FilesMerger
             }
         }
 
-        public static int GetFolderCount(DirectoryInfo dirInfo,int layer,int maxLayer)
+        public static int GetFolderCount(DirectoryInfo dirInfo, int layer, int maxLayer)
         {
             int totalFolder = 0;
             if (layer < maxLayer)
@@ -976,13 +1210,13 @@ namespace DataChecker_FilesMerger
                 foreach (DirectoryInfo subdir in dirInfo.GetDirectories())
                 {
                     int nextLayer = layer + 1;
-                    totalFolder += GetFolderCount(subdir,nextLayer,maxLayer);
+                    totalFolder += GetFolderCount(subdir, nextLayer, maxLayer);
                 }
             }
             return totalFolder;
         }
 
-        private string RewriteFolderName(DirectoryInfo target,int bit,float count)
+        private string RewriteFolderName(DirectoryInfo target, int bit, float count)
         {
             try
             {
@@ -997,7 +1231,7 @@ namespace DataChecker_FilesMerger
                     MyComputer.FileSystem.RenameDirectory(target.FullName, newName);
                     return target.Parent.FullName + "\\" + newName;
                 }
-                else if (target.Name.Length>bit)
+                else if (target.Name.Length > bit)
                 {
                     string newName = target.Name.Substring(target.Name.Length - bit);
                     Computer MyComputer = new Computer();
@@ -1006,7 +1240,7 @@ namespace DataChecker_FilesMerger
                 }
                 else return null;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
                 return null;
@@ -1027,7 +1261,7 @@ namespace DataChecker_FilesMerger
             {
                 MessageBox.Show("请先选择案卷文件"); return;
             }
-            DemergeSetting demergeSetting = new DemergeSetting(AJExcelColumns,saveColumn,turnRow);
+            DemergeSetting demergeSetting = new DemergeSetting(AJReader.ExcelColumns.strIndex, saveColumn, turnRow);
             if (demergeSetting.ShowDialog() == DialogResult.OK)
             {
                 saveColumn = demergeSetting.saveColumn;
@@ -1037,11 +1271,11 @@ namespace DataChecker_FilesMerger
 
         private void btnSplit_Click(object sender, EventArgs e)
         {
-            if(!prepareAJComplete)
+            if (!DataLoaded)
             {
-                MessageBox.Show("请先完成检测");return;
+                MessageBox.Show("请先完成检测"); return;
             }
-            if(DemergeSetted)
+            if (DemergeSetted)
             {
                 this.listView_Error.Items.Clear();
                 this.progressBar1.Value = 0;
@@ -1058,24 +1292,24 @@ namespace DataChecker_FilesMerger
         DataTable JNs = new DataTable();
         private void demergeExcel_DoWork(object sender, DoWorkEventArgs e)
         {
-            JNs = new DataTable();
-            foreach (string column in saveColumn)
-            {
-                JNs.Columns.Add(column);
-            }
-            JNs.Columns.Add("序号");
-            JNs.Columns.Add("题名");
-            JNs.Columns.Add("页数");
-            object[] obj = new object[JNs.Columns.Count];
-            foreach (AJEntity aj in ajEntities_List)
-            {
-                DataTable JN = DataTableRecombine(aj);
-                for (int i = 0; i < JN.Rows.Count; i++)
-                {
-                    JN.Rows[i].ItemArray.CopyTo(obj, 0);
-                    JNs.Rows.Add(obj);
-                }
-            }
+            //JNs = new DataTable();
+            //foreach (string column in saveColumn)
+            //{
+            //    JNs.Columns.Add(column);
+            //}
+            //JNs.Columns.Add("序号");
+            //JNs.Columns.Add("题名");
+            //JNs.Columns.Add("页数");
+            //object[] obj = new object[JNs.Columns.Count];
+            //foreach (AJEntity aj in ajEntities_List)
+            //{
+            //    DataTable JN = DataTableRecombine(aj);
+            //    for (int i = 0; i < JN.Rows.Count; i++)
+            //    {
+            //        JN.Rows[i].ItemArray.CopyTo(obj, 0);
+            //        JNs.Rows.Add(obj);
+            //    }
+            //}
         }
 
         private void demergeExcel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -1084,96 +1318,96 @@ namespace DataChecker_FilesMerger
             AdjustControlEnable(true);
         }
 
-        private DataTable DataTableRecombine(AJEntity AJEntity)
-        {
-            DataTable AJ = AJEntity.Value;
-            DataTable JN = new DataTable();
-            foreach (string column in saveColumn)
-            {
-                JN.Columns.Add(column);
-            }
-            JN.Columns.Add("序号");
-            JN.Columns.Add("题名");
-            JN.Columns.Add("页数");
-            try
-            {
-                int orderNum = 1;
-                for (int i = 0; i < turnRow.Count; i++)
-                {
-                    if (AJ.Columns.Contains(turnRow[i]))
-                    {
-                        DataRow row = JN.NewRow();
-                        for (int j = 0; j < saveColumn.Count; j++)
-                        {
-                            row[saveColumn[j]] = AJ.Rows[0][saveColumn[j]];
-                        }
-                        row["序号"] = orderNum;
-                        row["题名"] = turnRow[i].Trim();
-                        //纯数字,则页数为1
-                        if (int.TryParse(AJ.Rows[0][turnRow[i]].ToString(),out int num1))
-                        {
-                            row["页数"] = 1;
-                        }
-                        else
-                        {
-                            //用分隔符进行拆分
-                            string[] pageNum = AJ.Rows[0][turnRow[i]].ToString().Split('-');
-                            //正常情况,拆分为两段
-                            if (pageNum.Length == 2)
-                            {
-                                //首位不为数字
-                                if (!int.TryParse(pageNum[0], out int num2))
-                                {
-                                    //第二位不为数字
-                                    if (!int.TryParse(pageNum[1], out int num3))
-                                    {
-                                        //放弃
-                                        continue;
-                                    }
-                                }
-                                //第二位不为数字
-                                if (!int.TryParse(pageNum[1], out int num4))
-                                {
-                                    WriteErrorInfo(AJEntity.Location.ToString(), turnRow[i], "该位置页号存在问题");
-                                    row["页数"] = "-";
-                                }
-                                else
-                                {
-                                    row["页数"] = int.Parse(pageNum[1].Trim()) - int.Parse(pageNum[0].Trim()) + 1;
-                                }
-                            }
-                            //不正常情况
-                            else
-                            {
-                                //首位不为数字,直接放弃
-                                if (!int.TryParse(pageNum[0], out int num2))
-                                {
-                                    continue;
-                                }
-                                //首位为数字,但整体为不标准情况,需要检查
-                                else
-                                {
-                                    WriteErrorInfo(AJEntity.Location.ToString(), turnRow[i], "该位置页号存在问题");
-                                    row["页数"] = "-";
-                                }
-                            }
-                        }
+        //private DataTable DataTableRecombine(AJEntity AJEntity)
+        //{
+        //    DataTable AJ = AJEntity.Value;
+        //    DataTable JN = new DataTable();
+        //    foreach (string column in saveColumn)
+        //    {
+        //        JN.Columns.Add(column);
+        //    }
+        //    JN.Columns.Add("序号");
+        //    JN.Columns.Add("题名");
+        //    JN.Columns.Add("页数");
+        //    try
+        //    {
+        //        int orderNum = 1;
+        //        for (int i = 0; i < turnRow.Count; i++)
+        //        {
+        //            if (AJ.Columns.Contains(turnRow[i]))
+        //            {
+        //                DataRow row = JN.NewRow();
+        //                for (int j = 0; j < saveColumn.Count; j++)
+        //                {
+        //                    row[saveColumn[j]] = AJ.Rows[0][saveColumn[j]];
+        //                }
+        //                row["序号"] = orderNum;
+        //                row["题名"] = turnRow[i].Trim();
+        //                //纯数字,则页数为1
+        //                if (int.TryParse(AJ.Rows[0][turnRow[i]].ToString(),out int num1))
+        //                {
+        //                    row["页数"] = 1;
+        //                }
+        //                else
+        //                {
+        //                    //用分隔符进行拆分
+        //                    string[] pageNum = AJ.Rows[0][turnRow[i]].ToString().Split('-');
+        //                    //正常情况,拆分为两段
+        //                    if (pageNum.Length == 2)
+        //                    {
+        //                        //首位不为数字
+        //                        if (!int.TryParse(pageNum[0], out int num2))
+        //                        {
+        //                            //第二位不为数字
+        //                            if (!int.TryParse(pageNum[1], out int num3))
+        //                            {
+        //                                //放弃
+        //                                continue;
+        //                            }
+        //                        }
+        //                        //第二位不为数字
+        //                        if (!int.TryParse(pageNum[1], out int num4))
+        //                        {
+        //                            WriteErrorInfo(AJEntity.Location.ToString(), turnRow[i], "该位置页号存在问题");
+        //                            row["页数"] = "-";
+        //                        }
+        //                        else
+        //                        {
+        //                            row["页数"] = int.Parse(pageNum[1].Trim()) - int.Parse(pageNum[0].Trim()) + 1;
+        //                        }
+        //                    }
+        //                    //不正常情况
+        //                    else
+        //                    {
+        //                        //首位不为数字,直接放弃
+        //                        if (!int.TryParse(pageNum[0], out int num2))
+        //                        {
+        //                            continue;
+        //                        }
+        //                        //首位为数字,但整体为不标准情况,需要检查
+        //                        else
+        //                        {
+        //                            WriteErrorInfo(AJEntity.Location.ToString(), turnRow[i], "该位置页号存在问题");
+        //                            row["页数"] = "-";
+        //                        }
+        //                    }
+        //                }
 
-                        JN.Rows.Add(row);
-                        orderNum++;
-                    }
-                }
-            }
-            catch(Exception ex)
-            {
-                WriteErrorInfo(AJEntity.Location.ToString(), "DataTableRecombine", ex.Message);
-            }
-            return JN;
-        }
+        //                JN.Rows.Add(row);
+        //                orderNum++;
+        //            }
+        //        }
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        WriteErrorInfo(AJEntity.Location.ToString(), "DataTableRecombine", ex.Message);
+        //    }
+        //    return JN;
+        //}
         #endregion
 
 
-        
+
 
         private void mergeFile_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -1187,16 +1421,12 @@ namespace DataChecker_FilesMerger
             AdjustControlEnable(true);
         }
 
-        private void bgwPrepareAJ_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            prepareAJComplete = true;
-        }
+
 
         private void ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
             AdjustProgress(e.ProgressPercentage);
         }
 
-        
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.tbAJFile = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -67,8 +68,8 @@
             this.cbJNSheets = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.mergeFile = new System.ComponentModel.BackgroundWorker();
-            this.btnLoadData = new System.Windows.Forms.Button();
             this.lblTimer = new System.Windows.Forms.Label();
+            this.UpdatePercent = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // tbAJFile
@@ -132,6 +133,7 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(97, 23);
             this.comboBox1.TabIndex = 29;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.selectedChanged);
             // 
             // btnSelectFolder
             // 
@@ -213,7 +215,7 @@
             // 
             // btnMatchSetting
             // 
-            this.btnMatchSetting.Location = new System.Drawing.Point(324, 99);
+            this.btnMatchSetting.Location = new System.Drawing.Point(414, 99);
             this.btnMatchSetting.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnMatchSetting.Name = "btnMatchSetting";
             this.btnMatchSetting.Size = new System.Drawing.Size(82, 25);
@@ -427,25 +429,20 @@
             this.mergeFile.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.ProgressChanged);
             this.mergeFile.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.mergeFile_RunWorkerCompleted);
             // 
-            // btnLoadData
-            // 
-            this.btnLoadData.Location = new System.Drawing.Point(324, 130);
-            this.btnLoadData.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.btnLoadData.Name = "btnLoadData";
-            this.btnLoadData.Size = new System.Drawing.Size(82, 25);
-            this.btnLoadData.TabIndex = 50;
-            this.btnLoadData.Text = "读取数据";
-            this.btnLoadData.UseVisualStyleBackColor = true;
-            this.btnLoadData.Click += new System.EventHandler(this.btnLoadData_Click);
-            // 
             // lblTimer
             // 
             this.lblTimer.AutoSize = true;
-            this.lblTimer.Location = new System.Drawing.Point(268, 431);
+            this.lblTimer.Location = new System.Drawing.Point(232, 431);
             this.lblTimer.Name = "lblTimer";
-            this.lblTimer.Size = new System.Drawing.Size(67, 15);
+            this.lblTimer.Size = new System.Drawing.Size(31, 15);
             this.lblTimer.TabIndex = 51;
-            this.lblTimer.Text = "当前耗时";
+            this.lblTimer.Text = "ABC";
+            // 
+            // UpdatePercent
+            // 
+            this.UpdatePercent.Enabled = true;
+            this.UpdatePercent.Interval = 50;
+            this.UpdatePercent.Tick += new System.EventHandler(this.UpdatePercent_work);
             // 
             // MainForm
             // 
@@ -453,7 +450,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(869, 495);
             this.Controls.Add(this.lblTimer);
-            this.Controls.Add(this.btnLoadData);
             this.Controls.Add(this.cbJNSheets);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.rbOneToOne);
@@ -531,8 +527,8 @@
         private System.Windows.Forms.Label label7;
         private System.ComponentModel.BackgroundWorker mergeFile;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private System.Windows.Forms.Button btnLoadData;
         private System.Windows.Forms.Label lblTimer;
+        private System.Windows.Forms.Timer UpdatePercent;
     }
 }
 

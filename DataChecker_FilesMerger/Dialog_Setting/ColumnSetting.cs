@@ -50,6 +50,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
             set
             {
                 _JNColumn = value;
+                InitCombox();
             }
         }
 
@@ -125,10 +126,16 @@ namespace DataChecker_FilesMerger.Dialog_Setting
         {
             if (this.cbAJPageCount.SelectedItem != null && !string.IsNullOrWhiteSpace(this.cbAJPageCount.SelectedItem.ToString()))
                 AJPageColumn = this.cbAJPageCount.SelectedItem.ToString();
+            else
+                AJPageColumn = null;
             if (this.cbJNPageCount.SelectedItem != null && !string.IsNullOrWhiteSpace(this.cbJNPageCount.SelectedItem.ToString()))
                 JNPageColumn = this.cbJNPageCount.SelectedItem.ToString();
+            else
+                JNPageColumn = null;
             if (this.cbJNCount.SelectedItem != null && !string.IsNullOrWhiteSpace(this.cbJNCount.SelectedItem.ToString()))
                 JNCountColumn = this.cbJNCount.SelectedItem.ToString();
+            else
+                JNCountColumn = null;
             return DialogResult.OK;
         }
     }

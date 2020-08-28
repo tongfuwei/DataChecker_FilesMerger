@@ -41,10 +41,10 @@
     <Reference Include="FileHelper">
       <HintPath>DLL\FileHelper.dll</HintPath>
     </Reference>
-    <Reference Include="ItextSharp">
-      <HintPath>DLL\ItextSharp.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="O2S.Components.PDF4NET">
+      <HintPath>DLL\O2S.Components.PDF4NET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -99,6 +99,7 @@
     <Compile Include="Helper\ControlHelper.cs" />
     <Compile Include="Helper\ExcelReader.cs" />
     <Compile Include="Helper\ExcelSaver.cs" />
+    <Compile Include="Helper\MergeUtil.cs" />
     <Compile Include="Helper\ThreadHelper.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

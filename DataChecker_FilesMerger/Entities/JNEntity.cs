@@ -11,7 +11,8 @@ using System.Threading.Tasks;
 
 namespace DataChecker_FilesMerger
 {
-    public class JNEntity : DynamicObject
+    [Serializable]
+    public class JNEntity 
     {
         /// <summary>
         /// 该目录的数据[列名,值]
@@ -37,6 +38,15 @@ namespace DataChecker_FilesMerger
         private string PageColumn = null;
 
         /// <summary>
+        /// 扫描件
+        /// </summary>
+        public List<FileInfo> ScanFiles
+        {
+            get;
+            set;
+        } = new List<FileInfo>();
+
+        /// <summary>
         /// 当前卷内的页数
         /// </summary>
         public int Pages
@@ -60,9 +70,6 @@ namespace DataChecker_FilesMerger
                     }
                     else
                     {
-                        StackTrace trace = new StackTrace();
-                        MethodBase methodName = trace.GetFrame(1).GetMethod();
-                        MainForm.CreateInstrance().WriteErrorInfo("", "", "页数所在列未设定");
                         return -2;
                     }
                 }
@@ -75,14 +82,6 @@ namespace DataChecker_FilesMerger
             }
         }
 
-        /// <summary>
-        /// 扫描件
-        /// </summary>
-        public List<FileInfo> ScanFiles
-        {
-            get;
-            set;
-        } = new List<FileInfo>();
 
         #region 构造
         public JNEntity(Dictionary<string, string> _value, int _location, string _PageColumn = null)
@@ -93,22 +92,5 @@ namespace DataChecker_FilesMerger
         }
         #endregion
 
-        Dictionary<string, object> Properties = new Dictionary<string, object>();
-
-        public override bool TrySetMember(SetMemberBinder binder, object value)
-        {
-            if (!Properties.Keys.Contains(binder.Name))
-            {
-                //在此可以做一些小动作
-                //if (binder.Name == "Col")
-                //　　Properties.Add(binder.Name + (Properties.Count), value.ToString());
-                //else
-                //　　Properties.Add(binder.Name, value.ToString());
-
-
-                Properties.Add(binder.Name, value.ToString());
-            }
-            return true;
-        }
     }
 }

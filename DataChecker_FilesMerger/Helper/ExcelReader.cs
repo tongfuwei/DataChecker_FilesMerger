@@ -92,12 +92,10 @@ namespace DataChecker_FilesMerger
 
             for (int i = 0; i <= num; i++)
             {
-                if (cells[columnNameRow, i].Value != null && (!string.IsNullOrWhiteSpace( cells[columnNameRow, i].Value.ToString())))
-                {
-                    string a = cells[columnNameRow, i].Value.ToString();
-                    if (!ExcelColumns.Keys.Contains(a))
-                        ExcelColumns.Add(a);
-                }
+                string a = (cells[columnNameRow, i].Value == null || string.IsNullOrWhiteSpace(cells[columnNameRow, i].Value.ToString())) ?
+                    "空列" + i.ToString() : cells[columnNameRow, i].Value.ToString();
+                if (!ExcelColumns.Keys.Contains(a))
+                    ExcelColumns.Add(a);
             }
         }
     }

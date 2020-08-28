@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -109,8 +112,14 @@ namespace DataChecker_FilesMerger
             return collectionStaticsDict;
         }
 
+        /// <summary>
+        /// 给comboBox添加项
+        /// </summary>
+        /// <param name="combo"></param>
+        /// <param name="value"></param>
         public static void ComboAdd(ComboBox combo, List<string> value)
         {
+            //Combo中没有时添加
             foreach (string ColumnName in value)
             {
                 if (combo.Items.Contains(ColumnName))
@@ -118,6 +127,7 @@ namespace DataChecker_FilesMerger
                 else
                     combo.Items.Add(ColumnName);
             }
+            //将list中没有的项从combo移除
             for (int i = 0; i < combo.Items.Count; i++)
             {
                 object item = combo.Items[i];
@@ -126,6 +136,7 @@ namespace DataChecker_FilesMerger
                 else
                     combo.Items.Remove(item);
             }
+            //在头部添加空白项
             if (combo.Items.Count != 0)
             {
                 if (!string.IsNullOrWhiteSpace(combo.Items[0].ToString()))
@@ -133,6 +144,23 @@ namespace DataChecker_FilesMerger
                     combo.Items.Insert(0, "");
                     combo.SelectedIndex = 0;
                 }
+            }
+        }
+
+        /// <summary>
+        /// 深复制list
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="List">The list.</param>
+        /// <returns>List{``0}.</returns>
+        public static List<T> Clone<T>(object List)
+        {
+            using (Stream objectStream = new MemoryStream())
+            {
+                IFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(objectStream, List);
+                objectStream.Seek(0, SeekOrigin.Begin);
+                return formatter.Deserialize(objectStream) as List<T>;
             }
         }
     }
@@ -207,4 +235,5 @@ namespace DataChecker_FilesMerger
             this.i++;
         }
     }
+
 }

@@ -32,7 +32,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
             set
             {
                 _AJColumn = value;
-                InitCombox();
+                InitCombox("AJColumns",AJColumn.Keys.ToList());
             }
         }
 
@@ -46,6 +46,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
             set
             {
                 _JNColumn = value;
+                InitCombox("JNColumns", JNColumn.Keys.ToList());
             }
         }
 
@@ -76,49 +77,37 @@ namespace DataChecker_FilesMerger.Dialog_Setting
             DialogResult = DialogResult.None;
             if (!AJColumn.EqualDictionary(AJColumns.strIndex))
             {
-                JNColumn = JNColumns.strIndex;
                 AJColumn = AJColumns.strIndex;
+            }
+            if(!JNColumn.EqualDictionary(JNColumns.strIndex))
+            {
+                JNColumn = JNColumns.strIndex;
             }
         }
 
-        private void InitCombox()
+        private void InitCombox(string panelName,List<string> columns)
         {
             foreach (Control control in this.Controls)
             {
                 if (control is Panel)
                 {
                     //初始化案卷部分
-                    if (control.Name == "AJColumns")
+                    if (control.Name == panelName)
                     {
+                        if (columns == null || columns.Count == 0)
+                        {
+                            control.Visible = false;
+                            return;
+                        }
                         foreach (Control con in control.Controls)
                         {
                             if (con is ComboBox)
                             {
                                 ComboBox combo = con as ComboBox;
-                                Commons.ComboAdd(combo, AJColumn.Keys.ToList());
+                                Commons.ComboAdd(combo, columns);
                             }
                         }
-                    }
-                    //初始化卷内部分
-                    if (control.Name == "JNColumns")
-                    {
-                        if (JNColumn != null)
-                        {
-                            foreach (Control con in control.Controls)
-                            {
-                                if (con is ComboBox)
-                                {
-                                    ComboBox combo = con as ComboBox;
-                                    Commons.ComboAdd(combo, JNColumn.Keys.ToList());
-                                }
-                            }
-                        }
-                        //卷内未传入值时设为不可用
-                        else
-                        {
-                            control.Visible = false;
-                        }
-                    }
+                    }                    
                 }
             }
         }
@@ -129,21 +118,18 @@ namespace DataChecker_FilesMerger.Dialog_Setting
             {
                 if ((ajcb.SelectedItem!=null) && (!string.IsNullOrWhiteSpace(ajcb.SelectedItem.ToString())))
                 {
-                    if ((AJ_JN[ajcb].SelectedItem!= null)&& !string.IsNullOrWhiteSpace (AJ_JN[ajcb].SelectedItem.ToString()))
-                    {
-                        AJKeyColumn.Add(ajcb.SelectedItem.ToString());
-                        JNKeyColumn.Add(AJ_JN[ajcb].SelectedItem.ToString());
-                    }
-                    else
-                    {
-                        MessageBox.Show("两侧均要选择列!");
-                        return DialogResult.Cancel;
-                    }
+                    AJKeyColumn.Add(ajcb.SelectedItem.ToString());
+                }
+                if ((AJ_JN[ajcb].SelectedItem != null) && !string.IsNullOrWhiteSpace(AJ_JN[ajcb].SelectedItem.ToString()))
+                {
+                    JNKeyColumn.Add(AJ_JN[ajcb].SelectedItem.ToString());
                 }
             }
-            if(AJKeyColumn.Count != JNKeyColumn.Count || AJKeyColumn.Count == 0)
+            if(AJKeyColumn.Count != JNKeyColumn.Count)
             {
-                MessageBox.Show("案卷与卷内的对应关系不能为空!");
+                MessageBox.Show("案卷与卷内必须一一对应!");
+                AJKeyColumn.Clear();
+                JNKeyColumn.Clear();
                 return DialogResult.Cancel;
             }
             return DialogResult.OK;
