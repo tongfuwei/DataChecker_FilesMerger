@@ -1,12 +1,8 @@
 ﻿using DataChecker_FilesMerger.Helper;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DataChecker_FilesMerger.Dialog_Setting
@@ -75,14 +71,14 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 			InitializeComponent();
 		}
 
-		public void Upload(IndexDictionary<string> AJColumns,bool OneToMany = true)
+		public void Upload(IndexDictionary<string> AJColumns, bool OneToMany = true)
 		{
 			DialogResult = DialogResult.None;
 			if (!AJColumn.EqualDictionary(AJColumns.strIndex))
 			{
 				AJColumn = AJColumns.strIndex;
 			}
-			if(!OneToMany)
+			if (!OneToMany)
 			{
 				CheckBox check = new CheckBox
 				{
@@ -97,9 +93,9 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 		private void Check_CheckedChanged(object sender, EventArgs e)
 		{
 			AppendToHead = ((CheckBox)sender).Checked;
-			if(AppendToHead)
+			if (AppendToHead)
 			{
-				foreach(Control control in AddedControls)
+				foreach (Control control in AddedControls)
 				{
 					control.Dispose();
 				}
@@ -192,11 +188,20 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 				additionSort.Clear();
 
 				if (!string.IsNullOrWhiteSpace(comboBox1.SelectedItem.ToString()))
+				{
 					additionSort.Add(comboBox1.SelectedItem.ToString());
+				}
+
 				if (!string.IsNullOrWhiteSpace(comboBox2.SelectedItem.ToString()))
+				{
 					additionSort.Add(comboBox2.SelectedItem.ToString());
+				}
+
 				if (!string.IsNullOrWhiteSpace(comboBox3.SelectedItem.ToString()))
+				{
 					additionSort.Add(comboBox3.SelectedItem.ToString());
+				}
+
 				if (additionSort.Count == 0)
 				{
 					MessageBox.Show("若要合并附件,请先设置附件排序!");
@@ -237,13 +242,13 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 						}
 					}
 
-					if(additionPartName.Count == 0)
+					if (additionPartName.Count == 0)
 					{
 						MessageBox.Show("若要合并附件,请先设置命名规则!");
 						return DialogResult.Cancel;
 					}
 
-					else if(string.IsNullOrWhiteSpace(tbLast.Text))
+					else if (string.IsNullOrWhiteSpace(tbLast.Text))
 					{
 						MessageBox.Show("为了避免重名,必须设置附件后缀!");
 						return DialogResult.Cancel;
@@ -261,7 +266,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			foreach(Control control in AddedControls)
+			foreach (Control control in AddedControls)
 			{
 				control.Dispose();
 			}

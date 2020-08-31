@@ -1,18 +1,14 @@
 ﻿using DataChecker_FilesMerger.Helper;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DataChecker_FilesMerger.Dialog_Setting
 {
-    public partial class MergeFolder : Form
-    {
+	public partial class MergeFolder : Form
+	{
 		private static MergeFolder mainForm = null;
 		public static MergeFolder CreateInstrance()
 		{
@@ -43,7 +39,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 			}
 		}
 
-		Dictionary<ComboBox, CheckBox> Part_Separator = new Dictionary<ComboBox, CheckBox>();
+		private Dictionary<ComboBox, CheckBox> Part_Separator = new Dictionary<ComboBox, CheckBox>();
 
 		public string PDFSavePath
 		{
@@ -60,9 +56,9 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 		private string DefaultSeparator = "-";
 
 		public MergeFolder()
-        {
-            InitializeComponent();
-        }
+		{
+			InitializeComponent();
+		}
 
 		public void Upload(IndexDictionary<string> AJColumns)
 		{
@@ -74,7 +70,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 		}
 
 		private void cbSaveAlone_CheckedChanged(object sender, EventArgs e)
-        {
+		{
 			if (((CheckBox)sender).Checked == true)
 			{
 				Button add = new Button();
@@ -91,40 +87,44 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 				{
 					control.Dispose();
 				}
-				foreach(Control control in AddedControls)
+				foreach (Control control in AddedControls)
 				{
 					control.Dispose();
 				}
 			}
 		}
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-            folderBrowserDialog.Description = "选择目录";
-            folderBrowserDialog.RootFolder = Environment.SpecialFolder.MyComputer;
-            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
-            {
-                tbPDFSavePath.Text = folderBrowserDialog.SelectedPath;
+		private void button1_Click(object sender, EventArgs e)
+		{
+			FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+			folderBrowserDialog.Description = "选择目录";
+			folderBrowserDialog.RootFolder = Environment.SpecialFolder.MyComputer;
+			if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+			{
+				tbPDFSavePath.Text = folderBrowserDialog.SelectedPath;
 				PDFSavePath = tbPDFSavePath.Text;
-            }
-        }
+			}
+		}
 
 		private void tbDefault_TextChanged(object sender, EventArgs e)
 		{
 			if (!string.IsNullOrWhiteSpace(((TextBox)sender).Text))
 			{
 				if (((TextBox)sender).Text == @"\")
+				{
 					((TextBox)sender).Text = "";
+				}
 				else
+				{
 					DefaultSeparator = ((TextBox)sender).Text;
+				}
 			}
 		}
 
-		private void btn_AddControl(object sender ,EventArgs e)
+		private void btn_AddControl(object sender, EventArgs e)
 		{
 			Control pointControl;
-			if(Part_Separator.Count == 0)
+			if (Part_Separator.Count == 0)
 			{
 				pointControl = cbSaveAlone;
 			}
@@ -183,32 +183,34 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 			if (!string.IsNullOrWhiteSpace(((TextBox)sender).Text))
 			{
 				if (((TextBox)sender).Text == @"\")
+				{
 					((TextBox)sender).Text = "";
+				}
 			}
 		}
 
 		public DialogResult CheckSave()
 		{
-			if(string.IsNullOrWhiteSpace(PDFSavePath))
+			if (string.IsNullOrWhiteSpace(PDFSavePath))
 			{
 				MessageBox.Show("请设置保存路径!");
 				return DialogResult.Cancel;
 			}
 
-			if(cbSaveAlone.Checked)
+			if (cbSaveAlone.Checked)
 			{
 				savePartFolder.Clear();
-				foreach(ComboBox com in Part_Separator.Keys)
+				foreach (ComboBox com in Part_Separator.Keys)
 				{
-					if(!string.IsNullOrWhiteSpace(com.SelectedItem.ToString()))
+					if (!string.IsNullOrWhiteSpace(com.SelectedItem.ToString()))
 					{
 						CheckBox chk = Part_Separator[com];
-						if(chk.Checked)
+						if (chk.Checked)
 						{
 							foreach (Control con in Controls.Find(chk.Name + "_Num", false))
 							{
 								TextBox txt = (TextBox)con;
-								if(!string.IsNullOrWhiteSpace(txt.Text))
+								if (!string.IsNullOrWhiteSpace(txt.Text))
 								{
 									savePartFolder.Add(com.SelectedItem.ToString(), txt.Text);
 								}
@@ -229,7 +231,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 					}
 				}
 
-				if(savePartFolder.Count ==0)
+				if (savePartFolder.Count == 0)
 				{
 					MessageBox.Show("若要单独保存案卷,请先输入路径设置!");
 					return DialogResult.Cancel;
@@ -241,6 +243,6 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 			return DialogResult.OK;
 		}
 
-		
+
 	}
 }

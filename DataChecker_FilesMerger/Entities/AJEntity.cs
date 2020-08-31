@@ -90,7 +90,9 @@ namespace DataChecker_FilesMerger
                     {
                         int pages;
                         if (int.TryParse(Value[PageColumn].Trim(), out pages))
+                        {
                             return pages;
+                        }
                         else
                         {
                             StackTrace trace = new StackTrace();
@@ -340,9 +342,13 @@ namespace DataChecker_FilesMerger
             for (int i = 0; i < filter.Count; i++)
             {
                 if (jn.Value[filter[i]] == value[i])
+                {
                     continue;
+                }
                 else
+                {
                     return false;
+                }
             }
             return true;
         }
@@ -477,13 +483,17 @@ namespace DataChecker_FilesMerger
                 foreach (JNEntity jn in JNEntities)
                 {
                     if (jn.Pages > 0)
+                    {
                         jnpages += jn.Pages;
+                    }
                     else if (jn.Pages == -2)
                     {
                         return;
                     }
                     else
+                    {
                         continue;
+                    }
                 }
                 if (jnpages != Pages)
                 {
@@ -540,7 +550,9 @@ namespace DataChecker_FilesMerger
                 {
                     partNames.Add(Value[name]);
                     if (!string.IsNullOrWhiteSpace(partFolder[name]))
+                    {
                         partNames.Add(partFolder[name]);
+                    }
                 }
                 string Name = string.Join("", partNames.ToArray());
                 PDFSavePath = PDFSavePath + "\\" + Name;
@@ -596,7 +608,10 @@ namespace DataChecker_FilesMerger
                             list = files.Take(files.Count);
                         }
                         else
+                        {
                             list = files.Take(jn.Pages);
+                        }
+
                         ScanFiles.RemoveRange(0, jn.Pages - 1);
                         List<string> fileNames = new List<string>();
                         foreach (FileInfo info in list)
@@ -761,7 +776,9 @@ namespace DataChecker_FilesMerger
                 {
                     nameParts.Add(ValuePool[name]);
                     if (!string.IsNullOrWhiteSpace(NameRule[name]))
+                    {
                         nameParts.Add(NameRule[name]);
+                    }
                 }
                 string Name = string.Join("", nameParts.ToArray());
                 return Name;

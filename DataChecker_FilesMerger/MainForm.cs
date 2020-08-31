@@ -163,16 +163,17 @@ namespace DataChecker_FilesMerger
         /// <summary>
         /// 锁
         /// </summary>
-        readonly static object locker = new object();
+        private static readonly object locker = new object();
 
         /// <summary>
         /// 案卷拆为卷内时保留的列
         /// </summary>
-        List<string> saveColumn = new List<string>();
+        private List<string> saveColumn = new List<string>();
+
         /// <summary>
         /// 案卷拆为卷内时转换为行的列
         /// </summary>
-        List<string> turnRow = new List<string>();
+        private List<string> turnRow = new List<string>();
 
         #region PDF合并规则
 
@@ -384,7 +385,7 @@ namespace DataChecker_FilesMerger
 
         #region 调整进度
 
-        int nowPercent;
+        private int nowPercent;
 
         private delegate void Progress_FlushClient(int i);
         /// <summary>
@@ -406,7 +407,9 @@ namespace DataChecker_FilesMerger
                     this.lblPercent.Text = i.ToString() + "%";
                 }
                 else
+                {
                     nowPercent = i;
+                }
             }
         }
 
@@ -564,7 +567,9 @@ namespace DataChecker_FilesMerger
         private void tbColuNameRow_TextChanged(object sender, EventArgs e)
         {
             if (ControlHelper.NumberCheck(sender, true))
+            {
                 ColumnNameRow = int.Parse(tbColuNameRow.Text.Trim()) - 1;
+            }
         }
 
         private void rbOneToMany_CheckedChanged(object sender, EventArgs e)
@@ -755,7 +760,10 @@ namespace DataChecker_FilesMerger
                     var value = DataBuilder(i, AJReader);
                     AJEntity aj = new AJEntity(value, location, rootDir, AJPageColumn, dirConstitute);
                     if (IsOneToMany)
-                        aj.OneToManyAppend(JNCountColumn, AJFilter,JNFilter);
+                    {
+                        aj.OneToManyAppend(JNCountColumn, AJFilter, JNFilter);
+                    }
+
                     ajEntities_List.Add(aj);
                     complete++;
                     int percent = complete * 100 / total;
@@ -837,11 +845,19 @@ namespace DataChecker_FilesMerger
         private void Match(AJEntity aj)
         {
             if (!JumpJNCount && !JumpJN)
+            {
                 aj.MatchCount();
+            }
+
             if (!JumpPageCount && !JumpJN)
+            {
                 aj.MatchPages();
+            }
+
             if (!JumpScanFiles)
+            {
                 aj.MatchScanfile();
+            }
         }
 
         private void ShowOneDoneMsg(AJEntity x, CompetedEventArgs args)
@@ -934,7 +950,7 @@ namespace DataChecker_FilesMerger
             GetDirectory(rootDir, 0, bits, Count);
         }
 
-        float nowNum = 0;
+        private float nowNum = 0;
         private void GetDirectory(DirectoryInfo parent, int layer, List<int> bits, float count)
         {
             if (layer < bits.Count)
@@ -988,7 +1004,10 @@ namespace DataChecker_FilesMerger
                     MyComputer.FileSystem.RenameDirectory(target.FullName, newName);
                     return target.Parent.FullName + "\\" + newName;
                 }
-                else return null;
+                else
+                {
+                    return null;
+                }
             }
             catch (Exception ex)
             {
@@ -1038,8 +1057,7 @@ namespace DataChecker_FilesMerger
             }
         }
 
-
-        DataTable JNs = new DataTable();
+        private DataTable JNs = new DataTable();
         private void demergeExcel_DoWork(object sender, DoWorkEventArgs e)
         {
             //JNs = new DataTable();

@@ -1,12 +1,6 @@
 ﻿using DataChecker_FilesMerger.Helper;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DataChecker_FilesMerger.Dialog_Setting
@@ -103,7 +97,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
                     }
                 }
             }
-        }        
+        }
 
         private ColumnSetting()
         {
@@ -116,9 +110,14 @@ namespace DataChecker_FilesMerger.Dialog_Setting
             if (!AJColumn.EqualDictionary(AJColumns.strIndex))
             {
                 if (JNColumns != null)
+                {
                     JNColumn = JNColumns.strIndex;
+                }
                 else
+                {
                     JNColumn = null;
+                }
+
                 AJColumn = AJColumns.strIndex;
             }
         }
@@ -126,17 +125,32 @@ namespace DataChecker_FilesMerger.Dialog_Setting
         public DialogResult CheckSave()
         {
             if (this.cbAJPageCount.SelectedItem != null && !string.IsNullOrWhiteSpace(this.cbAJPageCount.SelectedItem.ToString()))
+            {
                 AJPageColumn = this.cbAJPageCount.SelectedItem.ToString();
+            }
             else
+            {
                 AJPageColumn = null;
+            }
+
             if (this.cbJNPageCount.SelectedItem != null && !string.IsNullOrWhiteSpace(this.cbJNPageCount.SelectedItem.ToString()))
+            {
                 JNPageColumn = this.cbJNPageCount.SelectedItem.ToString();
+            }
             else
+            {
                 JNPageColumn = null;
+            }
+
             if (this.cbJNCount.SelectedItem != null && !string.IsNullOrWhiteSpace(this.cbJNCount.SelectedItem.ToString()))
+            {
                 JNCountColumn = this.cbJNCount.SelectedItem.ToString();
+            }
             else
+            {
                 JNCountColumn = null;
+            }
+
             return DialogResult.OK;
         }
     }

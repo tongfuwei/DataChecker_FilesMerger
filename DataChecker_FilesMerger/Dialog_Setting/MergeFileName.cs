@@ -1,12 +1,8 @@
 ﻿using DataChecker_FilesMerger.Helper;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DataChecker_FilesMerger.Dialog_Setting
@@ -42,7 +38,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 			}
 		}
 
-		Dictionary<ComboBox, CheckBox> Part_Separator = new Dictionary<ComboBox, CheckBox>();
+		private Dictionary<ComboBox, CheckBox> Part_Separator = new Dictionary<ComboBox, CheckBox>();
 
 		public Dictionary<string, string> pdfPartName
 		{
@@ -178,7 +174,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			foreach(Control control in AddedControls)
+			foreach (Control control in AddedControls)
 			{
 				control.Dispose();
 			}

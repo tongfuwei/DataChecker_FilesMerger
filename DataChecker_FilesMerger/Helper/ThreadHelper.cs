@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace DataChecker_FilesMerger.Helper
 {
-    class ThreadHelper
+    internal class ThreadHelper
     {
         public class ThreadBaseControl<T>
         {
@@ -52,7 +49,7 @@ namespace DataChecker_FilesMerger.Helper
             /// <summary>
             /// 线程list
             /// </summary>
-            List<Thread> m_ThreadList;
+            private List<Thread> m_ThreadList;
 
             /// <summary>
             /// 任务完成计数器
@@ -87,7 +84,7 @@ namespace DataChecker_FilesMerger.Helper
             /// <summary>
             /// 任务总数
             /// </summary>
-            private int m_QueueCount = 0;            
+            private int m_QueueCount = 0;
             #endregion
 
             #region 事件
@@ -147,7 +144,7 @@ namespace DataChecker_FilesMerger.Helper
             /// </summary>
             /// <param name="collection">任务项</param>
             /// <param name="callBack">对任务操作的方法</param>
-            public ThreadBaseControl(IEnumerable<T> collection,CallBackHanlder callBack)
+            public ThreadBaseControl(IEnumerable<T> collection, CallBackHanlder callBack)
             {
                 m_InnerQueue = new Queue<T>(collection);
                 this.m_QueueCount = m_InnerQueue.Count;

@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DataChecker_FilesMerger.Dialog_Setting
@@ -30,7 +24,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
         {
             InitializeComponent();
             this.forms = forms;
-            foreach(Form form in this.forms)
+            foreach (Form form in this.forms)
             {
                 Add_TabPage(form);
             }
@@ -64,14 +58,18 @@ namespace DataChecker_FilesMerger.Dialog_Setting
         private delegate void CheckSave_FlushClient();
         private void btnConfirm_Click(object sender, EventArgs e)
         {
-            foreach(Form form in this.forms)
+            foreach (Form form in this.forms)
             {
                 MethodInfo method = form.GetType().GetMethod("CheckSave");
-                object result = method.Invoke(form,null);                
+                object result = method.Invoke(form, null);
                 if ((DialogResult)result != DialogResult.OK)
+                {
                     return;
+                }
                 else
+                {
                     continue;
+                }
             }
             DialogResult = DialogResult.OK;
         }

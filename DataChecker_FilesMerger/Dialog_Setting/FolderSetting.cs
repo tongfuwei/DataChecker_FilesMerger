@@ -1,12 +1,7 @@
 ﻿using DataChecker_FilesMerger.Helper;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DataChecker_FilesMerger.Dialog_Setting
@@ -89,7 +84,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 
 		public DialogResult CheckSave()
 		{
-			Dictionary<string,int> dir = new Dictionary<string, int>();
+			Dictionary<string, int> dir = new Dictionary<string, int>();
 			foreach (ComboBox folder in dir_check.Keys)
 			{
 				if (folder.SelectedItem != null && !string.IsNullOrWhiteSpace(folder.SelectedItem.ToString()))
@@ -123,12 +118,18 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 			}
 
 			if (dir.Count != 0)
+			{
 				dirConstitute = dir;
+			}
 
 			if (cbRename.Checked == true)
+			{
 				renameFolder = true;
+			}
 			else
+			{
 				renameFolder = false;
+			}
 
 			return DialogResult.OK;
 
@@ -155,7 +156,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 
 				controls.Add(list);
 
-				ControlHelper.AppendControls(sender, this, ControlHelper.Direction.Horizontal,ControlHelper.Direction.Horizontal, controls);
+				ControlHelper.AppendControls(sender, this, ControlHelper.Direction.Horizontal, ControlHelper.Direction.Horizontal, controls);
 			}
 			else
 			{

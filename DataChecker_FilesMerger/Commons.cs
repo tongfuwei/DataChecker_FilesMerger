@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace DataChecker_FilesMerger
 {
@@ -111,7 +107,7 @@ namespace DataChecker_FilesMerger
 
             return collectionStaticsDict;
         }
-         
+
         /// <summary>
         /// 深复制list
         /// </summary>
@@ -142,7 +138,8 @@ namespace DataChecker_FilesMerger
             get;
             private set;
         }
-        int i = 0;
+
+        private int i = 0;
 
         public int Count
         {

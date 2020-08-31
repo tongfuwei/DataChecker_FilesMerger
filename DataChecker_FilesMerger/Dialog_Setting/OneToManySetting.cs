@@ -1,12 +1,6 @@
 ﻿using DataChecker_FilesMerger.Helper;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DataChecker_FilesMerger.Dialog_Setting
@@ -33,7 +27,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
             set
             {
                 _AJColumn = value;
-                InitCombox("AJColumns",AJColumn.Keys.ToList());
+                InitCombox("AJColumns", AJColumn.Keys.ToList());
             }
         }
 
@@ -63,7 +57,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
             set;
         } = new List<string>();
 
-        Dictionary<ComboBox, ComboBox> AJ_JN = new Dictionary<ComboBox, ComboBox>();
+        private Dictionary<ComboBox, ComboBox> AJ_JN = new Dictionary<ComboBox, ComboBox>();
 
         private OneToManySetting()
         {
@@ -80,13 +74,13 @@ namespace DataChecker_FilesMerger.Dialog_Setting
             {
                 AJColumn = AJColumns.strIndex;
             }
-            if(!JNColumn.EqualDictionary(JNColumns.strIndex))
+            if (!JNColumn.EqualDictionary(JNColumns.strIndex))
             {
                 JNColumn = JNColumns.strIndex;
             }
         }
 
-        private void InitCombox(string panelName,List<string> columns)
+        private void InitCombox(string panelName, List<string> columns)
         {
             foreach (Control control in this.Controls)
             {
@@ -108,7 +102,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
                                 ControlHelper.ComboAdd(combo, columns);
                             }
                         }
-                    }                    
+                    }
                 }
             }
         }
@@ -117,7 +111,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
         {
             foreach (ComboBox ajcb in AJ_JN.Keys)
             {
-                if ((ajcb.SelectedItem!=null) && (!string.IsNullOrWhiteSpace(ajcb.SelectedItem.ToString())))
+                if ((ajcb.SelectedItem != null) && (!string.IsNullOrWhiteSpace(ajcb.SelectedItem.ToString())))
                 {
                     AJKeyColumn.Add(ajcb.SelectedItem.ToString());
                 }
@@ -126,7 +120,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
                     JNKeyColumn.Add(AJ_JN[ajcb].SelectedItem.ToString());
                 }
             }
-            if(AJKeyColumn.Count != JNKeyColumn.Count)
+            if (AJKeyColumn.Count != JNKeyColumn.Count)
             {
                 MessageBox.Show("案卷与卷内必须一一对应!");
                 AJKeyColumn.Clear();

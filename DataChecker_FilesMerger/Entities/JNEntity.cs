@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
-using System.Dynamic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataChecker_FilesMerger
 {
     [Serializable]
-    public class JNEntity 
+    public class JNEntity
     {
         /// <summary>
         /// 该目录的数据[列名,值]
@@ -59,7 +54,9 @@ namespace DataChecker_FilesMerger
                     {
                         int pages;
                         if (int.TryParse(Value[PageColumn].Trim(), out pages))
+                        {
                             return pages;
+                        }
                         else
                         {
                             StackTrace trace = new StackTrace();
