@@ -78,7 +78,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 				if (control is ComboBox)
 				{
 					ComboBox combo = control as ComboBox;
-					Commons.ComboAdd(combo, Column.Keys.ToList());
+					ControlHelper.ComboAdd(combo, Column.Keys.ToList());
 				}
 			}
 			dir_check.Add(cbFolder1, checkBox1);
@@ -139,19 +139,23 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 			if (((CheckBox)sender).Checked == true)
 			{
 				cbRename.Enabled = true;
-				List<Control> controls = new List<Control>();
+
+				List<List<object>> controls = new List<List<object>>();
+				List<object> list = new List<object>();
 
 				TextBox num = new TextBox();
 				num.Name = ((CheckBox)sender).Name + "_Num";
-				num.TextChanged += new EventHandler(this.Text_TextChanged);
-				controls.Add(num);
+				num.TextChanged += new EventHandler(ControlHelper.TextIsPositiveNumber);
+				list.Add(num);
 
 				Label text = new Label();
 				text.Name = ((CheckBox)sender).Name + "_Bit";
 				text.Text = "位";
-				controls.Add(text);
+				list.Add(text);
 
-				ControlHelper.AppendControl(sender, this, ControlHelper.Direction.Horizontal, controls);
+				controls.Add(list);
+
+				ControlHelper.AppendControls(sender, this, ControlHelper.Direction.Horizontal,ControlHelper.Direction.Horizontal, controls);
 			}
 			else
 			{
@@ -164,11 +168,11 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 					cbRename.Enabled = false;
 				}
 
-				foreach (Control control in (this.Controls.Find(((System.Windows.Forms.CheckBox)sender).Name + "_Num", false)))
+				foreach (Control control in Controls.Find(((CheckBox)sender).Name + "_Num", false))
 				{
 					control.Dispose();
 				}
-				foreach (Control control in (this.Controls.Find(((System.Windows.Forms.CheckBox)sender).Name + "_Bit", false)))
+				foreach (Control control in Controls.Find(((CheckBox)sender).Name + "_Bit", false))
 				{
 					control.Dispose();
 				}

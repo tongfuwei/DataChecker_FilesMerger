@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataChecker_FilesMerger.Helper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -68,7 +69,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
                             if (con is ComboBox)
                             {
                                 ComboBox combo = con as ComboBox;
-                                Commons.ComboAdd(combo, AJColumn.Keys.ToList());
+                                ControlHelper.ComboAdd(combo, AJColumn.Keys.ToList());
                             }
                         }
                     }
@@ -84,12 +85,12 @@ namespace DataChecker_FilesMerger.Dialog_Setting
                                     if (con.Name == "cbJNCount")
                                     {
                                         ComboBox combo = con as ComboBox;
-                                        Commons.ComboAdd(combo, AJColumn.Keys.ToList());
+                                        ControlHelper.ComboAdd(combo, AJColumn.Keys.ToList());
                                     }
                                     else
                                     {
                                         ComboBox combo = con as ComboBox;
-                                        Commons.ComboAdd(combo, JNColumn.Keys.ToList());
+                                        ControlHelper.ComboAdd(combo, JNColumn.Keys.ToList());
                                     }
                                 }
                             }

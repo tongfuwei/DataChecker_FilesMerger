@@ -111,42 +111,7 @@ namespace DataChecker_FilesMerger
 
             return collectionStaticsDict;
         }
-
-        /// <summary>
-        /// 给comboBox添加项
-        /// </summary>
-        /// <param name="combo"></param>
-        /// <param name="value"></param>
-        public static void ComboAdd(ComboBox combo, List<string> value)
-        {
-            //Combo中没有时添加
-            foreach (string ColumnName in value)
-            {
-                if (combo.Items.Contains(ColumnName))
-                    continue;
-                else
-                    combo.Items.Add(ColumnName);
-            }
-            //将list中没有的项从combo移除
-            for (int i = 0; i < combo.Items.Count; i++)
-            {
-                object item = combo.Items[i];
-                if (value.Contains(item))
-                    continue;
-                else
-                    combo.Items.Remove(item);
-            }
-            //在头部添加空白项
-            if (combo.Items.Count != 0)
-            {
-                if (!string.IsNullOrWhiteSpace(combo.Items[0].ToString()))
-                {
-                    combo.Items.Insert(0, "");
-                    combo.SelectedIndex = 0;
-                }
-            }
-        }
-
+         
         /// <summary>
         /// 深复制list
         /// </summary>

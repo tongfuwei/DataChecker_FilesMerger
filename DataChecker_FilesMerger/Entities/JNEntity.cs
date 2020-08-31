@@ -78,7 +78,6 @@ namespace DataChecker_FilesMerger
                     MainForm.CreateInstrance().WriteErrorInfo("JN行号:" + Location.ToString(), "读取件数出现问题", ex.Message);
                     return -3;
                 }
-
             }
         }
 

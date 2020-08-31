@@ -1,12 +1,11 @@
-﻿using System;
+﻿using DataChecker_FilesMerger.Helper;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataChecker_FilesMerger
 {
@@ -28,7 +27,7 @@ namespace DataChecker_FilesMerger
         public int Location
         {
             get;
-            set;
+            private set;
         }
 
         /// <summary>
@@ -37,7 +36,7 @@ namespace DataChecker_FilesMerger
         public bool IsOneToMany
         {
             get;
-            set;
+            private set;
         } = true;
 
         #endregion
@@ -56,7 +55,7 @@ namespace DataChecker_FilesMerger
         /// <summary>
         /// 卷内数据是否装载完成
         /// </summary>
-        public bool JNLoaded
+        private bool JNLoaded
         {
             get;
             set;
@@ -65,7 +64,7 @@ namespace DataChecker_FilesMerger
         /// <summary>
         /// 片段路径是否读取完成
         /// </summary>
-        public bool PathLoaded
+        private bool PathLoaded
         {
             get;
             set;
@@ -81,7 +80,7 @@ namespace DataChecker_FilesMerger
         /// <summary>
         /// 该目录的总页数
         /// </summary>
-        public int Pages
+        private int Pages
         {
             get
             {
@@ -120,7 +119,7 @@ namespace DataChecker_FilesMerger
         /// <summary>
         /// 件数
         /// </summary>
-        public int JNCount
+        private int JNCount
         {
             get
             {
@@ -154,10 +153,12 @@ namespace DataChecker_FilesMerger
             }
         }
 
+        private List<string> JNFilter = null;
+
         /// <summary>
         /// 用于查找卷内的关键列
         /// </summary>
-        private List<string> Filter = null;
+        private List<string> AJFilter = null;
         /// <summary>
         /// 用于查找卷内的值
         /// </summary>
@@ -165,12 +166,12 @@ namespace DataChecker_FilesMerger
         {
             get
             {
-                if (Filter != null && Filter.Count != 0)
+                if (AJFilter != null && AJFilter.Count != 0)
                 {
                     try
                     {
                         List<string> key = new List<string>();
-                        foreach (string str in Filter)
+                        foreach (string str in AJFilter)
                         {
                             key.Add(Value[str].Trim());
                         }
@@ -197,7 +198,14 @@ namespace DataChecker_FilesMerger
         /// </summary>
         private Dictionary<string, int> DirRule = new Dictionary<string, int>();
 
-        private string RootDir;
+        /// <summary>
+        /// 扫描件根目录
+        /// </summary>
+        private string RootDir
+        {
+            get;
+            set;
+        }
 
         private string _Dir = null;
         /// <summary>
@@ -209,7 +217,7 @@ namespace DataChecker_FilesMerger
             {
                 return _Dir;
             }
-            set
+            private set
             {
                 if (!Directory.Exists(value))
                 {
@@ -238,7 +246,7 @@ namespace DataChecker_FilesMerger
         public List<FileInfo> ScanFiles
         {
             get;
-            set;
+            private set;
         } = new List<FileInfo>();
 
         /// <summary>
@@ -247,7 +255,7 @@ namespace DataChecker_FilesMerger
         public List<FileInfo> FMFiles
         {
             get;
-            set;
+            private set;
         } = new List<FileInfo>();
 
         /// <summary>
@@ -256,7 +264,7 @@ namespace DataChecker_FilesMerger
         public List<FileInfo> MLFiles
         {
             get;
-            set;
+            private set;
         } = new List<FileInfo>();
 
         /// <summary>
@@ -265,14 +273,34 @@ namespace DataChecker_FilesMerger
         public List<FileInfo> FDFiles
         {
             get;
-            set;
+            private set;
         } = new List<FileInfo>();
+
+        private string _PDFSavePath;
+        /// <summary>
+        /// PDF保存路径
+        /// </summary>
+        private string PDFSavePath
+        {
+            get
+            {
+                return _PDFSavePath;
+            }
+            set
+            {
+                if (!Directory.Exists(value))
+                {
+                    Directory.CreateDirectory(value);
+                }
+                _PDFSavePath = value;
+            }
+        }
 
         #endregion
 
         #region 构造
         public AJEntity(Dictionary<string, string> _value, int _location, string _rootDir = null,
-                                string _PageColumn = null,Dictionary<string, int> _DirRule = null)
+                                string _PageColumn = null, Dictionary<string, int> _DirRule = null)
         {
             this.Value = _value;
             this.Location = _location;
@@ -284,10 +312,11 @@ namespace DataChecker_FilesMerger
 
         #region 装载方法
 
-        public void OneToManyAppend(string _JNCountColumn, List<string> _filter)
+        public void OneToManyAppend(string _JNCountColumn, List<string> _AJfilter, List<string> _JNFilter)
         {
             this.JNCountColumn = _JNCountColumn;
-            this.Filter = _filter;
+            this.AJFilter = _AJfilter;
+            this.JNFilter = _JNFilter;
         }
 
         /// <summary>
@@ -296,7 +325,7 @@ namespace DataChecker_FilesMerger
         private void LoadJN()
         {
             List<JNEntity> entities = new List<JNEntity>(MainForm.CreateInstrance().jnEntities_List);
-            List<string> JNColumnForFilter = MainForm.CreateInstrance().JNFilter;
+            List<string> JNColumnForFilter = JNFilter;
             if (JNColumnForFilter != null && JNColumnForFilter.Count != 0)
             {
                 JNEntities = Commons.Clone<JNEntity>(entities.Where(jn => ListFind(jn, JNColumnForFilter, Key)).ToList());
@@ -496,7 +525,254 @@ namespace DataChecker_FilesMerger
             }
         }
 
-        
+        /// <summary>
+        /// 拼接保存路径
+        /// </summary>
+        /// <param name="SavePath">保存路径</param>
+        /// <param name="partFolder">拼接文件夹名称</param>
+        public void SplitPath(string SavePath, Dictionary<string, string> partFolder = null)
+        {
+            PDFSavePath = SavePath;
+            if (partFolder != null)
+            {
+                List<string> partNames = new List<string>();
+                foreach (string name in partFolder.Keys)
+                {
+                    partNames.Add(Value[name]);
+                    if (!string.IsNullOrWhiteSpace(partFolder[name]))
+                        partNames.Add(partFolder[name]);
+                }
+                string Name = string.Join("", partNames.ToArray());
+                PDFSavePath = PDFSavePath + "\\" + Name;
+            }
+        }
+
+        public void Merge(Dictionary<string, string> scanPartName, bool mergeAdditions, List<string> additionSort,
+            bool appendToHead, Dictionary<string, string> additionPartName)
+        {
+            if (!FilesLoaded)
+            {
+                LoadFiles();
+            }
+            if (IsOneToMany)
+            {
+                if (!JNLoaded)
+                {
+                    LoadJN();
+                }
+
+                #region 合并附件
+                if (mergeAdditions)
+                {
+                    try
+                    {
+                        //获取附件扫描件
+                        List<string> fileNames = GetAdditionFileNames(additionSort);
+                        //解析文件名
+                        string Name = AnalysisNameRule(additionPartName, Value);
+
+                        MergeUtil.MergeToPDF(fileNames, PDFSavePath + "\\" + Name + ".pdf");
+                    }
+                    catch (Exception ex)
+                    {
+                        MainForm.CreateInstrance().WriteErrorInfo("AJ行号:" + Location, "附件合并", ex.Message);
+                    }
+                }
+                #endregion
+
+                #region 合并扫描件
+
+                List<FileInfo> files = Commons.Clone<FileInfo>(ScanFiles);
+
+                foreach (JNEntity jn in JNEntities)
+                {
+                    try
+                    {
+                        IEnumerable<FileInfo> list = new List<FileInfo>();
+                        //取出扫描件
+                        if (files.Count < jn.Pages)
+                        {
+                            MainForm.CreateInstrance().WriteErrorInfo("JN行号:" + jn.Location.ToString(), "卷内扫描件合并", "剩余扫描件数量[" + files.Count + "]小于卷内页数[" + jn.Pages + "],将合并剩余页数");
+                            list = files.Take(files.Count);
+                        }
+                        else
+                            list = files.Take(jn.Pages);
+                        ScanFiles.RemoveRange(0, jn.Pages - 1);
+                        List<string> fileNames = new List<string>();
+                        foreach (FileInfo info in list)
+                        {
+                            fileNames.Add(info.FullName);
+                        }
+                        //解析文件名
+                        string Name = AnalysisNameRule(scanPartName, jn.Value);
+
+                        MergeUtil.MergeToPDF(fileNames, PDFSavePath + "\\" + Name + ".pdf");
+                    }
+                    catch (Exception ex)
+                    {
+                        MainForm.CreateInstrance().WriteErrorInfo("JN行号:" + jn.Location.ToString(), "卷内扫描件合并", ex.Message);
+                    }
+                }
+                #endregion
+            }
+            else
+            {
+                //需要合并附件
+                if (mergeAdditions)
+                {
+                    List<string> additionFileNames = GetAdditionFileNames(additionSort);
+                    //不追加到头部
+                    if (!appendToHead)
+                    {
+
+                        #region 合并附件
+                        try
+                        {
+                            //构建文件名称
+                            string Name = AnalysisNameRule(additionPartName, Value);
+                            MergeUtil.MergeToPDF(additionFileNames, PDFSavePath + "\\" + Name + ".pdf");
+                        }
+                        catch (Exception ex)
+                        {
+                            MainForm.CreateInstrance().WriteErrorInfo("AJ行号:" + Location, "附件合并", ex.Message);
+                        }
+                        #endregion
+
+                        #region 合并扫描件
+                        try
+                        {
+                            //构建文件名称
+                            string Name1 = AnalysisNameRule(scanPartName, Value);
+                            //拉取扫描件路径
+                            List<string> fileNames = new List<string>();
+                            foreach (FileInfo info in ScanFiles)
+                            {
+                                fileNames.Add(info.FullName);
+                            }
+                            MergeUtil.MergeToPDF(fileNames, PDFSavePath + "\\" + Name1 + ".pdf");
+                        }
+                        catch (Exception ex)
+                        {
+                            MainForm.CreateInstrance().WriteErrorInfo("AJ行号:" + Location, "扫描件合并", ex.Message);
+                        }
+                        #endregion
+                    }
+                    //追加到头部
+                    else
+                    {
+                        #region 合并
+                        try
+                        {
+                            //直接向附件List中追加正文路径
+                            foreach (FileInfo info in ScanFiles)
+                            {
+                                additionFileNames.Add(info.FullName);
+                            }
+                            //构建文件名称
+                            string Name = AnalysisNameRule(scanPartName, Value);
+                            //合并
+                            MergeUtil.MergeToPDF(additionFileNames, PDFSavePath + "\\" + Name + ".pdf");
+                        }
+                        catch (Exception ex)
+                        {
+                            MainForm.CreateInstrance().WriteErrorInfo("AJ行号:" + Location, "附件追加扫描件合并", ex.Message);
+                        }
+                        #endregion
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        string Name = AnalysisNameRule(scanPartName, Value);
+                        //拉取扫描件路径
+                        List<string> fileNames = new List<string>();
+                        foreach (FileInfo info in ScanFiles)
+                        {
+                            fileNames.Add(info.FullName);
+                        }
+                        MergeUtil.MergeToPDF(fileNames, PDFSavePath + "\\" + Name + ".pdf");
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MainForm.CreateInstrance().WriteErrorInfo("AJ行号:" + Location, "仅扫描件合并", ex.Message);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 根据附件排序方式拉取文件路径
+        /// </summary>
+        /// <param name="additionSort"></param>
+        /// <returns></returns>
+        public List<string> GetAdditionFileNames(List<string> additionSort)
+        {
+            try
+            {
+                List<string> additions = new List<string>();
+                foreach (string str in additionSort)
+                {
+                    if (str == "封面")
+                    {
+                        foreach (FileInfo info in FMFiles)
+                        {
+                            additions.Add(info.FullName);
+                        }
+                    }
+                    else if (str == "卷内")
+                    {
+                        foreach (FileInfo info in MLFiles)
+                        {
+                            additions.Add(info.FullName);
+                        }
+                    }
+                    else if (str == "封底")
+                    {
+                        foreach (FileInfo info in FDFiles)
+                        {
+                            additions.Add(info.FullName);
+                        }
+                    }
+                }
+                return additions;
+            }
+            catch (Exception ex)
+            {
+                MainForm.CreateInstrance().WriteErrorInfo("AJ行号:" + Location, "获取附件[GetAdditionFileNames]", ex.Message);
+                return null;
+            }
+        }
+
+
+        /// <summary>
+        /// 解析文件名规则
+        /// </summary>
+        /// <param name="NameRule"></param>
+        /// <param name="ValuePool"></param>
+        /// <returns></returns>
+        public string AnalysisNameRule(Dictionary<string, string> NameRule, Dictionary<string, string> ValuePool)
+        {
+            try
+            {
+                List<string> nameParts = new List<string>();
+                foreach (string name in NameRule.Keys)
+                {
+                    nameParts.Add(ValuePool[name]);
+                    if (!string.IsNullOrWhiteSpace(NameRule[name]))
+                        nameParts.Add(NameRule[name]);
+                }
+                string Name = string.Join("", nameParts.ToArray());
+                return Name;
+            }
+            catch (Exception ex)
+            {
+                MainForm.CreateInstrance().WriteErrorInfo("AJ行号:" + Location, "解析文件名规则[AnalysisNameRule]", ex.Message);
+                return null;
+            }
+        }
+
         #endregion
     }
 }

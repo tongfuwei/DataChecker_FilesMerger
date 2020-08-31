@@ -59,11 +59,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commons.cs" />
-    <Compile Include="Dialog_Setting\MergeSetting.cs">
+    <Compile Include="Dialog_Setting\MergeAddition.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Dialog_Setting\MergeSetting.Designer.cs">
-      <DependentUpon>MergeSetting.cs</DependentUpon>
+    <Compile Include="Dialog_Setting\MergeAddition.Designer.cs">
+      <DependentUpon>MergeAddition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialog_Setting\MergeFileName.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog_Setting\MergeFileName.Designer.cs">
+      <DependentUpon>MergeFileName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialog_Setting\MergeFolder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog_Setting\MergeFolder.Designer.cs">
+      <DependentUpon>MergeFolder.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialog_Setting\ColumnSetting.cs">
       <SubType>Form</SubType>
@@ -90,12 +102,6 @@
     <Compile Include="Dialog_Setting\DemergeSetting.Designer.cs">
       <DependentUpon>DemergeSetting.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Helper\ControlHelper.cs" />
     <Compile Include="Helper\ExcelReader.cs" />
     <Compile Include="Helper\ExcelSaver.cs" />
@@ -108,12 +114,6 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Entities\JNEntity.cs" />
-    <Compile Include="Dialog_Setting\OneToManyMatchSetting.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialog_Setting\OneToManyMatchSetting.Designer.cs">
-      <DependentUpon>OneToManyMatchSetting.cs</DependentUpon>
-    </Compile>
     <Compile Include="Dialog_Setting\FolderSetting.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -125,8 +125,14 @@
     <EmbeddedResource Include="Dialog_Setting\DemergeSetting.resx">
       <DependentUpon>DemergeSetting.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialog_Setting\MergeSetting.resx">
-      <DependentUpon>MergeSetting.cs</DependentUpon>
+    <EmbeddedResource Include="Dialog_Setting\MergeAddition.resx">
+      <DependentUpon>MergeAddition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog_Setting\MergeFileName.resx">
+      <DependentUpon>MergeFileName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog_Setting\MergeFolder.resx">
+      <DependentUpon>MergeFolder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog_Setting\ColumnSetting.resx">
       <DependentUpon>ColumnSetting.cs</DependentUpon>
@@ -137,15 +143,9 @@
     <EmbeddedResource Include="Dialog_Setting\Setting.resx">
       <DependentUpon>Setting.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialog_Setting\OneToManyMatchSetting.resx">
-      <DependentUpon>OneToManyMatchSetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog_Setting\FolderSetting.resx">
       <DependentUpon>FolderSetting.cs</DependentUpon>

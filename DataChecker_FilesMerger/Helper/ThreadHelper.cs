@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using static DataChecker_FilesMerger.Form1;
 
 namespace DataChecker_FilesMerger.Helper
 {
@@ -310,6 +309,7 @@ namespace DataChecker_FilesMerger.Helper
                 }
                 catch (Exception ex)
                 {
+                    MainForm.CreateInstrance().WriteErrorInfo("", "", ex.Message);
                     return DoWorkResult.AbortCurrentThread;//有异常,可以终止当前线程.当然.也可以继续,
                     //return  DoWorkResult.AbortAllThread; //特殊情况下 ,有异常终止所有的线程...
                 }

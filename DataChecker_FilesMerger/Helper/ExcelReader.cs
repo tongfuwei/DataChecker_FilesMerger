@@ -1,15 +1,11 @@
 ﻿using Aspose.Cells;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataChecker_FilesMerger
 {
-    class ExcelReader
+    internal class ExcelReader
     {
         private Workbook _workBook;
 
@@ -37,12 +33,12 @@ namespace DataChecker_FilesMerger
         {
             get
             {
-                if(Loaded)
+                if (Loaded)
                 {
                     return _workSheet.Cells;
                 }
                 else
-                {                    
+                {
                     return null;
                 }
             }
@@ -61,7 +57,7 @@ namespace DataChecker_FilesMerger
                 _workSheet = _workBook.Worksheets[sheetIndex];
                 Loaded = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MainForm.CreateInstrance().WriteErrorInfo("打开Excel", "[Load_Excel]", ex.Message);
             }
@@ -95,7 +91,9 @@ namespace DataChecker_FilesMerger
                 string a = (cells[columnNameRow, i].Value == null || string.IsNullOrWhiteSpace(cells[columnNameRow, i].Value.ToString())) ?
                     "空列" + i.ToString() : cells[columnNameRow, i].Value.ToString();
                 if (!ExcelColumns.Keys.Contains(a))
+                {
                     ExcelColumns.Add(a);
+                }
             }
         }
     }

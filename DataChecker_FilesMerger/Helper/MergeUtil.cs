@@ -1,10 +1,6 @@
 ﻿using O2S.Components.PDF4NET;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataChecker_FilesMerger.Helper
 {
