@@ -39,7 +39,7 @@ namespace DataChecker_FilesMerger.Helper
                 get { return this.m_ThreadCount; }
                 set { this.m_ThreadCount = value; }
             }
-            private int m_ThreadCount = 10;
+            private int m_ThreadCount = 1;
 
             /// <summary>
             /// 取消
@@ -306,7 +306,7 @@ namespace DataChecker_FilesMerger.Helper
                 }
                 catch (Exception ex)
                 {
-                    MainForm.CreateInstrance().WriteErrorInfo("", "", ex.Message);
+                    MainForm.CreateInstrance().WriteErrorInfo("线程控制", "[DoWork]", ex.Message);
                     return DoWorkResult.AbortCurrentThread;//有异常,可以终止当前线程.当然.也可以继续,
                     //return  DoWorkResult.AbortAllThread; //特殊情况下 ,有异常终止所有的线程...
                 }

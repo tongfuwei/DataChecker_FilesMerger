@@ -67,12 +67,13 @@ namespace DataChecker_FilesMerger
                     }
                     else
                     {
+                        MainForm.CreateInstrance().WriteErrorInfo("JN行号:" + Location.ToString(), "读取页数出现问题", "页数列未设置!");
                         return -2;
                     }
                 }
                 catch (Exception ex)
                 {
-                    MainForm.CreateInstrance().WriteErrorInfo("JN行号:" + Location.ToString(), "读取件数出现问题", ex.Message);
+                    MainForm.CreateInstrance().WriteErrorInfo("JN行号:" + Location.ToString(), "读取页数出现问题", ex.Message);
                     return -3;
                 }
             }

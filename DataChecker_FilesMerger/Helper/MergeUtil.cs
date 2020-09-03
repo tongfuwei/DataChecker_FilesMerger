@@ -13,17 +13,20 @@ namespace DataChecker_FilesMerger.Helper
         /// <param name="sSaveFileName"></param>
         public static void MergeToPDF(List<string> fileNames, string sSaveFileName)
         {
-            PDFDocument pDFDocument = new PDFDocument();
-            foreach (string item in fileNames)
+            if (fileNames.Count != 0)
             {
-                pDFDocument.AddPage();
-                Bitmap bitmap = new Bitmap(item);
-                pDFDocument.Pages[pDFDocument.Pages.Count - 1].Width = bitmap.Width;
-                pDFDocument.Pages[pDFDocument.Pages.Count - 1].Height = bitmap.Height;
-                pDFDocument.Pages[pDFDocument.Pages.Count - 1].Canvas.DrawImage(bitmap, 0.0, 0.0, bitmap.Width, bitmap.Height);
-                bitmap.Dispose();
+                PDFDocument pDFDocument = new PDFDocument();
+                foreach (string item in fileNames)
+                {
+                    pDFDocument.AddPage();
+                    Bitmap bitmap = new Bitmap(item);
+                    pDFDocument.Pages[pDFDocument.Pages.Count - 1].Width = bitmap.Width;
+                    pDFDocument.Pages[pDFDocument.Pages.Count - 1].Height = bitmap.Height;
+                    pDFDocument.Pages[pDFDocument.Pages.Count - 1].Canvas.DrawImage(bitmap, 0.0, 0.0, bitmap.Width, bitmap.Height);
+                    bitmap.Dispose();
+                }
+                pDFDocument.Save(sSaveFileName);
             }
-            pDFDocument.Save(sSaveFileName);
         }
     }
 }

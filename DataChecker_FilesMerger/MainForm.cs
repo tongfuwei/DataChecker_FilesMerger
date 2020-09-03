@@ -250,14 +250,14 @@ namespace DataChecker_FilesMerger
         private bool DataLoaded = false;
 
         /// <summary>
+        /// 是否完成合并设置
+        /// </summary>
+        private bool MergeSetted = false;
+
+        /// <summary>
         /// 是否完成拆分设置
         /// </summary>
         private bool DemergeSetted = false;
-
-        /// <summary>
-        /// 是否完成合并设置
-        /// </summary>
-        //private bool MergeSetted = false;
 
         #endregion
 
@@ -378,7 +378,7 @@ namespace DataChecker_FilesMerger
                 }
             }
             DemergeSetted = false;
-            //MergeSetted = false;
+            MergeSetted = false;
         }
 
         #endregion
@@ -798,7 +798,7 @@ namespace DataChecker_FilesMerger
         private Dictionary<string, string> DataBuilder(int i, ExcelReader reader)
         {
             Dictionary<string, string> archive = new Dictionary<string, string>();
-            for (int j = 0; j <= reader.Cells.Rows[i].LastCell.Column; j++)
+            for (int j = 0; j < reader.Cells.Rows[i].LastCell.Column; j++)
             {
                 try
                 {
@@ -816,7 +816,7 @@ namespace DataChecker_FilesMerger
                 }
                 catch (Exception ex)
                 {
-                    this.WriteErrorInfo("", "", ex.Message);
+                    this.WriteErrorInfo("AJ行号:" + i, "[DataBuilder]", ex.Message);
                 }
             }
             return archive;
@@ -881,6 +881,10 @@ namespace DataChecker_FilesMerger
             {
                 MessageBox.Show("请先完成数据读取!");
             }
+            else if (!MergeSetted)
+            {
+                MessageBox.Show("请先完成合并设置!");
+            }
             else
             {
                 StartProgress();
@@ -928,11 +932,14 @@ namespace DataChecker_FilesMerger
                 AppendToHead = mergeAddition.AppendToHead;
                 AdditionSort = mergeAddition.additionSort;
                 AdditionPartName = mergeAddition.additionPartName;
+                MergeSetted = true;
             }
         }
+
         #endregion
 
         #region 重命名文件夹
+
         public void Rename()
         {
             this.listView_Error.Items.Clear();
@@ -1021,9 +1028,11 @@ namespace DataChecker_FilesMerger
             MessageBox.Show("重命名完成");
             AdjustControlEnable(true);
         }
+
         #endregion
 
         #region 拆分案卷Excel
+
         private void btnSplitSetting_Click(object sender, EventArgs e)
         {
             if (AJExcelColumns.Count == 0)
@@ -1086,92 +1095,6 @@ namespace DataChecker_FilesMerger
             AdjustControlEnable(true);
         }
 
-        //private DataTable DataTableRecombine(AJEntity AJEntity)
-        //{
-        //    DataTable AJ = AJEntity.Value;
-        //    DataTable JN = new DataTable();
-        //    foreach (string column in saveColumn)
-        //    {
-        //        JN.Columns.Add(column);
-        //    }
-        //    JN.Columns.Add("序号");
-        //    JN.Columns.Add("题名");
-        //    JN.Columns.Add("页数");
-        //    try
-        //    {
-        //        int orderNum = 1;
-        //        for (int i = 0; i < turnRow.Count; i++)
-        //        {
-        //            if (AJ.Columns.Contains(turnRow[i]))
-        //            {
-        //                DataRow row = JN.NewRow();
-        //                for (int j = 0; j < saveColumn.Count; j++)
-        //                {
-        //                    row[saveColumn[j]] = AJ.Rows[0][saveColumn[j]];
-        //                }
-        //                row["序号"] = orderNum;
-        //                row["题名"] = turnRow[i].Trim();
-        //                //纯数字,则页数为1
-        //                if (int.TryParse(AJ.Rows[0][turnRow[i]].ToString(),out int num1))
-        //                {
-        //                    row["页数"] = 1;
-        //                }
-        //                else
-        //                {
-        //                    //用分隔符进行拆分
-        //                    string[] pageNum = AJ.Rows[0][turnRow[i]].ToString().Split('-');
-        //                    //正常情况,拆分为两段
-        //                    if (pageNum.Length == 2)
-        //                    {
-        //                        //首位不为数字
-        //                        if (!int.TryParse(pageNum[0], out int num2))
-        //                        {
-        //                            //第二位不为数字
-        //                            if (!int.TryParse(pageNum[1], out int num3))
-        //                            {
-        //                                //放弃
-        //                                continue;
-        //                            }
-        //                        }
-        //                        //第二位不为数字
-        //                        if (!int.TryParse(pageNum[1], out int num4))
-        //                        {
-        //                            WriteErrorInfo(AJEntity.Location.ToString(), turnRow[i], "该位置页号存在问题");
-        //                            row["页数"] = "-";
-        //                        }
-        //                        else
-        //                        {
-        //                            row["页数"] = int.Parse(pageNum[1].Trim()) - int.Parse(pageNum[0].Trim()) + 1;
-        //                        }
-        //                    }
-        //                    //不正常情况
-        //                    else
-        //                    {
-        //                        //首位不为数字,直接放弃
-        //                        if (!int.TryParse(pageNum[0], out int num2))
-        //                        {
-        //                            continue;
-        //                        }
-        //                        //首位为数字,但整体为不标准情况,需要检查
-        //                        else
-        //                        {
-        //                            WriteErrorInfo(AJEntity.Location.ToString(), turnRow[i], "该位置页号存在问题");
-        //                            row["页数"] = "-";
-        //                        }
-        //                    }
-        //                }
-
-        //                JN.Rows.Add(row);
-        //                orderNum++;
-        //            }
-        //        }
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        WriteErrorInfo(AJEntity.Location.ToString(), "DataTableRecombine", ex.Message);
-        //    }
-        //    return JN;
-        //}
         #endregion
 
 

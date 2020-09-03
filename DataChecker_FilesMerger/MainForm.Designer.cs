@@ -68,7 +68,6 @@
             this.cbJNSheets = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.mergeFile = new System.ComponentModel.BackgroundWorker();
-            this.lblTimer = new System.Windows.Forms.Label();
             this.UpdatePercent = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
@@ -429,15 +428,6 @@
             this.mergeFile.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.ProgressChanged);
             this.mergeFile.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.mergeFile_RunWorkerCompleted);
             // 
-            // lblTimer
-            // 
-            this.lblTimer.AutoSize = true;
-            this.lblTimer.Location = new System.Drawing.Point(232, 431);
-            this.lblTimer.Name = "lblTimer";
-            this.lblTimer.Size = new System.Drawing.Size(31, 15);
-            this.lblTimer.TabIndex = 51;
-            this.lblTimer.Text = "ABC";
-            // 
             // UpdatePercent
             // 
             this.UpdatePercent.Enabled = true;
@@ -449,7 +439,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(869, 495);
-            this.Controls.Add(this.lblTimer);
             this.Controls.Add(this.cbJNSheets);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.rbOneToOne);
@@ -527,7 +516,6 @@
         private System.Windows.Forms.Label label7;
         private System.ComponentModel.BackgroundWorker mergeFile;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private System.Windows.Forms.Label lblTimer;
         private System.Windows.Forms.Timer UpdatePercent;
     }
 }

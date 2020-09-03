@@ -601,6 +601,10 @@ namespace DataChecker_FilesMerger
                     try
                     {
                         IEnumerable<FileInfo> list = new List<FileInfo>();
+                        if (jn.Pages == -2)
+                        {
+                            continue;
+                        }
                         //取出扫描件
                         if (files.Count < jn.Pages)
                         {
