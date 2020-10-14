@@ -798,7 +798,7 @@ namespace DataChecker_FilesMerger
         private Dictionary<string, string> DataBuilder(int i, ExcelReader reader)
         {
             Dictionary<string, string> archive = new Dictionary<string, string>();
-            for (int j = 0; j < reader.Cells.Rows[i].LastCell.Column; j++)
+            for (int j = 0; j < reader.Cells.Rows[i].LastCell.Column+1; j++)
             {
                 try
                 {

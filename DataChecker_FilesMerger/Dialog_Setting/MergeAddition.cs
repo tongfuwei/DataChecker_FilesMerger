@@ -187,17 +187,17 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 			{
 				additionSort.Clear();
 
-				if (!string.IsNullOrWhiteSpace(comboBox1.SelectedItem.ToString()))
+				if (comboBox1.SelectedItem != null && !string.IsNullOrWhiteSpace(comboBox1.SelectedItem.ToString()))
 				{
 					additionSort.Add(comboBox1.SelectedItem.ToString());
 				}
 
-				if (!string.IsNullOrWhiteSpace(comboBox2.SelectedItem.ToString()))
+				if (comboBox2.SelectedItem != null && !string.IsNullOrWhiteSpace(comboBox2.SelectedItem.ToString()))
 				{
 					additionSort.Add(comboBox2.SelectedItem.ToString());
 				}
 
-				if (!string.IsNullOrWhiteSpace(comboBox3.SelectedItem.ToString()))
+				if (comboBox3.SelectedItem != null && !string.IsNullOrWhiteSpace(comboBox3.SelectedItem.ToString()))
 				{
 					additionSort.Add(comboBox3.SelectedItem.ToString());
 				}

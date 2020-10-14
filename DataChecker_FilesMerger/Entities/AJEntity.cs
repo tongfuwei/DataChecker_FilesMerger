@@ -37,7 +37,7 @@ namespace DataChecker_FilesMerger
         {
             get;
             private set;
-        } = true;
+        } = false;
 
         #endregion
 
@@ -319,6 +319,7 @@ namespace DataChecker_FilesMerger
             this.JNCountColumn = _JNCountColumn;
             this.AJFilter = _AJfilter;
             this.JNFilter = _JNFilter;
+            this.IsOneToMany = true;
         }
 
         /// <summary>
@@ -369,7 +370,8 @@ namespace DataChecker_FilesMerger
                     //指定目录
                     DirectoryInfo directoryInfo = new DirectoryInfo(Dir);
                     //指定类型的文件
-                    FileInfo[] files = directoryInfo.GetFiles();
+                    List<FileInfo> files = directoryInfo.GetFiles("*.*", SearchOption.TopDirectoryOnly).
+                        Where(s => s.Name.EndsWith(".jpg") || s.Name.EndsWith(".tif") || s.Name.EndsWith(".png")).ToList();
                     //根据文件名排序
                     IOrderedEnumerable<FileInfo> orderedEnumerable = files.OrderBy((FileInfo c) => c.Name);
                     List<FileInfo> fmFile = new List<FileInfo>();
@@ -625,7 +627,7 @@ namespace DataChecker_FilesMerger
                         //解析文件名
                         string Name = AnalysisNameRule(scanPartName, jn.Value);
 
-                        MergeUtil.MergeToPDF(fileNames, PDFSavePath + "\\" + Name + ".pdf");
+                        MergeUtil.MergeToPDF(fileNames, PDFSavePath + Name + ".pdf");
                     }
                     catch (Exception ex)
                     {
@@ -783,6 +785,10 @@ namespace DataChecker_FilesMerger
                     {
                         nameParts.Add(NameRule[name]);
                     }
+                }
+                if(nameParts.Last() == "-")
+                {
+                    nameParts.RemoveAt(nameParts.Count - 1);
                 }
                 string Name = string.Join("", nameParts.ToArray());
                 return Name;
