@@ -186,7 +186,7 @@ namespace DataChecker_FilesMerger
                         return item.Value;
                     }
                 }
-                return default;
+                return -1;
             }
         }
 

@@ -627,7 +627,7 @@ namespace DataChecker_FilesMerger
                         //解析文件名
                         string Name = AnalysisNameRule(scanPartName, jn.Value);
 
-                        MergeUtil.MergeToPDF(fileNames, PDFSavePath + Name + ".pdf");
+                        MergeUtil.MergeToPDF(fileNames, PDFSavePath + "\\"+Name + ".pdf");
                     }
                     catch (Exception ex)
                     {
