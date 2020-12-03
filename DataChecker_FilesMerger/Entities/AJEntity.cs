@@ -618,12 +618,13 @@ namespace DataChecker_FilesMerger
                             list = files.Take(jn.Pages);
                         }
 
-                        ScanFiles.RemoveRange(0, jn.Pages - 1);
+                        // ScanFiles.RemoveRange(0, jn.Pages - 1);
                         List<string> fileNames = new List<string>();
                         foreach (FileInfo info in list)
                         {
                             fileNames.Add(info.FullName);
                         }
+                        files.RemoveRange(0, jn.Pages);
                         //解析文件名
                         string Name = AnalysisNameRule(scanPartName, jn.Value);
 
