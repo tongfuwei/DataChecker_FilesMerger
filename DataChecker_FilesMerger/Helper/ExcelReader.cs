@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace DataChecker_FilesMerger
 {
@@ -90,6 +91,7 @@ namespace DataChecker_FilesMerger
             {
                 string a = (cells[columnNameRow, i].Value == null || string.IsNullOrWhiteSpace(cells[columnNameRow, i].Value.ToString())) ?
                     "空列" + i.ToString() : cells[columnNameRow, i].Value.ToString();
+                a = Regex.Replace(a, @"\s", "");
                 if (!ExcelColumns.Keys.Contains(a))
                 {
                     ExcelColumns.Add(a);

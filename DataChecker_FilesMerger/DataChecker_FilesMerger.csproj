@@ -38,6 +38,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLL\Aspose.Cells.dll</HintPath>
     </Reference>
+    <Reference Include="Aspose.Words">
+      <HintPath>DLL\Aspose.Words.dll</HintPath>
+    </Reference>
     <Reference Include="FileHelper">
       <HintPath>DLL\FileHelper.dll</HintPath>
     </Reference>
@@ -102,11 +105,19 @@
     <Compile Include="Dialog_Setting\DemergeSetting.Designer.cs">
       <DependentUpon>DemergeSetting.cs</DependentUpon>
     </Compile>
+    <Compile Include="Entities\PersonalInfo.cs" />
     <Compile Include="Helper\ControlHelper.cs" />
     <Compile Include="Helper\ExcelReader.cs" />
     <Compile Include="Helper\ExcelSaver.cs" />
     <Compile Include="Helper\MergeUtil.cs" />
     <Compile Include="Helper\ThreadHelper.cs" />
+    <Compile Include="PersonnelChecklist.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include=".Designer.cs">
+      <DependentUpon>PersonnelChecklist.cs</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -142,6 +153,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog_Setting\Setting.resx">
       <DependentUpon>Setting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PersonnelChecklist.resx">
+      <DependentUpon>PersonnelChecklist.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
