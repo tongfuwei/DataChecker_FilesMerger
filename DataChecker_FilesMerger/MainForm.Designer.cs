@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.tbAJFile = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -243,6 +244,7 @@
             this.btnSplitSetting.TabIndex = 33;
             this.btnSplitSetting.Text = "拆分设置";
             this.btnSplitSetting.UseVisualStyleBackColor = true;
+            this.btnSplitSetting.Visible = false;
             this.btnSplitSetting.Click += new System.EventHandler(this.btnSplitSetting_Click);
             // 
             // btnSplit
@@ -254,6 +256,7 @@
             this.btnSplit.TabIndex = 34;
             this.btnSplit.Text = "拆分";
             this.btnSplit.UseVisualStyleBackColor = true;
+            this.btnSplit.Visible = false;
             this.btnSplit.Click += new System.EventHandler(this.btnSplit_Click);
             // 
             // btnMergeSetting
@@ -468,8 +471,10 @@
             this.Controls.Add(this.btnSelectAJExcel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbAJFile);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
-            this.Text = "检测+案卷拆分+合并pdf";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "付正数据检测与图像合并";
             this.ResumeLayout(false);
             this.PerformLayout();
 

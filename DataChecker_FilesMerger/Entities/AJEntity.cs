@@ -624,7 +624,8 @@ namespace DataChecker_FilesMerger
                         {
                             fileNames.Add(info.FullName);
                         }
-                        files.RemoveRange(0, jn.Pages);
+
+                        files.RemoveRange(0, fileNames.Count);
                         //解析文件名
                         string Name = AnalysisNameRule(scanPartName, jn.Value);
 
