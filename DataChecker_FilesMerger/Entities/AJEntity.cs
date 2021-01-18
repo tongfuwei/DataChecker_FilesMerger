@@ -299,6 +299,19 @@ namespace DataChecker_FilesMerger
             }
         }
 
+        private int _SettingDPI;
+        public int SettingDPI
+        {
+            get
+            {
+                return _SettingDPI;
+            }
+            set
+            {
+                _SettingDPI = value;
+            }
+        }
+
         #endregion
 
         #region 构造
@@ -382,7 +395,7 @@ namespace DataChecker_FilesMerger
                     foreach (FileInfo item in orderedEnumerable)
                     {
                         Bitmap bitmap = new Bitmap(item.FullName);
-                        if(bitmap.VerticalResolution != 300 || bitmap.HorizontalResolution != 300)
+                        if(bitmap.VerticalResolution != SettingDPI || bitmap.HorizontalResolution != SettingDPI)
                         {
                             MainForm.CreateInstrance().WriteErrorInfo("AJ行号:" + Location.ToString(), item.Name, "垂直DPI:" + bitmap.VerticalResolution + "||水平DPI:" + bitmap.HorizontalResolution);
                         }

@@ -763,7 +763,7 @@ namespace DataChecker_FilesMerger
                     {
                         aj.OneToManyAppend(JNCountColumn, AJFilter, JNFilter);
                     }
-
+                    aj.SettingDPI = int.Parse(tbDPI.Text.Trim());
                     ajEntities_List.Add(aj);
                     complete++;
                     int percent = complete * 100 / total;
@@ -836,6 +836,7 @@ namespace DataChecker_FilesMerger
             {
                 StartProgress();
                 ThreadBaseControl<AJEntity> thfd = new ThreadBaseControl<AJEntity>(ajEntities_List, Match);
+                thfd.ThreadCount = int.Parse(tbThreadCount.Text.Trim());
                 thfd.OneCompleted += ShowOneDoneMsg;
                 thfd.AllCompleted += ShowAllDoneMsg;
                 thfd.Start();
@@ -889,6 +890,7 @@ namespace DataChecker_FilesMerger
             {
                 StartProgress();
                 ThreadBaseControl<AJEntity> thfd = new ThreadBaseControl<AJEntity>(ajEntities_List, Merge);
+                thfd.ThreadCount = int.Parse(tbThreadCount.Text.Trim());
                 thfd.OneCompleted += ShowOneDoneMsg;
                 thfd.AllCompleted += ShowAllDoneMsg;
                 thfd.Start();
@@ -1119,5 +1121,14 @@ namespace DataChecker_FilesMerger
             AdjustProgress(e.ProgressPercentage);
         }
 
+        private void tbThreadCount_TextChanged(object sender, EventArgs e)
+        {
+            ControlHelper.NumberCheck(sender, true);
+        }
+
+        private void tbDPI_TextChanged(object sender, EventArgs e)
+        {
+            ControlHelper.NumberCheck(sender, true);
+        }
     }
 }

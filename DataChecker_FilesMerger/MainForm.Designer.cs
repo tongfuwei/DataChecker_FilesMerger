@@ -70,6 +70,10 @@
             this.label7 = new System.Windows.Forms.Label();
             this.mergeFile = new System.ComponentModel.BackgroundWorker();
             this.UpdatePercent = new System.Windows.Forms.Timer(this.components);
+            this.tbDPI = new System.Windows.Forms.TextBox();
+            this.tbThreadCount = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // tbAJFile
@@ -298,6 +302,7 @@
             this.tbColuNameRow.Name = "tbColuNameRow";
             this.tbColuNameRow.Size = new System.Drawing.Size(33, 25);
             this.tbColuNameRow.TabIndex = 38;
+            this.tbColuNameRow.Text = "1";
             this.tbColuNameRow.TextChanged += new System.EventHandler(this.tbColuNameRow_TextChanged);
             // 
             // progressBar1
@@ -437,11 +442,55 @@
             this.UpdatePercent.Interval = 50;
             this.UpdatePercent.Tick += new System.EventHandler(this.UpdatePercent_work);
             // 
+            // tbDPI
+            // 
+            this.tbDPI.Location = new System.Drawing.Point(60, 132);
+            this.tbDPI.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.tbDPI.Name = "tbDPI";
+            this.tbDPI.Size = new System.Drawing.Size(78, 25);
+            this.tbDPI.TabIndex = 50;
+            this.tbDPI.Text = "300";
+            this.tbDPI.TextChanged += new System.EventHandler(this.tbDPI_TextChanged);
+            // 
+            // tbThreadCount
+            // 
+            this.tbThreadCount.Location = new System.Drawing.Point(283, 132);
+            this.tbThreadCount.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.tbThreadCount.Name = "tbThreadCount";
+            this.tbThreadCount.Size = new System.Drawing.Size(33, 25);
+            this.tbThreadCount.TabIndex = 51;
+            this.tbThreadCount.Text = "4";
+            this.tbThreadCount.TextChanged += new System.EventHandler(this.tbThreadCount_TextChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(13, 135);
+            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(39, 15);
+            this.label8.TabIndex = 52;
+            this.label8.Text = "DPI:";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(200, 135);
+            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(60, 15);
+            this.label9.TabIndex = 53;
+            this.label9.Text = "线程数:";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(869, 495);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.tbThreadCount);
+            this.Controls.Add(this.tbDPI);
             this.Controls.Add(this.cbJNSheets);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.rbOneToOne);
@@ -522,6 +571,10 @@
         private System.ComponentModel.BackgroundWorker mergeFile;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.Timer UpdatePercent;
+        private System.Windows.Forms.TextBox tbDPI;
+        private System.Windows.Forms.TextBox tbThreadCount;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
     }
 }
 
