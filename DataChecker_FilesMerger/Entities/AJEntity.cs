@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -380,6 +381,12 @@ namespace DataChecker_FilesMerger
                     List<FileInfo> scanFile = new List<FileInfo>();
                     foreach (FileInfo item in orderedEnumerable)
                     {
+                        Bitmap bitmap = new Bitmap(item.FullName);
+                        if(bitmap.VerticalResolution != 300 || bitmap.HorizontalResolution != 300)
+                        {
+                            MainForm.CreateInstrance().WriteErrorInfo("AJ行号:" + Location.ToString(), item.Name, "垂直DPI:" + bitmap.VerticalResolution + "||水平DPI:" + bitmap.HorizontalResolution);
+                        }
+                        bitmap.Dispose();
                         if (item.Name.Contains("FM") || item.Name.Contains("fm")) //封面
                         {
                             fmFile.Add(item);

@@ -28,5 +28,21 @@ namespace DataChecker_FilesMerger.Helper
                 pDFDocument.Save(sSaveFileName);
             }
         }
+
+        public static void MergeToPDF(List<Bitmap> Files,string SaveFileName)
+        {
+            if (Files.Count != 0)
+            {
+                PDFDocument PDF = new PDFDocument();
+                foreach (Bitmap item in Files)
+                {
+                    PDF.AddPage();
+                    PDF.Pages[PDF.Pages.Count - 1].Width = item.Width;
+                    PDF.Pages[PDF.Pages.Count - 1].Height = item.Height;
+                    PDF.Pages[PDF.Pages.Count - 1].Canvas.DrawImage(item, 0.0, 0.0, item.Width, item.Height);
+                }
+                PDF.Save(SaveFileName);
+            }
+        }
     }
 }
