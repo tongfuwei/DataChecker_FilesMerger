@@ -25,7 +25,7 @@ namespace DataChecker_FilesMerger.Entities
             {
                 if (_Name == null)
                 {
-                    if (Value.Keys.Contains("身份证号码"))
+                    if (Value.Keys.Contains("姓名"))
                     {
                         try
                         {
