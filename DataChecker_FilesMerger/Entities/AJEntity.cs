@@ -394,12 +394,18 @@ namespace DataChecker_FilesMerger
                     List<FileInfo> scanFile = new List<FileInfo>();
                     foreach (FileInfo item in orderedEnumerable)
                     {
-                        Bitmap bitmap = new Bitmap(item.FullName);
-                        if(bitmap.VerticalResolution != SettingDPI || bitmap.HorizontalResolution != SettingDPI)
+
+                        FileStream myFileStream = new FileStream(item.FullName, FileMode.Open, FileAccess.Read);
+                        Image myImage = Image.FromStream(myFileStream, false, false);
+                        if (myImage.VerticalResolution != SettingDPI || myImage.HorizontalResolution != SettingDPI)
                         {
-                            MainForm.CreateInstrance().WriteErrorInfo("AJ行号:" + Location.ToString(), item.Name, "垂直DPI:" + bitmap.VerticalResolution + "||水平DPI:" + bitmap.HorizontalResolution);
+                            MainForm.CreateInstrance().WriteErrorInfo("AJ行号:" + Location.ToString(), item.Name, "垂直DPI:" + myImage.VerticalResolution + "||水平DPI:" + myImage.HorizontalResolution);
                         }
-                        bitmap.Dispose();
+                        myImage.Dispose();
+
+
+
+
                         if (item.Name.Contains("FM") || item.Name.Contains("fm")) //封面
                         {
                             fmFile.Add(item);
