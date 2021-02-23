@@ -272,41 +272,101 @@ namespace DataChecker_FilesMerger.Entities
             //公司B3
             sheet.Cells[2, 1].PutValue(Company);
             //档案编号E3
-            sheet.Cells[2, 4].PutValue(ArchID);
+            if (string.IsNullOrEmpty(ArchID))
+                sheet.Cells[2, 4].PutValue(Value["序号"]);
+            else
+                sheet.Cells[2, 4].PutValue(ArchID);
             string RetireYear = "﹍﹍﹍";
-            if(Retire.Length >=4)
-            {
-                RetireYear = Retire.Substring(0, 4);
-            }
+            string RetireDay = "﹍﹍";
             string RetireMonth = "﹍﹍";
-            if (Retire.Length >= 6)
+            if (Retire.Contains('-'))
             {
-                RetireMonth = Retire.Substring(4, 2);
+                string[] str = Retire.Split('-');
+                if (str.Length == 3)
+                {
+                    RetireDay = str[2].PadLeft(2, '0');
+                }
+                if (str.Length >= 2)
+                {
+                    RetireMonth = str[1].PadLeft(2, '0');
+                }
+                RetireYear = str[0].PadLeft(4, '0');
             }
-            string RetireDay  = "﹍﹍";
-            if (Retire.Length>=8)
+            else if (Retire.Contains('/'))
             {
-                RetireDay = Retire.Substring(6, 2);
+                string[] str = Retire.Split('/');
+                if (str.Length == 3)
+                {
+                    RetireDay = str[2].PadLeft(2, '0');
+                }
+                if (str.Length >= 2)
+                {
+                    RetireMonth = str[1].PadLeft(2, '0');
+                }
+                RetireYear = str[0].PadLeft(4, '0');
+            }
+            else
+            {
+                if (Retire.Length >= 4)
+                {
+                    RetireYear = Retire.Substring(0, 4);
+                }
+                if (Retire.Length >= 6)
+                {
+                    RetireMonth = Retire.Substring(4, 2);
+                }
+                if (Retire.Length >= 8)
+                {
+                    RetireDay = Retire.Substring(6, 2);
+                }
             }
             //退休日期C5
             sheet.Cells[4, 2].PutValue(string.Format("1、退休日期：{0}年{1}月{2}日（社保账号﹍﹍﹍﹍﹍﹍）", RetireYear, RetireMonth, RetireDay));
 
             string DeadYear = "﹍﹍﹍";
-            if (Dead.Length >= 4)
-            {
-                DeadYear = Dead.Substring(0, 4);
-            }
             string DeadMonth = "﹍﹍";
-            if (Dead.Length >= 6)
-            {
-                DeadMonth = Dead.Substring(4, 2);
-            }
             string DeadDay = "﹍﹍";
-            if (Dead.Length >= 8)
+            if (Dead.Contains('-'))
             {
-                DeadDay = Dead.Substring(6, 2);
+                string[] str = Dead.Split('-');
+                if (str.Length == 3)
+                {
+                    DeadDay = str[2].PadLeft(2, '0');
+                }
+                if (str.Length >= 2)
+                {
+                    DeadMonth = str[1].PadLeft(2, '0');
+                }
+                DeadYear = str[0].PadLeft(4, '0');
             }
-
+            else if (Dead.Contains('/'))
+            {
+                string[] str = Dead.Split('/');
+                if (str.Length == 3)
+                {
+                    DeadDay = str[2].PadLeft(2, '0');
+                }
+                if (str.Length >= 2)
+                {
+                    DeadMonth = str[1].PadLeft(2, '0');
+                }
+                DeadYear = str[0].PadLeft(4, '0');
+            }
+            else
+            {
+                if (Dead.Length >= 4)
+                {
+                    DeadYear = Dead.Substring(0, 4);
+                }
+                if (Dead.Length >= 6)
+                {
+                    DeadMonth = Dead.Substring(4, 2);
+                }
+                if (Dead.Length >= 8)
+                {
+                    DeadDay = Dead.Substring(6, 2);
+                }
+            }
             //死亡日期C6
             sheet.Cells[5, 2].PutValue(string.Format("2、死亡日期：{0}年{1}月{2}日 3、无去向 □ 4、无 □",DeadYear,DeadMonth,DeadDay));
             sheet.Cells[26, 4].PutValue(string.Format("{0}年{1}月{2}日", DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), DateTime.Now.Day.ToString()));
@@ -334,6 +394,9 @@ namespace DataChecker_FilesMerger.Entities
             builder.Write(Company);
             builder.MoveToBookmark("date");
             builder.Write(string.Format("{0}年{1}月{2}日", DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), DateTime.Now.Day.ToString()));
+            builder.MoveToBookmark("sort");
+            builder.Underline = Underline.Single;
+            builder.Write(Value["序号"]);
             try
             {
                 doc.Save(savePath + "//" + Value["序号"] + "-" + Name + ".doc");
