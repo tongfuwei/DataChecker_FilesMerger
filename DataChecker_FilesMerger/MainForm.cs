@@ -498,7 +498,6 @@ namespace DataChecker_FilesMerger
             }
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
             folderBrowserDialog.Description = "选择目录";
-            folderBrowserDialog.RootFolder = Environment.SpecialFolder.MyComputer;
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 tbFilesPath.Text = folderBrowserDialog.SelectedPath;

@@ -397,7 +397,7 @@ namespace DataChecker_FilesMerger
 
                         FileStream myFileStream = new FileStream(item.FullName, FileMode.Open, FileAccess.Read);
                         Image myImage = Image.FromStream(myFileStream, false, false);
-                        if (myImage.VerticalResolution != SettingDPI || myImage.HorizontalResolution != SettingDPI)
+                        if (Convert.ToInt32(myImage.VerticalResolution) != SettingDPI || Convert.ToInt32(myImage.HorizontalResolution) != SettingDPI)
                         {
                             MainForm.CreateInstrance().WriteErrorInfo("AJ行号:" + Location.ToString(), item.Name, "垂直DPI:" + myImage.VerticalResolution + "||水平DPI:" + myImage.HorizontalResolution);
                         }
