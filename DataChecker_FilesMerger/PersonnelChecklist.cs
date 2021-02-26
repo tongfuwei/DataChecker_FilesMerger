@@ -698,7 +698,7 @@ namespace DataChecker_FilesMerger
 
         private void Licen(PersonalInfo info)
         {
-            info.Turn2Licen(tbModeFile.Text, rootDir);
+            info.Turn2Licen(tbModeFile.Text, rootDir,cb.Checked);
         }
     }
 }

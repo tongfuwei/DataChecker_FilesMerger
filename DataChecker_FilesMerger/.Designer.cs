@@ -58,6 +58,7 @@
             this.bwgPrepareData = new System.ComponentModel.BackgroundWorker();
             this.btnTurn = new System.Windows.Forms.Button();
             this.btnLicen = new System.Windows.Forms.Button();
+            this.cb = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // tbDataFile
@@ -314,11 +315,22 @@
             this.btnLicen.UseVisualStyleBackColor = true;
             this.btnLicen.Click += new System.EventHandler(this.btnLicen_Click);
             // 
+            // cb
+            // 
+            this.cb.AutoSize = true;
+            this.cb.Location = new System.Drawing.Point(310, 132);
+            this.cb.Name = "cb";
+            this.cb.Size = new System.Drawing.Size(89, 19);
+            this.cb.TabIndex = 55;
+            this.cb.Text = "间接说明";
+            this.cb.UseVisualStyleBackColor = true;
+            // 
             // PersonnelChecklist
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(869, 495);
+            this.Controls.Add(this.cb);
             this.Controls.Add(this.btnLicen);
             this.Controls.Add(this.btnTurn);
             this.Controls.Add(this.label4);
@@ -379,6 +391,7 @@
         private System.ComponentModel.BackgroundWorker bwgPrepareData;
         private System.Windows.Forms.Button btnTurn;
         private System.Windows.Forms.Button btnLicen;
+        private System.Windows.Forms.CheckBox cb;
     }
 }
 
