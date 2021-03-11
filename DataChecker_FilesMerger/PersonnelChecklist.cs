@@ -50,9 +50,15 @@ namespace DataChecker_FilesMerger
         /// </summary>
         private string rootDir
         {
-            get;
-            set;
-        } = null;
+            get
+            {
+                return tbFilesPath.Text;
+            }
+            set
+            {
+                rootDir = value;
+            }
+        }
 
         /// <summary>
         /// 筛选文件类型
@@ -443,6 +449,8 @@ namespace DataChecker_FilesMerger
                 tbDataFile.Text = openFileDialog.FileName;
                 DataReader.Load_Excel(tbDataFile.Text.Trim());
                 cbAJSheets.DataSource = DataReader.SheetsName;
+                if (infoEntity_List.Count != 0)
+                    infoEntity_List = new List<PersonalInfo>();
             }
         }
 
@@ -457,6 +465,8 @@ namespace DataChecker_FilesMerger
         private void cbAJSheets_SelectedIndexChanged(object sender, EventArgs e)
         {
             DataReader.ResetSheet(cbAJSheets.SelectedItem.ToString());
+            if (infoEntity_List.Count != 0)
+                infoEntity_List = new List<PersonalInfo>();
         }
 
         private void cbJNSheets_SelectedIndexChanged(object sender, EventArgs e)
@@ -557,7 +567,7 @@ namespace DataChecker_FilesMerger
         {
             DataReader.Caculate_Columns(ColumnNameRow);
             AJExcelColumns = DataReader.ExcelColumns;
-        }       
+        }
 
         /// <summary>
         /// 生成[列名][值]的字典
@@ -568,7 +578,7 @@ namespace DataChecker_FilesMerger
         private Dictionary<string, string> DataBuilder(int i, ExcelReader reader)
         {
             Dictionary<string, string> archive = new Dictionary<string, string>();
-            for (int j = 0; j < reader.Cells.Rows[i].LastCell.Column+1; j++)
+            for (int j = 0; j < reader.Cells.Rows[i].LastCell.Column + 1; j++)
             {
                 try
                 {
@@ -604,7 +614,7 @@ namespace DataChecker_FilesMerger
 
 
         #endregion
-                          
+
         private void mergeFile_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             MessageBox.Show("合并完成");
@@ -626,8 +636,14 @@ namespace DataChecker_FilesMerger
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (!Directory.Exists(tbFilesPath.Text))
+                Directory.CreateDirectory(tbFilesPath.Text);
+            rootDir = tbFilesPath.Text;
             bwgPrepareData.RunWorkerAsync();
         }
+
+
+
 
         private void btnTurn_Click(object sender, EventArgs e)
         {
@@ -640,7 +656,7 @@ namespace DataChecker_FilesMerger
 
         private void Check(PersonalInfo info)
         {
-            info.Turn2Check(tbModeFile.Text,rootDir);
+            info.Turn2Check(tbModeFile.Text, rootDir);
         }
 
         private void ShowOneDoneMsg(PersonalInfo x, CompetedEventArgs args)
@@ -698,7 +714,35 @@ namespace DataChecker_FilesMerger
 
         private void Licen(PersonalInfo info)
         {
-            info.Turn2Licen(tbModeFile.Text, rootDir,cb.Checked);
+            info.Turn2Licen(tbModeFile.Text, rootDir, cbJianjie.Checked, cbRetire.Checked);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            StartProgress();
+            ThreadBaseControl<PersonalInfo> thfd = new ThreadBaseControl<PersonalInfo>(infoEntity_List, Dead);
+            thfd.OneCompleted += ShowOneDoneMsg;
+            thfd.AllCompleted += ShowAllDoneMsg;
+            thfd.Start();
+        }
+
+        private void Dead(PersonalInfo info)
+        {
+            info.DeadInfo(tbModeFile.Text, rootDir);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            StartProgress();
+            ThreadBaseControl<PersonalInfo> thfd = new ThreadBaseControl<PersonalInfo>(infoEntity_List, Retire);
+            thfd.OneCompleted += ShowOneDoneMsg;
+            thfd.AllCompleted += ShowAllDoneMsg;
+            thfd.Start();
+        }
+
+        private void Retire(PersonalInfo info)
+        {
+            info.RetireInfo(tbModeFile.Text, rootDir);
         }
     }
 }

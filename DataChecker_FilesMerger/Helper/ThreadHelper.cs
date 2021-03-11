@@ -39,7 +39,7 @@ namespace DataChecker_FilesMerger.Helper
                 get { return this.m_ThreadCount; }
                 set { this.m_ThreadCount = value; }
             }
-            private int m_ThreadCount = 4;
+            private int m_ThreadCount = 1;
 
             /// <summary>
             /// 取消

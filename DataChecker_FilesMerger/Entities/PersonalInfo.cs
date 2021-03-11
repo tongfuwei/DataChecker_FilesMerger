@@ -62,11 +62,20 @@ namespace DataChecker_FilesMerger.Entities
             {
                 if (_ID == null)
                 {
-                    if (Value.Keys.Contains("身份证号码"))
+                    if (Value.Keys.Contains("身份证号") )
                     {
                         try
                         {
-                            _ID = Value["身份证号码"].Trim();
+                            _ID = Value["身份证号"].Trim();
+                            if (!(_ID.Length == 18 || _ID.Length == 15))
+                            {
+                                _Birth = _ID;
+                                RemakeBirth();
+                                _ID = _Birth;
+                            }
+
+                            if (string.IsNullOrWhiteSpace(_ID))
+                                _ID = Birth;
                             return _ID;
                         }
                         catch (Exception ex)
@@ -75,16 +84,243 @@ namespace DataChecker_FilesMerger.Entities
                             return null;
                         }
                     }
+                    else if(!string.IsNullOrWhiteSpace(Birth))
+                    {
+                        PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "", "不存在列名身份证号");
+                        _ID = Birth;
+                        return _ID;
+                    }
                     else
                     {
                         PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "", "身份证号为空");
-                        _ID = "";
-                        return "";
+                        _ID = "                  ";
+                        return _ID;
                     }
                 }
                 else
                 {
                     return _ID;
+                }
+            }
+        }
+
+        private void RemakeBirth()
+        {
+
+            if (_Birth.Contains('-'))
+            {
+                string[] str = _Birth.Split('-');
+                if (str.Length == 3)
+                {
+                    BirthDay = str[2].PadLeft(2, '0');
+                }
+                if (str.Length >= 2)
+                {
+                    BirthMonth = str[1].PadLeft(2, '0');
+                }
+                BirthYear = str[0].PadLeft(4, '0');
+            }
+            else if (_Birth.Contains('/'))
+            {
+                string[] str = _Birth.Split('/');
+                if (str.Length == 3)
+                {
+                    BirthDay = str[2].PadLeft(2, '0');
+                }
+                if (str.Length >= 2)
+                {
+                    BirthMonth = str[1].PadLeft(2, '0');
+                }
+                BirthYear = str[0].PadLeft(4, '0');
+            }
+            else if (_Birth.Contains('.'))
+            {
+                string[] str = _Birth.Split('.');
+                if (str.Length == 3)
+                {
+                    BirthDay = str[2].PadLeft(2, '0');
+                }
+                if (str.Length >= 2)
+                {
+                    BirthMonth = str[1].PadLeft(2, '0');
+                }
+                BirthYear = str[0].PadLeft(4, '0');
+            }
+            else
+            {
+                if (Birth.Length >= 4)
+                {
+                    BirthYear = Birth.Substring(0, 4);
+                }
+                if (Birth.Length >= 6)
+                {
+                    BirthMonth = Birth.Substring(4, 2);
+                }
+                if (Birth.Length >= 8)
+                {
+                    BirthDay = Birth.Substring(6, 2);
+                }
+            }
+
+            _Birth = BirthYear + BirthMonth + BirthDay;
+            if (_Birth.Length != 8)
+                _Birth = _Birth.PadLeft(8, '0');
+        }
+
+        private void MakePartDate()
+        {
+            if (_Retire == null)
+            {
+                if (Value.Keys.Contains("退休日期"))
+                {
+                    try
+                    {
+                        _Retire = Value["退休日期"].Trim();
+
+                        if (_Retire.Contains('-'))
+                        {
+                            string[] str = _Retire.Split('-');
+                            if (str.Length == 3)
+                            {
+                                RetireDay = str[2].PadLeft(2, '0');
+                            }
+                            if (str.Length >= 2)
+                            {
+                                RetireMonth = str[1].PadLeft(2, '0');
+                            }
+                            RetireYear = str[0].PadLeft(4, '0');
+                        }
+                        else if (_Retire.Contains('/'))
+                        {
+                            string[] str = _Retire.Split('/');
+                            if (str.Length == 3)
+                            {
+                                RetireDay = str[2].PadLeft(2, '0');
+                            }
+                            if (str.Length >= 2)
+                            {
+                                RetireMonth = str[1].PadLeft(2, '0');
+                            }
+                            RetireYear = str[0].PadLeft(4, '0');
+                        }
+                        else if (_Retire.Contains('.'))
+                        {
+                            string[] str = _Retire.Split('.');
+                            if (str.Length == 3)
+                            {
+                                RetireDay = str[2].PadLeft(2, '0');
+                            }
+                            if (str.Length >= 2)
+                            {
+                                RetireMonth = str[1].PadLeft(2, '0');
+                            }
+                            RetireYear = str[0].PadLeft(4, '0');
+                        }
+                        else
+                        {
+                            if (Retire.Length >= 4)
+                            {
+                                RetireYear = Retire.Substring(0, 4);
+                            }
+                            if (Retire.Length >= 6)
+                            {
+                                RetireMonth = Retire.Substring(4, 2);
+                            }
+                            if (Retire.Length >= 8)
+                            {
+                                RetireDay = Retire.Substring(6, 2);
+                            }
+                        }
+
+                        _Retire = RetireYear + RetireMonth + RetireDay;
+                    }
+                    catch (Exception ex)
+                    {
+                        PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "读取退休时间出现问题", ex.Message);
+                    }
+                }
+                else
+                {
+                    PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "", "退休日期为空");
+                    _Retire = "";
+                }
+            }
+
+
+            if (_Dead == null)
+            {
+                if (Value.Keys.Contains("死亡日期"))
+                {
+                    try
+                    {
+                        _Dead = Value["死亡日期"].Trim();
+
+                        if (_Dead.Contains('-'))
+                        {
+                            string[] str = _Dead.Split('-');
+                            if (str.Length == 3)
+                            {
+                                DeadDay = str[2].PadLeft(2, '0');
+                            }
+                            if (str.Length >= 2)
+                            {
+                                DeadMonth = str[1].PadLeft(2, '0');
+                            }
+                            DeadYear = str[0].PadLeft(4, '0');
+                        }
+                        else if (_Dead.Contains('/'))
+                        {
+                            string[] str = _Dead.Split('/');
+                            if (str.Length == 3)
+                            {
+                                DeadDay = str[2].PadLeft(2, '0');
+                            }
+                            if (str.Length >= 2)
+                            {
+                                DeadMonth = str[1].PadLeft(2, '0');
+                            }
+                            DeadYear = str[0].PadLeft(4, '0');
+                        }
+                        else if (_Dead.Contains('.'))
+                        {
+                            string[] str = _Dead.Split('.');
+                            if (str.Length == 3)
+                            {
+                                DeadDay = str[2].PadLeft(2, '0');
+                            }
+                            if (str.Length >= 2)
+                            {
+                                DeadMonth = str[1].PadLeft(2, '0');
+                            }
+                            DeadYear = str[0].PadLeft(4, '0');
+                        }
+                        else
+                        {
+                            if (Dead.Length >= 4)
+                            {
+                                DeadYear = Dead.Substring(0, 4);
+                            }
+                            if (Dead.Length >= 6)
+                            {
+                                DeadMonth = Dead.Substring(4, 2);
+                            }
+                            if (Dead.Length >= 8)
+                            {
+                                DeadDay = Dead.Substring(6, 2);
+                            }
+                        }
+
+                        _Dead = DeadYear + DeadMonth + DeadDay;
+                    }
+                    catch (Exception ex)
+                    {
+                        PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "读取死亡时间出现问题", ex.Message);
+                    }
+                }
+                else
+                {
+                    PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "", "死亡日期为空");
+                    _Dead = "";
                 }
             }
         }
@@ -98,25 +334,23 @@ namespace DataChecker_FilesMerger.Entities
         /// 生日
         /// </summary>
         public string Birth
-        { get
+        {
+            get
             {
                 if (_Birth == null)
                 {
-                    if(!string.IsNullOrEmpty(ID) && ID.Length == 18)
-                    {
-                        _Birth = ID.Substring(6, 8);
-                        return _Birth;
-                    }
-                    if (Value.Keys.Contains("出生日期"))
+                    if (Value.Keys.Contains("出生日期") )
                     {
                         try
                         {
                             _Birth = Value["出生日期"].Trim();
+                            RemakeBirth();
+
                             return _Birth;
                         }
                         catch (Exception ex)
                         {
-                            PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "读取出生日期出现问题", ex.Message);
+                            PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "读取出生时间出现问题", ex.Message);
                             return null;
                         }
                     }
@@ -144,11 +378,69 @@ namespace DataChecker_FilesMerger.Entities
             {
                 if (_Retire == null)
                 {
-                    if (Value.Keys.Contains("退休手续办理时间"))
+                    if (Value.Keys.Contains("退休日期"))
                     {
                         try
                         {
-                            _Retire = Value["退休手续办理时间"].Trim();
+                            _Retire = Value["退休日期"].Trim();
+
+                            if (_Retire.Contains('-'))
+                            {
+                                string[] str = _Retire.Split('-');
+                                if (str.Length == 3)
+                                {
+                                    RetireDay = str[2].PadLeft(2, '0');
+                                }
+                                if (str.Length >= 2)
+                                {
+                                    RetireMonth = str[1].PadLeft(2, '0');
+                                }
+                                RetireYear = str[0].PadLeft(4, '0');
+                            }
+                            else if (_Retire.Contains('/'))
+                            {
+                                string[] str = _Retire.Split('/');
+                                if (str.Length == 3)
+                                {
+                                    RetireDay = str[2].PadLeft(2, '0');
+                                }
+                                if (str.Length >= 2)
+                                {
+                                    RetireMonth = str[1].PadLeft(2, '0');
+                                }
+                                RetireYear = str[0].PadLeft(4, '0');
+                            }
+                            else if (_Retire.Contains('.'))
+                            {
+                                string[] str = _Retire.Split('.');
+                                if (str.Length == 3)
+                                {
+                                    RetireDay = str[2].PadLeft(2, '0');
+                                }
+                                if (str.Length >= 2)
+                                {
+                                    RetireMonth = str[1].PadLeft(2, '0');
+                                }
+                                RetireYear = str[0].PadLeft(4, '0');
+                            }
+                            else
+                            {
+                                if (Retire.Length >= 4)
+                                {
+                                    RetireYear = Retire.Substring(0, 4);
+                                }
+                                if (Retire.Length >= 6)
+                                {
+                                    RetireMonth = Retire.Substring(4, 2);
+                                }
+                                if (Retire.Length >= 8)
+                                {
+                                    RetireDay = Retire.Substring(6, 2);
+                                }
+                            }
+
+                            _Retire = RetireYear + RetireMonth + RetireDay;
+
                             return _Retire;
                         }
                         catch (Exception ex)
@@ -181,16 +473,74 @@ namespace DataChecker_FilesMerger.Entities
             {
                 if (_Dead == null)
                 {
-                    if (Value.Keys.Contains("死亡日期"))
+                    if (Value.Keys.Contains("死亡日期") )
                     {
                         try
                         {
                             _Dead = Value["死亡日期"].Trim();
+
+                            if (_Dead.Contains('-'))
+                            {
+                                string[] str = _Dead.Split('-');
+                                if (str.Length == 3)
+                                {
+                                    DeadDay = str[2].PadLeft(2, '0');
+                                }
+                                if (str.Length >= 2)
+                                {
+                                    DeadMonth = str[1].PadLeft(2, '0');
+                                }
+                                DeadYear = str[0].PadLeft(4, '0');
+                            }
+                            else if (_Dead.Contains('/'))
+                            {
+                                string[] str = _Dead.Split('/');
+                                if (str.Length == 3)
+                                {
+                                    DeadDay = str[2].PadLeft(2, '0');
+                                }
+                                if (str.Length >= 2)
+                                {
+                                    DeadMonth = str[1].PadLeft(2, '0');
+                                }
+                                DeadYear = str[0].PadLeft(4, '0');
+                            }
+                            else if (_Dead.Contains('.'))
+                            {
+                                string[] str = _Dead.Split('.');
+                                if (str.Length == 3)
+                                {
+                                    DeadDay = str[2].PadLeft(2, '0');
+                                }
+                                if (str.Length >= 2)
+                                {
+                                    DeadMonth = str[1].PadLeft(2, '0');
+                                }
+                                DeadYear = str[0].PadLeft(4, '0');
+                            }
+                            else
+                            {
+                                if (Dead.Length >= 4)
+                                {
+                                    DeadYear = Dead.Substring(0, 4);
+                                }
+                                if (Dead.Length >= 6)
+                                {
+                                    DeadMonth = Dead.Substring(4, 2);
+                                }
+                                if (Dead.Length >= 8)
+                                {
+                                    DeadDay = Dead.Substring(6, 2);
+                                }
+                            }
+
+                            _Dead = DeadYear + DeadMonth + DeadDay;
+
                             return _Dead;
                         }
                         catch (Exception ex)
                         {
-                            PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "读取死亡日期出现问题", ex.Message);
+                            PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "读取死亡时间出现问题", ex.Message);
                             return null;
                         }
                     }
@@ -254,11 +604,11 @@ namespace DataChecker_FilesMerger.Entities
             {
                 if (_ArchID == null)
                 {
-                    if (Value.Keys.Contains("档案局档号"))
+                    if (Value.Keys.Contains("档案编号"))
                     {
                         try
                         {
-                            _ArchID = Value["档案局档号"].Trim();
+                            _ArchID = Value["档案编号"].Trim();
                             return _ArchID;
                         }
                         catch (Exception ex)
@@ -270,13 +620,46 @@ namespace DataChecker_FilesMerger.Entities
                     else
                     {
                         PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "", "档号为空");
-                        _ArchID = "";
-                        return "";
+                        _ArchID = "    ";
+                        return _ArchID;
                     }
                 }
                 else
                 {
                     return _ArchID;
+                }
+            }
+        }
+
+        private string _SoID = "﹍﹍﹍﹍﹍﹍";
+        public string SoID
+        {
+            get
+            {
+                if (_SoID == "﹍﹍﹍﹍﹍﹍")
+                {
+                    if (Value.Keys.Contains("社保账号"))
+                    {
+                        try
+                        {
+                            _SoID = Value["社保账号"].Trim();
+                            return _SoID;
+                        }
+                        catch (Exception ex)
+                        {
+                            PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "读取社保账号出现问题", ex.Message);
+                            return null;
+                        }
+                    }
+                    else
+                    {
+                        PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "", "社保账号为空");
+                        return _SoID;
+                    }
+                }
+                else
+                {
+                    return _SoID;
                 }
             }
         }
@@ -290,6 +673,37 @@ namespace DataChecker_FilesMerger.Entities
         /// 页数
         /// </summary>
         public int Page { get; set; }
+
+        private string _Live;
+        public string Live
+        {
+            get
+            {
+                if (Value.Keys.Contains("生存状态"))
+                {
+                    try
+                    {
+                        _Live = Value["生存状态"].Trim();
+                        return _Live;
+                    }
+                    catch (Exception ex)
+                    {
+                        PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "读取生存状态出现问题", ex.Message);
+                        return "";
+                    }
+                }
+                else
+                {
+                    PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "", "生存状态为空");
+                    _Live = "";
+                    return _Live;
+                }
+            }
+            set
+            {
+                Live = value;
+            }
+        }
         #endregion
 
         public PersonalInfo(int _location, Dictionary<string, string> _value)
@@ -298,66 +712,16 @@ namespace DataChecker_FilesMerger.Entities
             this.Value = _value;
         }
 
-        private string _RetireYear = "﹍﹍﹍";
+        #region 日期分字段
+
+        private string _RetireYear = "0000";
         private string RetireYear
         {
             get
             {
-                if (_RetireYear != "﹍﹍﹍")
-                    return _RetireYear;
-                if (Retire.Contains('-'))
+                if (_RetireYear == "0000")
                 {
-                    string[] str = Retire.Split('-');
-                    if (str.Length == 3)
-                    {
-                        RetireDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        RetireMonth = str[1].PadLeft(2, '0');
-                    }
-                    _RetireYear = str[0].PadLeft(4, '0');
-                }
-                else if (Retire.Contains('/'))
-                {
-                    string[] str = Retire.Split('/');
-                    if (str.Length == 3)
-                    {
-                        RetireDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        RetireMonth = str[1].PadLeft(2, '0');
-                    }
-                    _RetireYear = str[0].PadLeft(4, '0');
-                }
-                else if (Retire.Contains('.'))
-                {
-                    string[] str = Retire.Split('.');
-                    if (str.Length == 3)
-                    {
-                        RetireDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        RetireMonth = str[1].PadLeft(2, '0');
-                    }
-                    _RetireYear = str[0].PadLeft(4, '0');
-                }
-                else
-                {
-                    if (Retire.Length >= 4)
-                    {
-                        _RetireYear = Retire.Substring(0, 4);
-                    }
-                    if (Retire.Length >= 6)
-                    {
-                        RetireMonth = Retire.Substring(4, 2);
-                    }
-                    if (Retire.Length >= 8)
-                    {
-                        RetireDay = Retire.Substring(6, 2);
-                    }
+                    var temp = Retire;
                 }
                 return _RetireYear;
             }
@@ -365,137 +729,16 @@ namespace DataChecker_FilesMerger.Entities
             {
                 _RetireYear = value;
             }
-        } 
-
-        private string _RetireDay = "﹍﹍﹍";
-        string RetireDay
-        {
-            get
-            {
-                if (_RetireDay != "﹍﹍﹍")
-                    return _RetireDay;
-                if (Retire.Contains('-'))
-                {
-                    string[] str = Retire.Split('-');
-                    if (str.Length == 3)
-                    {
-                        _RetireDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        RetireMonth = str[1].PadLeft(2, '0');
-                    }
-                    RetireYear = str[0].PadLeft(4, '0');
-                }
-                else if (Retire.Contains('/'))
-                {
-                    string[] str = Retire.Split('/');
-                    if (str.Length == 3)
-                    {
-                        _RetireDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        RetireMonth = str[1].PadLeft(2, '0');
-                    }
-                    RetireYear = str[0].PadLeft(4, '0');
-                }
-                else if (Retire.Contains('.'))
-                {
-                    string[] str = Retire.Split('.');
-                    if (str.Length == 3)
-                    {
-                        _RetireDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        RetireMonth = str[1].PadLeft(2, '0');
-                    }
-                    RetireYear = str[0].PadLeft(4, '0');
-                }
-                else
-                {
-                    if (Retire.Length >= 4)
-                    {
-                        RetireYear = Retire.Substring(0, 4);
-                    }
-                    if (Retire.Length >= 6)
-                    {
-                        RetireMonth = Retire.Substring(4, 2);
-                    }
-                    if (Retire.Length >= 8)
-                    {
-                        _RetireDay = Retire.Substring(6, 2);
-                    }
-                }
-                return _RetireDay;
-            }
-            set
-            {
-                _RetireDay = value;
-            }
         }
 
-        private string _RetireMonth = "﹍﹍﹍";
+        private string _RetireMonth = "00";
         string RetireMonth
         {
             get
             {
-                if (_RetireMonth != "﹍﹍﹍")
-                    return _RetireMonth;
-                if (Retire.Contains('-'))
+                if (_RetireMonth == "00")
                 {
-                    string[] str = Retire.Split('-');
-                    if (str.Length == 3)
-                    {
-                        RetireDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        _RetireMonth = str[1].PadLeft(2, '0');
-                    }
-                    RetireYear = str[0].PadLeft(4, '0');
-                }
-                else if (Retire.Contains('/'))
-                {
-                    string[] str = Retire.Split('/');
-                    if (str.Length == 3)
-                    {
-                        RetireDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        _RetireMonth = str[1].PadLeft(2, '0');
-                    }
-                    RetireYear = str[0].PadLeft(4, '0');
-                }
-                else if (Retire.Contains('.'))
-                {
-                    string[] str = Retire.Split('.');
-                    if (str.Length == 3)
-                    {
-                        RetireDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        _RetireMonth = str[1].PadLeft(2, '0');
-                    }
-                    RetireYear = str[0].PadLeft(4, '0');
-                }
-                else
-                {
-                    if (Retire.Length >= 4)
-                    {
-                        RetireYear = Retire.Substring(0, 4);
-                    }
-                    if (Retire.Length >= 6)
-                    {
-                        _RetireMonth = Retire.Substring(4, 2);
-                    }
-                    if (Retire.Length >= 8)
-                    {
-                        RetireDay = Retire.Substring(6, 2);
-                    }
+                    var temp = Retire;
                 }
                 return _RetireMonth;
             }
@@ -505,66 +748,31 @@ namespace DataChecker_FilesMerger.Entities
             }
         }
 
-        private string _DeadYear = "﹍﹍﹍";
+        private string _RetireDay = "00";
+        string RetireDay
+        {
+            get
+            {
+                if (_RetireDay == "00")
+                {
+                    var temp = Retire;
+                }
+                return _RetireDay;
+            }
+            set
+            {
+                _RetireDay = value;
+            }
+        }
+               
+        private string _DeadYear = "0000";
         private string DeadYear
         {
             get
             {
-                if (_DeadYear != "﹍﹍﹍")
-                    return _DeadYear;
-                if (Dead.Contains('-'))
+                if(_DeadYear == "0000")
                 {
-                    string[] str = Dead.Split('-');
-                    if (str.Length == 3)
-                    {
-                        DeadDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        DeadMonth = str[1].PadLeft(2, '0');
-                    }
-                    _DeadYear = str[0].PadLeft(4, '0');
-                }
-                else if (Dead.Contains('/'))
-                {
-                    string[] str = Dead.Split('/');
-                    if (str.Length == 3)
-                    {
-                        DeadDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        DeadMonth = str[1].PadLeft(2, '0');
-                    }
-                    _DeadYear = str[0].PadLeft(4, '0');
-                }
-                else if (Dead.Contains('.'))
-                {
-                    string[] str = Dead.Split('.');
-                    if (str.Length == 3)
-                    {
-                        DeadDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        DeadMonth = str[1].PadLeft(2, '0');
-                    }
-                    _DeadYear = str[0].PadLeft(4, '0');
-                }
-                else
-                {
-                    if (Dead.Length >= 4)
-                    {
-                        _DeadYear = Dead.Substring(0, 4);
-                    }
-                    if (Dead.Length >= 6)
-                    {
-                        DeadMonth = Dead.Substring(4, 2);
-                    }
-                    if (Dead.Length >= 8)
-                    {
-                        DeadDay = Dead.Substring(6, 2);
-                    }
+                    var temp = Dead;
                 }
                 return _DeadYear;
             }
@@ -574,135 +782,14 @@ namespace DataChecker_FilesMerger.Entities
             }
         }
 
-        private string _DeadDay = "﹍﹍﹍";
-        string DeadDay
-        {
-            get
-            {
-                if (_DeadDay != "﹍﹍﹍")
-                    return _DeadDay;
-                if (Dead.Contains('-'))
-                {
-                    string[] str = Dead.Split('-');
-                    if (str.Length == 3)
-                    {
-                        _DeadDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        DeadMonth = str[1].PadLeft(2, '0');
-                    }
-                    DeadYear = str[0].PadLeft(4, '0');
-                }
-                else if (Dead.Contains('/'))
-                {
-                    string[] str = Dead.Split('/');
-                    if (str.Length == 3)
-                    {
-                        _DeadDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        DeadMonth = str[1].PadLeft(2, '0');
-                    }
-                    DeadYear = str[0].PadLeft(4, '0');
-                }
-                else if (Dead.Contains('.'))
-                {
-                    string[] str = Dead.Split('.');
-                    if (str.Length == 3)
-                    {
-                        _DeadDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        DeadMonth = str[1].PadLeft(2, '0');
-                    }
-                    DeadYear = str[0].PadLeft(4, '0');
-                }
-                else
-                {
-                    if (Dead.Length >= 4)
-                    {
-                        DeadYear = Dead.Substring(0, 4);
-                    }
-                    if (Dead.Length >= 6)
-                    {
-                        DeadMonth = Dead.Substring(4, 2);
-                    }
-                    if (Dead.Length >= 8)
-                    {
-                        _DeadDay = Dead.Substring(6, 2);
-                    }
-                }
-                return _DeadDay;
-            }
-            set
-            {
-                _DeadDay = value;
-            }
-        }
-
-        private string _DeadMonth = "﹍﹍﹍";
+        private string _DeadMonth = "00";
         string DeadMonth
         {
             get
             {
-                if (_DeadMonth != "﹍﹍﹍")
-                    return _DeadMonth;
-                if (Dead.Contains('-'))
+                if (_DeadMonth == "00")
                 {
-                    string[] str = Dead.Split('-');
-                    if (str.Length == 3)
-                    {
-                        DeadDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        _DeadMonth = str[1].PadLeft(2, '0');
-                    }
-                    DeadYear = str[0].PadLeft(4, '0');
-                }
-                else if (Dead.Contains('/'))
-                {
-                    string[] str = Dead.Split('/');
-                    if (str.Length == 3)
-                    {
-                        DeadDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        _DeadMonth = str[1].PadLeft(2, '0');
-                    }
-                    DeadYear = str[0].PadLeft(4, '0');
-                }
-                else if (Dead.Contains('.'))
-                {
-                    string[] str = Dead.Split('.');
-                    if (str.Length == 3)
-                    {
-                        DeadDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        _DeadMonth = str[1].PadLeft(2, '0');
-                    }
-                    DeadYear = str[0].PadLeft(4, '0');
-                }
-                else
-                {
-                    if (Dead.Length >= 4)
-                    {
-                        DeadYear = Dead.Substring(0, 4);
-                    }
-                    if (Dead.Length >= 6)
-                    {
-                        _DeadMonth = Dead.Substring(4, 2);
-                    }
-                    if (Dead.Length >= 8)
-                    {
-                        DeadDay = Dead.Substring(6, 2);
-                    }
+                    var temp = Dead;
                 }
                 return _DeadMonth;
             }
@@ -712,68 +799,34 @@ namespace DataChecker_FilesMerger.Entities
             }
         }
 
-        private string _BirthYear = "﹍﹍﹍";
+        private string _DeadDay = "00";
+        string DeadDay
+        {
+            get
+            {
+                if (_DeadDay == "00")
+                {
+                    var temp = Dead;
+                }
+                return _DeadDay;                
+            }
+            set
+            {
+                _DeadDay = value;
+            }
+        }
+
+
+        private string _BirthYear = "0000";
         private string BirthYear
         {
             get
             {
-                if (_BirthYear != "﹍﹍﹍")
-                    return _BirthYear;
-                if (Birth.Contains('-'))
+                if(_BirthYear == "0000")
                 {
-                    string[] str = Birth.Split('-');
-                    if (str.Length == 3)
-                    {
-                        BirthDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        BirthMonth = str[1].PadLeft(2, '0');
-                    }
-                    _BirthYear = str[0].PadLeft(4, '0');
+                    var temp = Birth;
                 }
-                else if (Birth.Contains('/'))
-                {
-                    string[] str = Birth.Split('/');
-                    if (str.Length == 3)
-                    {
-                        BirthDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        BirthMonth = str[1].PadLeft(2, '0');
-                    }
-                    _BirthYear = str[0].PadLeft(4, '0');
-                }
-                else if (Birth.Contains('.'))
-                {
-                    string[] str = Birth.Split('.');
-                    if (str.Length == 3)
-                    {
-                        BirthDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        BirthMonth = str[1].PadLeft(2, '0');
-                    }
-                    _BirthYear = str[0].PadLeft(4, '0');
-                }
-                else
-                {
-                    if (Birth.Length >= 4)
-                    {
-                        _BirthYear = Birth.Substring(0, 4);
-                    }
-                    if (Birth.Length >= 6)
-                    {
-                        BirthMonth = Birth.Substring(4, 2);
-                    }
-                    if (Birth.Length >= 8)
-                    {
-                        BirthDay = Birth.Substring(6, 2);
-                    }
-                }
-                return _BirthYear;
+                return _BirthYear; 
             }
             set
             {
@@ -781,66 +834,31 @@ namespace DataChecker_FilesMerger.Entities
             }
         }
 
-        private string _BirthDay = "﹍﹍﹍";
+        private string _BirthMonth = "00";
+        string BirthMonth
+        {
+            get
+            {
+                if (_BirthMonth == "00")
+                {
+                    var temp = Birth;
+                }
+                return _BirthMonth;
+            }
+            set
+            {
+                _BirthMonth = value;
+            }
+        }
+
+        private string _BirthDay = "00";
         string BirthDay
         {
             get
             {
-                if (_BirthDay != "﹍﹍﹍")
-                    return _BirthDay;
-                if (Birth.Contains('-'))
+                if (_BirthDay == "00")
                 {
-                    string[] str = Birth.Split('-');
-                    if (str.Length == 3)
-                    {
-                        _BirthDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        BirthMonth = str[1].PadLeft(2, '0');
-                    }
-                    BirthYear = str[0].PadLeft(4, '0');
-                }
-                else if (Birth.Contains('/'))
-                {
-                    string[] str = Birth.Split('/');
-                    if (str.Length == 3)
-                    {
-                        _BirthDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        BirthMonth = str[1].PadLeft(2, '0');
-                    }
-                    BirthYear = str[0].PadLeft(4, '0');
-                }
-                else if (Birth.Contains('.'))
-                {
-                    string[] str = Birth.Split('.');
-                    if (str.Length == 3)
-                    {
-                        _BirthDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        BirthMonth = str[1].PadLeft(2, '0');
-                    }
-                    BirthYear = str[0].PadLeft(4, '0');
-                }
-                else
-                {
-                    if (Birth.Length >= 4)
-                    {
-                        BirthYear = Birth.Substring(0, 4);
-                    }
-                    if (Birth.Length >= 6)
-                    {
-                        BirthMonth = Birth.Substring(4, 2);
-                    }
-                    if (Birth.Length >= 8)
-                    {
-                        _BirthDay = Birth.Substring(6, 2);
-                    }
+                    var temp = Birth;
                 }
                 return _BirthDay;
             }
@@ -850,74 +868,8 @@ namespace DataChecker_FilesMerger.Entities
             }
         }
 
-        private string _BirthMonth = "﹍﹍﹍";
-        string BirthMonth
-        {
-            get
-            {
-                if (_BirthMonth != "﹍﹍﹍")
-                    return _BirthMonth;
-                if (Birth.Contains('-'))
-                {
-                    string[] str = Birth.Split('-');
-                    if (str.Length == 3)
-                    {
-                        BirthDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        _BirthMonth = str[1].PadLeft(2, '0');
-                    }
-                    BirthYear = str[0].PadLeft(4, '0');
-                }
-                else if (Birth.Contains('/'))
-                {
-                    string[] str = Birth.Split('/');
-                    if (str.Length == 3)
-                    {
-                        BirthDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        _BirthMonth = str[1].PadLeft(2, '0');
-                    }
-                    BirthYear = str[0].PadLeft(4, '0');
-                }
-                else if (Birth.Contains('.'))
-                {
-                    string[] str = Birth.Split('.');
-                    if (str.Length == 3)
-                    {
-                        BirthDay = str[2].PadLeft(2, '0');
-                    }
-                    if (str.Length >= 2)
-                    {
-                        _BirthMonth = str[1].PadLeft(2, '0');
-                    }
-                    BirthYear = str[0].PadLeft(4, '0');
-                }
-                else
-                {
-                    if (Birth.Length >= 4)
-                    {
-                        BirthYear = Birth.Substring(0, 4);
-                    }
-                    if (Birth.Length >= 6)
-                    {
-                        _BirthMonth = Birth.Substring(4, 2);
-                    }
-                    if (Birth.Length >= 8)
-                    {
-                        BirthDay = Birth.Substring(6, 2);
-                    }
-                }
-                return _BirthMonth;
-            }
-            set
-            {
-                _BirthMonth = value;
-            }
-        }
+        #endregion
+
 
         public void Turn2Check(string modePath,string savePath)
         {
@@ -934,12 +886,24 @@ namespace DataChecker_FilesMerger.Entities
                 sheet.Cells[2, 4].PutValue(Value["序号"]);
             else
                 sheet.Cells[2, 4].PutValue(ArchID);
-            
+
+
+            if (RetireYear == "0000")
+                RetireYear = "﹍﹍﹍";
+            if (RetireMonth == "00")
+                RetireMonth = "﹍﹍﹍";
+            if (RetireDay == "00")
+                RetireDay = "﹍﹍﹍";
 
             //退休日期C5
-            sheet.Cells[4, 2].PutValue(string.Format("1、退休日期：{0}年{1}月{2}日（社保账号﹍﹍﹍﹍﹍﹍）", RetireYear, RetireMonth, RetireDay));
+            sheet.Cells[4, 2].PutValue(string.Format("1、退休日期：{0}年{1}月{2}日（社保账号{3}）", RetireYear, RetireMonth, RetireDay,SoID));
 
-           
+            if (DeadYear == "0000")
+                DeadYear = "﹍﹍﹍";
+            if (DeadMonth == "00")
+                DeadMonth = "﹍﹍﹍";
+            if (DeadDay == "00")
+                DeadDay = "﹍﹍﹍";
 
             //死亡日期C6
             sheet.Cells[5, 2].PutValue(string.Format("2、死亡日期：{0}年{1}月{2}日 3、无去向 □ 4、无 □",DeadYear,DeadMonth,DeadDay));
@@ -954,7 +918,7 @@ namespace DataChecker_FilesMerger.Entities
             }
         }
 
-        public void Turn2Licen(string modePath, string savePath,bool jianjie)
+        public void Turn2Licen(string modePath, string savePath,bool jianjie,bool retire)
         {
             Document doc = new Document(modePath);
             DocumentBuilder builder = new DocumentBuilder(doc);
@@ -966,20 +930,28 @@ namespace DataChecker_FilesMerger.Entities
             builder.Write(ID); 
             builder.MoveToBookmark("sort");
             builder.Underline = Underline.Single;
-            builder.Write(Value["序号"]);
+            builder.Write(ArchID);
             builder.MoveToBookmark("company1");
             builder.Write(Company);
             builder.MoveToBookmark("date");
             builder.Write(string.Format("{0}年{1}月{2}日", DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), DateTime.Now.Day.ToString()));
+            if(retire)
+            {
+                builder.MoveToBookmark("retire");
+                if (RetireDay == "﹍﹍﹍"|| RetireDay=="00")
+                    builder.Write(string.Format("{0}年{1}月", RetireYear, RetireMonth));
+                else
+                    builder.Write(string.Format("{0}年{1}月{2}日", RetireYear, RetireMonth, RetireDay));
+            }
             if (jianjie)
             {
                 builder.MoveToBookmark("birth");
-                if (BirthDay == "﹍﹍﹍")
+                if (BirthDay == "﹍﹍﹍"||BirthDay=="00")
                     builder.Write(string.Format("{0}年{1}月", BirthYear, BirthMonth));
                 else
                     builder.Write(string.Format("{0}年{1}月{2}日", BirthYear, BirthMonth, BirthDay));
                 builder.MoveToBookmark("retire");
-                if (RetireDay == "﹍﹍﹍")
+                if (RetireDay == "﹍﹍﹍" || RetireDay == "00")
                     builder.Write(string.Format("{0}年{1}月", RetireYear, RetireMonth));
                 else
                     builder.Write(string.Format("{0}年{1}月{2}日", RetireYear, RetireMonth, RetireDay));
@@ -990,11 +962,81 @@ namespace DataChecker_FilesMerger.Entities
             }
             try
             {
-                doc.Save(savePath + "//" + Value["序号"] + "-" + Name + ".doc");
+                doc.Save(savePath + "//" + ArchID + "-" + Name + ".doc");
             }
             catch (Exception e)
             {
                 PersonnelChecklist.CreateInstrance().WriteErrorInfo(Location.ToString(), "Turn2Licen", e.Message);
+            }
+        }
+
+        public void DeadInfo(string modePath, string savePath)
+        {
+            if (Live != "死亡")
+                return;
+            Document doc = new Document(modePath);
+            DocumentBuilder builder = new DocumentBuilder(doc);
+            builder.MoveToBookmark("name");
+            builder.Underline = Underline.Single;
+            builder.Write(Name);
+            builder.MoveToBookmark("ID");
+            builder.Underline = Underline.Single;
+            builder.Write(ID);
+            builder.MoveToBookmark("ArID");
+            builder.Underline = Underline.Single;
+            builder.Write(ArchID);
+            builder.MoveToBookmark("company1");
+            builder.Write(Company);
+            builder.MoveToBookmark("company2");
+            builder.Write(Company);
+            builder.MoveToBookmark("dead");
+            if (DeadDay == "00")
+                builder.Write(string.Format("{0}年{1}月", DeadYear, DeadMonth));
+            else
+                builder.Write(string.Format("{0}年{1}月{2}日", DeadYear, DeadMonth, DeadDay));
+            builder.MoveToBookmark("date");
+            builder.Write(string.Format("{0}年{1}月{2}日", DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), DateTime.Now.Day.ToString()));
+            try
+            {
+                doc.Save(savePath + "//" + ArchID + "-" + Name + ".doc");
+            }
+            catch (Exception e)
+            {
+                PersonnelChecklist.CreateInstrance().WriteErrorInfo(Location.ToString(), "", e.Message);
+            }
+        }
+
+        public void RetireInfo(string modePath, string savePath)
+        {
+            Document doc = new Document(modePath);
+            DocumentBuilder builder = new DocumentBuilder(doc);
+            builder.MoveToBookmark("name");
+            builder.Underline = Underline.Single;
+            builder.Write(Name);
+            builder.MoveToBookmark("ID");
+            builder.Underline = Underline.Single;
+            builder.Write(ID);
+            builder.MoveToBookmark("ArID");
+            builder.Underline = Underline.Single;
+            builder.Write(ArchID);
+            builder.MoveToBookmark("company1");
+            builder.Write(Company);
+            builder.MoveToBookmark("company2");
+            builder.Write(Company);
+            builder.MoveToBookmark("retire");
+            if (RetireDay == "00")
+                builder.Write(string.Format("{0}年{1}月", RetireYear, RetireMonth));
+            else
+                builder.Write(string.Format("{0}年{1}月{2}日", RetireYear, RetireMonth, RetireDay));
+            builder.MoveToBookmark("date");
+            builder.Write(string.Format("{0}年{1}月{2}日", DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), DateTime.Now.Day.ToString()));
+            try
+            {
+                doc.Save(savePath + "//" + ArchID + "-" + Name + ".doc");
+            }
+            catch (Exception e)
+            {
+                PersonnelChecklist.CreateInstrance().WriteErrorInfo(Location.ToString(), "", e.Message);
             }
         }
     }

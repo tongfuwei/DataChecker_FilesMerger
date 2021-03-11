@@ -58,7 +58,10 @@
             this.bwgPrepareData = new System.ComponentModel.BackgroundWorker();
             this.btnTurn = new System.Windows.Forms.Button();
             this.btnLicen = new System.Windows.Forms.Button();
-            this.cb = new System.Windows.Forms.CheckBox();
+            this.cbJianjie = new System.Windows.Forms.CheckBox();
+            this.cbRetire = new System.Windows.Forms.CheckBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tbDataFile
@@ -315,22 +318,55 @@
             this.btnLicen.UseVisualStyleBackColor = true;
             this.btnLicen.Click += new System.EventHandler(this.btnLicen_Click);
             // 
-            // cb
+            // cbJianjie
             // 
-            this.cb.AutoSize = true;
-            this.cb.Location = new System.Drawing.Point(310, 132);
-            this.cb.Name = "cb";
-            this.cb.Size = new System.Drawing.Size(89, 19);
-            this.cb.TabIndex = 55;
-            this.cb.Text = "间接说明";
-            this.cb.UseVisualStyleBackColor = true;
+            this.cbJianjie.AutoSize = true;
+            this.cbJianjie.Location = new System.Drawing.Point(310, 132);
+            this.cbJianjie.Name = "cbJianjie";
+            this.cbJianjie.Size = new System.Drawing.Size(89, 19);
+            this.cbJianjie.TabIndex = 55;
+            this.cbJianjie.Text = "间接说明";
+            this.cbJianjie.UseVisualStyleBackColor = true;
+            // 
+            // cbRetire
+            // 
+            this.cbRetire.AutoSize = true;
+            this.cbRetire.Location = new System.Drawing.Point(405, 132);
+            this.cbRetire.Name = "cbRetire";
+            this.cbRetire.Size = new System.Drawing.Size(89, 19);
+            this.cbRetire.TabIndex = 56;
+            this.cbRetire.Text = "追加退休";
+            this.cbRetire.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(398, 101);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(82, 25);
+            this.button2.TabIndex = 57;
+            this.button2.Text = "死亡信息";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(486, 101);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(82, 25);
+            this.button3.TabIndex = 58;
+            this.button3.Text = "退休信息";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // PersonnelChecklist
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(869, 495);
-            this.Controls.Add(this.cb);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.cbRetire);
+            this.Controls.Add(this.cbJianjie);
             this.Controls.Add(this.btnLicen);
             this.Controls.Add(this.btnTurn);
             this.Controls.Add(this.label4);
@@ -391,7 +427,10 @@
         private System.ComponentModel.BackgroundWorker bwgPrepareData;
         private System.Windows.Forms.Button btnTurn;
         private System.Windows.Forms.Button btnLicen;
-        private System.Windows.Forms.CheckBox cb;
+        private System.Windows.Forms.CheckBox cbJianjie;
+        private System.Windows.Forms.CheckBox cbRetire;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
     }
 }
 
