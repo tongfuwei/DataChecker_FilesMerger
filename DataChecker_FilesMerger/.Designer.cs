@@ -62,6 +62,7 @@
             this.cbRetire = new System.Windows.Forms.CheckBox();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
+            this.cbWorkID = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // tbDataFile
@@ -358,11 +359,22 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
+            // cbWorkID
+            // 
+            this.cbWorkID.AutoSize = true;
+            this.cbWorkID.Location = new System.Drawing.Point(500, 132);
+            this.cbWorkID.Name = "cbWorkID";
+            this.cbWorkID.Size = new System.Drawing.Size(74, 19);
+            this.cbWorkID.TabIndex = 59;
+            this.cbWorkID.Text = "带工号";
+            this.cbWorkID.UseVisualStyleBackColor = true;
+            // 
             // PersonnelChecklist
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(869, 495);
+            this.Controls.Add(this.cbWorkID);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.cbRetire);
@@ -431,6 +443,7 @@
         private System.Windows.Forms.CheckBox cbRetire;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.CheckBox cbWorkID;
     }
 }
 

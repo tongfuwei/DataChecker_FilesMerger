@@ -162,7 +162,7 @@ namespace DataChecker_FilesMerger.Entities
                 }
             }
 
-            _Birth = BirthYear + BirthMonth + BirthDay;
+            _Birth = _BirthYear + _BirthMonth + _BirthDay;
             if (_Birth.Length != 8)
                 _Birth = _Birth.PadLeft(8, '0');
         }
@@ -439,7 +439,7 @@ namespace DataChecker_FilesMerger.Entities
                                 }
                             }
 
-                            _Retire = RetireYear + RetireMonth + RetireDay;
+                            _Retire = _RetireYear + _RetireMonth + _RetireDay;
 
                             return _Retire;
                         }
@@ -534,7 +534,7 @@ namespace DataChecker_FilesMerger.Entities
                                 }
                             }
 
-                            _Dead = DeadYear + DeadMonth + DeadDay;
+                            _Dead = _DeadYear + _DeadMonth + _DeadDay;
 
                             return _Dead;
                         }
@@ -627,6 +627,39 @@ namespace DataChecker_FilesMerger.Entities
                 else
                 {
                     return _ArchID;
+                }
+            }
+        }
+
+        public string WorkID
+        {
+            get
+            {
+                if (_WorkID == null)
+                {
+                    if (Value.Keys.Contains("工号"))
+                    {
+                        try
+                        {
+                            _WorkID = Value["工号"].Trim();
+                            return _WorkID;
+                        }
+                        catch (Exception ex)
+                        {
+                            PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "读取工号出现问题", ex.Message);
+                            return null;
+                        }
+                    }
+                    else
+                    {
+                        PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "", "工号为空");
+                        _WorkID = "      ";
+                        return _WorkID;
+                    }
+                }
+                else
+                {
+                    return _WorkID;
                 }
             }
         }
@@ -852,6 +885,8 @@ namespace DataChecker_FilesMerger.Entities
         }
 
         private string _BirthDay = "00";
+        private string _WorkID;
+
         string BirthDay
         {
             get
@@ -918,7 +953,7 @@ namespace DataChecker_FilesMerger.Entities
             }
         }
 
-        public void Turn2Licen(string modePath, string savePath,bool jianjie,bool retire)
+        public void Turn2Licen(string modePath, string savePath,bool jianjie,bool retire,bool workID)
         {
             Document doc = new Document(modePath);
             DocumentBuilder builder = new DocumentBuilder(doc);
@@ -928,7 +963,7 @@ namespace DataChecker_FilesMerger.Entities
             builder.MoveToBookmark("ID");
             builder.Underline = Underline.Single;
             builder.Write(ID); 
-            builder.MoveToBookmark("sort");
+            builder.MoveToBookmark("ArID");
             builder.Underline = Underline.Single;
             builder.Write(ArchID);
             builder.MoveToBookmark("company1");
@@ -960,6 +995,12 @@ namespace DataChecker_FilesMerger.Entities
                 builder.MoveToBookmark("company2");
                 builder.Write(Company);
             }
+            if(workID)
+            {
+                builder.MoveToBookmark("workID");
+                builder.Underline = Underline.Single;
+                builder.Write(WorkID);
+            }
             try
             {
                 doc.Save(savePath + "//" + ArchID + "-" + Name + ".doc");
@@ -970,7 +1011,7 @@ namespace DataChecker_FilesMerger.Entities
             }
         }
 
-        public void DeadInfo(string modePath, string savePath)
+        public void DeadInfo(string modePath, string savePath,bool workID)
         {
             if (Live != "死亡")
                 return;
@@ -990,7 +1031,15 @@ namespace DataChecker_FilesMerger.Entities
             builder.MoveToBookmark("company2");
             builder.Write(Company);
             builder.MoveToBookmark("dead");
-            if (DeadDay == "00")
+            if(workID)
+            {
+                builder.MoveToBookmark("workID");
+                builder.Underline = Underline.Single;
+                builder.Write(WorkID);
+            }
+            if (Dead == "00000000")
+            { builder.Write("        "); }
+            else if (DeadDay == "00")
                 builder.Write(string.Format("{0}年{1}月", DeadYear, DeadMonth));
             else
                 builder.Write(string.Format("{0}年{1}月{2}日", DeadYear, DeadMonth, DeadDay));
@@ -1006,7 +1055,7 @@ namespace DataChecker_FilesMerger.Entities
             }
         }
 
-        public void RetireInfo(string modePath, string savePath)
+        public void RetireInfo(string modePath, string savePath,bool workID)
         {
             Document doc = new Document(modePath);
             DocumentBuilder builder = new DocumentBuilder(doc);
@@ -1024,12 +1073,20 @@ namespace DataChecker_FilesMerger.Entities
             builder.MoveToBookmark("company2");
             builder.Write(Company);
             builder.MoveToBookmark("retire");
-            if (RetireDay == "00")
+            if(Retire == "00000000")
+            { builder.Write("        "); }
+            else if (RetireDay == "00")
                 builder.Write(string.Format("{0}年{1}月", RetireYear, RetireMonth));
             else
                 builder.Write(string.Format("{0}年{1}月{2}日", RetireYear, RetireMonth, RetireDay));
             builder.MoveToBookmark("date");
             builder.Write(string.Format("{0}年{1}月{2}日", DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), DateTime.Now.Day.ToString()));
+            if(workID)
+            {
+                builder.MoveToBookmark("workID");
+                builder.Underline = Underline.Single;
+                builder.Write(WorkID);
+            }
             try
             {
                 doc.Save(savePath + "//" + ArchID + "-" + Name + ".doc");

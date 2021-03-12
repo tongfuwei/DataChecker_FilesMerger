@@ -54,10 +54,6 @@ namespace DataChecker_FilesMerger
             {
                 return tbFilesPath.Text;
             }
-            set
-            {
-                rootDir = value;
-            }
         }
 
         /// <summary>
@@ -491,7 +487,6 @@ namespace DataChecker_FilesMerger
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 tbFilesPath.Text = folderBrowserDialog.SelectedPath;
-                rootDir = tbFilesPath.Text;
                 //if (JumpScanFiles)
                 //{
                 //    MessageBox.Show("扫描件路径追加完成,将重新读取数据!");
@@ -638,7 +633,6 @@ namespace DataChecker_FilesMerger
         {
             if (!Directory.Exists(tbFilesPath.Text))
                 Directory.CreateDirectory(tbFilesPath.Text);
-            rootDir = tbFilesPath.Text;
             bwgPrepareData.RunWorkerAsync();
         }
 
@@ -714,7 +708,7 @@ namespace DataChecker_FilesMerger
 
         private void Licen(PersonalInfo info)
         {
-            info.Turn2Licen(tbModeFile.Text, rootDir, cbJianjie.Checked, cbRetire.Checked);
+            info.Turn2Licen(tbModeFile.Text, rootDir, cbJianjie.Checked, cbRetire.Checked,cbWorkID.Checked);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -728,7 +722,7 @@ namespace DataChecker_FilesMerger
 
         private void Dead(PersonalInfo info)
         {
-            info.DeadInfo(tbModeFile.Text, rootDir);
+            info.DeadInfo(tbModeFile.Text, rootDir,cbWorkID.Checked);
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -742,7 +736,7 @@ namespace DataChecker_FilesMerger
 
         private void Retire(PersonalInfo info)
         {
-            info.RetireInfo(tbModeFile.Text, rootDir);
+            info.RetireInfo(tbModeFile.Text, rootDir,cbWorkID.Checked);
         }
     }
 }
