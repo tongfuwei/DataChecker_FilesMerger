@@ -35,23 +35,34 @@ namespace DataChecker_FilesMerger
             set;
         } = true;
 
+        private int _ColumnNameRow = 0;
         /// <summary>
         /// 列名所在行
         /// </summary>
         private int ColumnNameRow
         {
-            get;
-            set;
-        } = 0;
+            get
+            {
+                return _ColumnNameRow;
+            }
+            set
+            {
+                if (_ColumnNameRow != value)
+                    ResetState();
+                _ColumnNameRow = value;
+            }
+        }
 
         /// <summary>
         /// 根目录
         /// </summary>
         private string rootDir
         {
-            get;
-            set;
-        } = null;
+            get
+            {
+                return tbFilesPath.Text;
+            }
+        }
 
         /// <summary>
         /// 筛选文件类型
@@ -368,12 +379,13 @@ namespace DataChecker_FilesMerger
         {
             if (DataLoaded)
             {
-                if (MessageBox.Show("是否用原有设置重新加载数据?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show("是否用原有关联设置重新加载数据?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     LoadData();
                 }
                 else
                 {
+                    MessageBox.Show("请重新进行关联设置以读取数据!");
                     DataLoaded = false;
                 }
             }
@@ -501,7 +513,6 @@ namespace DataChecker_FilesMerger
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 tbFilesPath.Text = folderBrowserDialog.SelectedPath;
-                rootDir = tbFilesPath.Text;
                 if (JumpScanFiles)
                 {
                     MessageBox.Show("扫描件路径追加完成,将重新读取数据!");
