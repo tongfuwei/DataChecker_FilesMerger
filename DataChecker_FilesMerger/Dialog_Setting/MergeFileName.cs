@@ -134,7 +134,7 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 			pdfPartName.Clear();
 			foreach (ComboBox com in Part_Separator.Keys)
 			{
-				if (!string.IsNullOrWhiteSpace(com.SelectedItem.ToString()))
+				if (!string.IsNullOrWhiteSpace(com.Text))
 				{
 					CheckBox chk = Part_Separator[com];
 					if (chk.Checked)
@@ -144,17 +144,17 @@ namespace DataChecker_FilesMerger.Dialog_Setting
 							TextBox txt = (TextBox)con;
 							if (!string.IsNullOrWhiteSpace(txt.Text))
 							{
-								pdfPartName.Add(com.SelectedItem.ToString(), txt.Text);
+								pdfPartName.Add(com.Text, txt.Text);
 							}
 							else
 							{
-								pdfPartName.Add(com.SelectedItem.ToString(), DefaultSeparator);
+								pdfPartName.Add(com.Text, DefaultSeparator);
 							}
 						}
 					}
 					else
 					{
-						pdfPartName.Add(com.SelectedItem.ToString(), DefaultSeparator);
+						pdfPartName.Add(com.Text, DefaultSeparator);
 					}
 				}
 				else

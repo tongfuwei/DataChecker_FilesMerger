@@ -808,7 +808,14 @@ namespace DataChecker_FilesMerger
                 List<string> nameParts = new List<string>();
                 foreach (string name in NameRule.Keys)
                 {
-                    nameParts.Add(ValuePool[name]);
+                    if (ValuePool.ContainsKey(name))
+                    {
+                        nameParts.Add(ValuePool[name]);
+                    }
+                    else
+                    {
+                        nameParts.Add(name);
+                    }
                     if (!string.IsNullOrWhiteSpace(NameRule[name]))
                     {
                         nameParts.Add(NameRule[name]);
