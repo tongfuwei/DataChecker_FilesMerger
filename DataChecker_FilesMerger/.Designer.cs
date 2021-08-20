@@ -63,6 +63,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.cbWorkID = new System.Windows.Forms.CheckBox();
+            this.btnUnArchive = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tbDataFile
@@ -369,11 +370,22 @@
             this.cbWorkID.Text = "带工号";
             this.cbWorkID.UseVisualStyleBackColor = true;
             // 
+            // btnUnArchive
+            // 
+            this.btnUnArchive.Location = new System.Drawing.Point(574, 101);
+            this.btnUnArchive.Name = "btnUnArchive";
+            this.btnUnArchive.Size = new System.Drawing.Size(82, 25);
+            this.btnUnArchive.TabIndex = 60;
+            this.btnUnArchive.Text = "无档证明";
+            this.btnUnArchive.UseVisualStyleBackColor = true;
+            this.btnUnArchive.Click += new System.EventHandler(this.btnUnArchive_Click);
+            // 
             // PersonnelChecklist
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(869, 495);
+            this.Controls.Add(this.btnUnArchive);
             this.Controls.Add(this.cbWorkID);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
@@ -444,6 +456,7 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.CheckBox cbWorkID;
+        private System.Windows.Forms.Button btnUnArchive;
     }
 }
 

@@ -1011,6 +1011,36 @@ namespace DataChecker_FilesMerger.Entities
             }
         }
 
+        public void UnArchiveLicences(string modePath, string savePath)
+        {
+            if (Value["档案情况"].Trim() != "无档")
+                return;
+            Document doc = new Document(modePath);
+            DocumentBuilder builder = new DocumentBuilder(doc);
+            builder.MoveToBookmark("name");
+            builder.Underline = Underline.Single;
+            builder.Write(Name);
+            builder.MoveToBookmark("ID");
+            builder.Underline = Underline.Single;
+            builder.Write(ID);
+            builder.MoveToBookmark("ArID");
+            builder.Underline = Underline.Single;
+            builder.Write(ArchID);
+            builder.MoveToBookmark("company1");
+            builder.Write(Company);
+            builder.MoveToBookmark("date");
+            builder.Write(string.Format("{0}年{1}月{2}日", DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), DateTime.Now.Day.ToString()));
+            
+            try
+            {
+                doc.Save(savePath + "//" + ArchID + "-" + Name + ".doc");
+            }
+            catch (Exception e)
+            {
+                PersonnelChecklist.CreateInstrance().WriteErrorInfo(Location.ToString(), "Turn2Licen", e.Message);
+            }
+        }
+
         public void DeadInfo(string modePath, string savePath,bool workID)
         {
             if (Live != "死亡")

@@ -648,6 +648,7 @@ namespace DataChecker_FilesMerger
             thfd.Start();
         }
 
+
         private void Check(PersonalInfo info)
         {
             info.Turn2Check(tbModeFile.Text, rootDir);
@@ -697,6 +698,23 @@ namespace DataChecker_FilesMerger
             MessageBox.Show("读取完成");
         }
 
+
+
+        private void btnUnArchive_Click(object sender, EventArgs e)
+        {
+            StartProgress();
+            ThreadBaseControl<PersonalInfo> thfd = new ThreadBaseControl<PersonalInfo>(infoEntity_List, UnArchive);
+            thfd.OneCompleted += ShowOneDoneMsg;
+            thfd.AllCompleted += ShowAllDoneMsg;
+            thfd.Start();
+        }
+
+
+        private void UnArchive(PersonalInfo info)
+        {
+            info.UnArchiveLicences(tbModeFile.Text, rootDir);
+        }
+
         private void btnLicen_Click(object sender, EventArgs e)
         {
             StartProgress();
@@ -738,5 +756,6 @@ namespace DataChecker_FilesMerger
         {
             info.RetireInfo(tbModeFile.Text, rootDir,cbWorkID.Checked);
         }
+
     }
 }
