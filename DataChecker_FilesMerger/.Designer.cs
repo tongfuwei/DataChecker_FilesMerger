@@ -64,6 +64,9 @@
             this.button3 = new System.Windows.Forms.Button();
             this.cbWorkID = new System.Windows.Forms.CheckBox();
             this.btnUnArchive = new System.Windows.Forms.Button();
+            this.btnJPG = new System.Windows.Forms.Button();
+            this.tbThread = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // tbDataFile
@@ -380,11 +383,43 @@
             this.btnUnArchive.UseVisualStyleBackColor = true;
             this.btnUnArchive.Click += new System.EventHandler(this.btnUnArchive_Click);
             // 
+            // btnJPG
+            // 
+            this.btnJPG.Location = new System.Drawing.Point(662, 101);
+            this.btnJPG.Name = "btnJPG";
+            this.btnJPG.Size = new System.Drawing.Size(82, 25);
+            this.btnJPG.TabIndex = 61;
+            this.btnJPG.Text = "生成jpg";
+            this.btnJPG.UseVisualStyleBackColor = true;
+            this.btnJPG.Click += new System.EventHandler(this.btnJPG_Click);
+            // 
+            // tbThread
+            // 
+            this.tbThread.Location = new System.Drawing.Point(94, 132);
+            this.tbThread.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.tbThread.Name = "tbThread";
+            this.tbThread.Size = new System.Drawing.Size(33, 25);
+            this.tbThread.TabIndex = 62;
+            this.tbThread.Text = "4";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 136);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(60, 15);
+            this.label2.TabIndex = 63;
+            this.label2.Text = "线程数:";
+            // 
             // PersonnelChecklist
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(869, 495);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.tbThread);
+            this.Controls.Add(this.btnJPG);
             this.Controls.Add(this.btnUnArchive);
             this.Controls.Add(this.cbWorkID);
             this.Controls.Add(this.button3);
@@ -457,6 +492,9 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.CheckBox cbWorkID;
         private System.Windows.Forms.Button btnUnArchive;
+        private System.Windows.Forms.Button btnJPG;
+        private System.Windows.Forms.TextBox tbThread;
+        private System.Windows.Forms.Label label2;
     }
 }
 

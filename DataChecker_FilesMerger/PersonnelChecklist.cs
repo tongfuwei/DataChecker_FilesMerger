@@ -634,6 +634,10 @@ namespace DataChecker_FilesMerger
             if (!Directory.Exists(tbFilesPath.Text))
                 Directory.CreateDirectory(tbFilesPath.Text);
             bwgPrepareData.RunWorkerAsync();
+            if (ControlHelper.NumberCheck(tbThread, true))
+            {
+                ThreadHelper.ThreadCount = int.Parse(tbThread.Text.Trim()) - 1;
+            }
         }
 
 
@@ -757,5 +761,20 @@ namespace DataChecker_FilesMerger
             info.RetireInfo(tbModeFile.Text, rootDir,cbWorkID.Checked);
         }
 
+        private void btnJPG_Click(object sender, EventArgs e)
+        {
+            StartProgress();
+            ThreadBaseControl<PersonalInfo> thfd = new ThreadBaseControl<PersonalInfo>(infoEntity_List, JPG);
+            thfd.OneCompleted += ShowOneDoneMsg;
+            thfd.AllCompleted += ShowAllDoneMsg;
+            thfd.Start();
+        }
+
+        private void JPG(PersonalInfo info)
+        {
+            info.Convert2PDF(@"D:\付正数据\人事档案核查表与情况说明生成工具\模板\人事档案核查表【缩小】.xls",
+                @"D:\付正数据\人事档案核查表与情况说明生成工具\模板\综合情况说明【带编号】.doc", 
+                @"D:\付正数据\人事档案核查表与情况说明生成工具\模板\无档证明【带档号】.doc", rootDir);
+        }
     }
 }

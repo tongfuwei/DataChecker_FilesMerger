@@ -1,7 +1,10 @@
 ﻿using Aspose.Cells;
 using Aspose.Words;
+using Aspose.Words.Fonts;
+using ImageMagick;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,7 +65,7 @@ namespace DataChecker_FilesMerger.Entities
             {
                 if (_ID == null)
                 {
-                    if (Value.Keys.Contains("身份证号") )
+                    if (Value.Keys.Contains("身份证号"))
                     {
                         try
                         {
@@ -84,7 +87,7 @@ namespace DataChecker_FilesMerger.Entities
                             return null;
                         }
                     }
-                    else if(!string.IsNullOrWhiteSpace(Birth))
+                    else if (!string.IsNullOrWhiteSpace(Birth))
                     {
                         PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "", "不存在列名身份证号");
                         _ID = Birth;
@@ -120,12 +123,32 @@ namespace DataChecker_FilesMerger.Entities
                 }
                 BirthYear = str[0].PadLeft(4, '0');
             }
+            else if (_Birth.Contains("年"))
+            {
+                string[] str = _Birth.Split('年');
+                BirthYear = str[0].PadLeft(4, '0');
+                if (_Birth.Contains("月"))
+                {
+                    string[] str1 = str[1].Split('月');
+                    BirthMonth = str1[0].PadLeft(2, '0');
+                    if (_Birth.Contains("日"))
+                    {
+                        string[] str2 = str[1].Split('日');
+                        BirthMonth = str2[0].PadLeft(2, '0');
+                    }
+                }
+            }
             else if (_Birth.Contains('/'))
             {
                 string[] str = _Birth.Split('/');
                 if (str.Length == 3)
                 {
                     BirthDay = str[2].PadLeft(2, '0');
+                    if (BirthDay.Length != 2)
+                    {
+                        string[] s = BirthDay.Split(' ');
+                        BirthDay = s[0].PadLeft(2, '0');
+                    }
                 }
                 if (str.Length >= 2)
                 {
@@ -339,7 +362,7 @@ namespace DataChecker_FilesMerger.Entities
             {
                 if (_Birth == null)
                 {
-                    if (Value.Keys.Contains("出生日期") )
+                    if (Value.Keys.Contains("出生日期"))
                     {
                         try
                         {
@@ -473,7 +496,7 @@ namespace DataChecker_FilesMerger.Entities
             {
                 if (_Dead == null)
                 {
-                    if (Value.Keys.Contains("死亡日期") )
+                    if (Value.Keys.Contains("死亡日期"))
                     {
                         try
                         {
@@ -613,13 +636,13 @@ namespace DataChecker_FilesMerger.Entities
                         }
                         catch (Exception ex)
                         {
-                            PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "读取档号出现问题", ex.Message);
+                            PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "读取档案编号出现问题", ex.Message);
                             return null;
                         }
                     }
                     else
                     {
-                        PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "", "档号为空");
+                        PersonnelChecklist.CreateInstrance().WriteErrorInfo("行号:" + Location.ToString(), "", "档案编号为空");
                         _ArchID = "    ";
                         return _ArchID;
                     }
@@ -797,13 +820,13 @@ namespace DataChecker_FilesMerger.Entities
                 _RetireDay = value;
             }
         }
-               
+
         private string _DeadYear = "0000";
         private string DeadYear
         {
             get
             {
-                if(_DeadYear == "0000")
+                if (_DeadYear == "0000")
                 {
                     var temp = Dead;
                 }
@@ -841,7 +864,7 @@ namespace DataChecker_FilesMerger.Entities
                 {
                     var temp = Dead;
                 }
-                return _DeadDay;                
+                return _DeadDay;
             }
             set
             {
@@ -855,11 +878,11 @@ namespace DataChecker_FilesMerger.Entities
         {
             get
             {
-                if(_BirthYear == "0000")
+                if (_BirthYear == "0000")
                 {
                     var temp = Birth;
                 }
-                return _BirthYear; 
+                return _BirthYear;
             }
             set
             {
@@ -906,8 +929,9 @@ namespace DataChecker_FilesMerger.Entities
         #endregion
 
 
-        public void Turn2Check(string modePath,string savePath)
+        public string Turn2Check(string modePath, string savePath, Aspose.Cells.SaveFormat saveFormat = Aspose.Cells.SaveFormat.Xlsx)
         {
+            FontSettings.DefaultInstance.SetFontsFolder(@"C:\WINDOWS\Fonts", true);
             Workbook mode = new Workbook(modePath);
             Worksheet sheet = mode.Worksheets[0];
             //姓名B2
@@ -931,7 +955,7 @@ namespace DataChecker_FilesMerger.Entities
                 RetireDay = "﹍﹍﹍";
 
             //退休日期C5
-            sheet.Cells[4, 2].PutValue(string.Format("1、退休日期：{0}年{1}月{2}日（社保账号{3}）", RetireYear, RetireMonth, RetireDay,SoID));
+            sheet.Cells[4, 2].PutValue(string.Format("1、退休日期：{0}年{1}月{2}日（社保账号{3}）", RetireYear, RetireMonth, RetireDay, SoID));
 
             if (DeadYear == "0000")
                 DeadYear = "﹍﹍﹍";
@@ -941,80 +965,26 @@ namespace DataChecker_FilesMerger.Entities
                 DeadDay = "﹍﹍﹍";
 
             //死亡日期C6
-            sheet.Cells[5, 2].PutValue(string.Format("2、死亡日期：{0}年{1}月{2}日 3、无去向 □ 4、无 □",DeadYear,DeadMonth,DeadDay));
+            sheet.Cells[5, 2].PutValue(string.Format("2、死亡日期：{0}年{1}月{2}日 3、无去向 □ 4、无 □", DeadYear, DeadMonth, DeadDay));
             sheet.Cells[26, 4].PutValue(string.Format("{0}年{1}月{2}日", DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), DateTime.Now.Day.ToString()));
+            string forMat = ".xlsx";
+            if (saveFormat == Aspose.Cells.SaveFormat.Pdf)
+                forMat = ".pdf";
+            string fileName = savePath + "//" + ArchID + "-" + Name + forMat;
             try
             {
-                mode.Save(savePath + "//" + Value["序号"] + "-" + Name + ".xls");
+                mode.Save(fileName,saveFormat);
+                return fileName;
             }
             catch (Exception e)
             {
                 PersonnelChecklist.CreateInstrance().WriteErrorInfo(Location.ToString(), "Turn2Check", e.Message);
+                return string.Empty;
             }
         }
 
-        public void Turn2Licen(string modePath, string savePath,bool jianjie,bool retire,bool workID)
+        public string Turn2Licen(string modePath, string savePath, bool jianjie, bool retire, bool workID,Aspose.Words.SaveFormat saveFormat=Aspose.Words.SaveFormat.Doc)
         {
-            Document doc = new Document(modePath);
-            DocumentBuilder builder = new DocumentBuilder(doc);
-            builder.MoveToBookmark("name");
-            builder.Underline = Underline.Single;
-            builder.Write(Name);
-            builder.MoveToBookmark("ID");
-            builder.Underline = Underline.Single;
-            builder.Write(ID); 
-            builder.MoveToBookmark("ArID");
-            builder.Underline = Underline.Single;
-            builder.Write(ArchID);
-            builder.MoveToBookmark("company1");
-            builder.Write(Company);
-            builder.MoveToBookmark("date");
-            builder.Write(string.Format("{0}年{1}月{2}日", DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), DateTime.Now.Day.ToString()));
-            if(retire)
-            {
-                builder.MoveToBookmark("retire");
-                if (RetireDay == "﹍﹍﹍"|| RetireDay=="00")
-                    builder.Write(string.Format("{0}年{1}月", RetireYear, RetireMonth));
-                else
-                    builder.Write(string.Format("{0}年{1}月{2}日", RetireYear, RetireMonth, RetireDay));
-            }
-            if (jianjie)
-            {
-                builder.MoveToBookmark("birth");
-                if (BirthDay == "﹍﹍﹍"||BirthDay=="00")
-                    builder.Write(string.Format("{0}年{1}月", BirthYear, BirthMonth));
-                else
-                    builder.Write(string.Format("{0}年{1}月{2}日", BirthYear, BirthMonth, BirthDay));
-                builder.MoveToBookmark("retire");
-                if (RetireDay == "﹍﹍﹍" || RetireDay == "00")
-                    builder.Write(string.Format("{0}年{1}月", RetireYear, RetireMonth));
-                else
-                    builder.Write(string.Format("{0}年{1}月{2}日", RetireYear, RetireMonth, RetireDay));
-
-
-                builder.MoveToBookmark("company2");
-                builder.Write(Company);
-            }
-            if(workID)
-            {
-                builder.MoveToBookmark("workID");
-                builder.Underline = Underline.Single;
-                builder.Write(WorkID);
-            }
-            try
-            {
-                doc.Save(savePath + "//" + ArchID + "-" + Name + ".doc");
-            }
-            catch (Exception e)
-            {
-                PersonnelChecklist.CreateInstrance().WriteErrorInfo(Location.ToString(), "Turn2Licen", e.Message);
-            }
-        }
-
-        public void UnArchiveLicences(string modePath, string savePath)
-        {
-            if (Value["档案情况"].Trim() != "无档")
-                return;
             Document doc = new Document(modePath);
             DocumentBuilder builder = new DocumentBuilder(doc);
             builder.MoveToBookmark("name");
@@ -1030,18 +1000,88 @@ namespace DataChecker_FilesMerger.Entities
             builder.Write(Company);
             builder.MoveToBookmark("date");
             builder.Write(string.Format("{0}年{1}月{2}日", DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), DateTime.Now.Day.ToString()));
-            
+            if (retire)
+            {
+                builder.MoveToBookmark("retire");
+                if (RetireDay == "﹍﹍﹍" || RetireDay == "00")
+                    builder.Write(string.Format("{0}年{1}月", RetireYear, RetireMonth));
+                else
+                    builder.Write(string.Format("{0}年{1}月{2}日", RetireYear, RetireMonth, RetireDay));
+            }
+            if (jianjie)
+            {
+                builder.MoveToBookmark("birth");
+                if (BirthDay == "﹍﹍﹍" || BirthDay == "00")
+                    builder.Write(string.Format("{0}年{1}月", BirthYear, BirthMonth));
+                else
+                    builder.Write(string.Format("{0}年{1}月{2}日", BirthYear, BirthMonth, BirthDay));
+                builder.MoveToBookmark("retire");
+                if (RetireDay == "﹍﹍﹍" || RetireDay == "00")
+                    builder.Write(string.Format("{0}年{1}月", RetireYear, RetireMonth));
+                else
+                    builder.Write(string.Format("{0}年{1}月{2}日", RetireYear, RetireMonth, RetireDay));
+
+
+                builder.MoveToBookmark("company2");
+                builder.Write(Company);
+            }
+            if (workID)
+            {
+                builder.MoveToBookmark("workID");
+                builder.Underline = Underline.Single;
+                builder.Write(WorkID);
+            }
+            string forMat = ".doc";
+            if (saveFormat == Aspose.Words.SaveFormat.Pdf)
+                forMat = ".pdf";
+            string fileName = savePath + "//" + ArchID + "-" + Name + forMat;
             try
             {
-                doc.Save(savePath + "//" + ArchID + "-" + Name + ".doc");
+                doc.Save(fileName,saveFormat);
+                return fileName;
             }
             catch (Exception e)
             {
                 PersonnelChecklist.CreateInstrance().WriteErrorInfo(Location.ToString(), "Turn2Licen", e.Message);
+                return string.Empty;
             }
         }
 
-        public void DeadInfo(string modePath, string savePath,bool workID)
+        public string UnArchiveLicences(string modePath, string savePath,Aspose.Words.SaveFormat saveFormat = Aspose.Words.SaveFormat.Doc)
+        {
+            FontSettings.DefaultInstance.SetFontsFolder(@"C:\WINDOWS\Fonts", true);
+            Document doc = new Document(modePath);
+            DocumentBuilder builder = new DocumentBuilder(doc);
+            builder.MoveToBookmark("name");
+            builder.Underline = Underline.Single;
+            builder.Write(Name);
+            builder.MoveToBookmark("ID");
+            builder.Underline = Underline.Single;
+            builder.Write(ID);
+            builder.MoveToBookmark("ArID");
+            builder.Underline = Underline.Single;
+            builder.Write(ArchID);
+            builder.MoveToBookmark("company1");
+            builder.Write(Company);
+            builder.MoveToBookmark("date");
+            builder.Write(string.Format("{0}年{1}月{2}日", DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), DateTime.Now.Day.ToString()));
+            string forMat = ".doc";
+            if (saveFormat == Aspose.Words.SaveFormat.Pdf)
+                forMat = ".pdf";
+            string fileName = savePath + "//" + ArchID + "-" + Name + forMat;
+            try
+            {                
+                doc.Save(fileName,saveFormat);
+                return fileName;
+            }
+            catch (Exception e)
+            {
+                PersonnelChecklist.CreateInstrance().WriteErrorInfo(Location.ToString(), "Turn2Licen", e.Message);
+                return string.Empty;
+            }
+        }
+
+        public void DeadInfo(string modePath, string savePath, bool workID)
         {
             if (Live != "死亡")
                 return;
@@ -1061,7 +1101,7 @@ namespace DataChecker_FilesMerger.Entities
             builder.MoveToBookmark("company2");
             builder.Write(Company);
             builder.MoveToBookmark("dead");
-            if(workID)
+            if (workID)
             {
                 builder.MoveToBookmark("workID");
                 builder.Underline = Underline.Single;
@@ -1085,7 +1125,7 @@ namespace DataChecker_FilesMerger.Entities
             }
         }
 
-        public void RetireInfo(string modePath, string savePath,bool workID)
+        public void RetireInfo(string modePath, string savePath, bool workID)
         {
             Document doc = new Document(modePath);
             DocumentBuilder builder = new DocumentBuilder(doc);
@@ -1103,7 +1143,7 @@ namespace DataChecker_FilesMerger.Entities
             builder.MoveToBookmark("company2");
             builder.Write(Company);
             builder.MoveToBookmark("retire");
-            if(Retire == "00000000")
+            if (Retire == "00000000")
             { builder.Write("        "); }
             else if (RetireDay == "00")
                 builder.Write(string.Format("{0}年{1}月", RetireYear, RetireMonth));
@@ -1111,7 +1151,7 @@ namespace DataChecker_FilesMerger.Entities
                 builder.Write(string.Format("{0}年{1}月{2}日", RetireYear, RetireMonth, RetireDay));
             builder.MoveToBookmark("date");
             builder.Write(string.Format("{0}年{1}月{2}日", DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), DateTime.Now.Day.ToString()));
-            if(workID)
+            if (workID)
             {
                 builder.MoveToBookmark("workID");
                 builder.Underline = Underline.Single;
@@ -1125,6 +1165,39 @@ namespace DataChecker_FilesMerger.Entities
             {
                 PersonnelChecklist.CreateInstrance().WriteErrorInfo(Location.ToString(), "", e.Message);
             }
+        }
+
+        public void Convert2PDF(string excelPath,string UnarchiveMode,string LicenceMode, string savePath)
+        {
+            string excelPdf = Turn2Check(excelPath, savePath,Aspose.Cells.SaveFormat.Pdf);
+            string path = savePath+"\\"+"图片" + "\\" + Value["案卷号"];
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            ConvertPDF2Image(excelPdf,path  + "\\" + "JN-1.jpg");
+            string UnArchivePdf = UnArchiveLicences(UnarchiveMode, savePath, Aspose.Words.SaveFormat.Pdf);
+            ConvertPDF2Image(UnArchivePdf, path + "\\" + "001.jpg");
+
+            string LicencePdf = UnArchiveLicences(LicenceMode, savePath, Aspose.Words.SaveFormat.Pdf);
+            ConvertPDF2Image(excelPdf, path + "\\" + "002.jpg");
+        }
+
+        public static void ConvertPDF2Image(string pdfInputPath, string saveName)
+        {
+            MagickNET.SetGhostscriptDirectory(System.AppDomain.CurrentDomain.BaseDirectory);
+            MagickReadSettings settings = new MagickReadSettings();
+            settings.Density = new Density(300, 300); //设置格式
+            MagickImageCollection images = new MagickImageCollection();
+            images.Read(pdfInputPath, settings);
+            if (images.Count == 0)
+                return;
+            MagickImage image = (MagickImage)images[0];
+            if (image.HasAlpha)
+                image.Alpha(AlphaOption.Background);
+            image.Format = MagickFormat.Jpg;
+            image.Write(saveName);
+            images.Dispose();
         }
     }
 }

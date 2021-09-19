@@ -6,6 +6,11 @@ namespace DataChecker_FilesMerger.Helper
 {
     internal class ThreadHelper
     {
+        public static int ThreadCount
+        {
+            get;
+            set;
+        } = 4;
         public class ThreadBaseControl<T>
         {
             #region 变量&属性
@@ -34,12 +39,18 @@ namespace DataChecker_FilesMerger.Helper
             /// <summary>
             /// 线程数
             /// </summary>
-            public int ThreadCount
+            private static int ThreadCount
             {
-                get { return this.m_ThreadCount; }
-                set { this.m_ThreadCount = value; }
+                get
+                {
+                    return ThreadHelper.ThreadCount;
+                }
+                set
+                {
+                    ThreadHelper.ThreadCount = value;
+                }
             }
-            private int m_ThreadCount = 4;
+            private int m_ThreadCount = 8;
 
             /// <summary>
             /// 取消
@@ -213,6 +224,8 @@ namespace DataChecker_FilesMerger.Helper
                     m_ThreadList.Add(t);
                     t.IsBackground = true;
                     t.Start();
+                    //等待1ms让所有线程错开工作                    
+                    Thread.Sleep(1);
                 }
             }
 
