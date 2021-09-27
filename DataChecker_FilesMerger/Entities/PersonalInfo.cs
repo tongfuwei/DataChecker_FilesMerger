@@ -8,6 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Aspose.Pdf.Facades;
+using Aspose.Pdf;
 
 namespace DataChecker_FilesMerger.Entities
 {
@@ -985,7 +987,7 @@ namespace DataChecker_FilesMerger.Entities
 
         public string Turn2Licen(string modePath, string savePath, bool jianjie, bool retire, bool workID,Aspose.Words.SaveFormat saveFormat=Aspose.Words.SaveFormat.Doc)
         {
-            Document doc = new Document(modePath);
+            Aspose.Words.Document doc = new Aspose.Words.Document(modePath);
             DocumentBuilder builder = new DocumentBuilder(doc);
             builder.MoveToBookmark("name");
             builder.Underline = Underline.Single;
@@ -1050,7 +1052,7 @@ namespace DataChecker_FilesMerger.Entities
         public string UnArchiveLicences(string modePath, string savePath,Aspose.Words.SaveFormat saveFormat = Aspose.Words.SaveFormat.Doc)
         {
             FontSettings.DefaultInstance.SetFontsFolder(@"C:\WINDOWS\Fonts", true);
-            Document doc = new Document(modePath);
+            Aspose.Words.Document doc = new Aspose.Words.Document(modePath);
             DocumentBuilder builder = new DocumentBuilder(doc);
             builder.MoveToBookmark("name");
             builder.Underline = Underline.Single;
@@ -1068,7 +1070,7 @@ namespace DataChecker_FilesMerger.Entities
             string forMat = ".doc";
             if (saveFormat == Aspose.Words.SaveFormat.Pdf)
                 forMat = ".pdf";
-            string fileName = savePath + "//" + ArchID + "-" + Name + forMat;
+            string fileName = savePath + "//" + ArchID + "-" + Name +"无档"+ forMat;
             try
             {                
                 doc.Save(fileName,saveFormat);
@@ -1081,11 +1083,12 @@ namespace DataChecker_FilesMerger.Entities
             }
         }
 
-        public void DeadInfo(string modePath, string savePath, bool workID)
+        public string DeadInfo(string modePath, string savePath, bool workID,Aspose.Words.SaveFormat saveFormat = Aspose.Words.SaveFormat.Doc)
         {
-            if (Live != "死亡")
-                return;
-            Document doc = new Document(modePath);
+            //if (Live != "死亡")
+            //    return ;
+            FontSettings.DefaultInstance.SetFontsFolder(@"C:\WINDOWS\Fonts", true);
+            Aspose.Words.Document doc = new Aspose.Words.Document(modePath);
             DocumentBuilder builder = new DocumentBuilder(doc);
             builder.MoveToBookmark("name");
             builder.Underline = Underline.Single;
@@ -1115,20 +1118,27 @@ namespace DataChecker_FilesMerger.Entities
                 builder.Write(string.Format("{0}年{1}月{2}日", DeadYear, DeadMonth, DeadDay));
             builder.MoveToBookmark("date");
             builder.Write(string.Format("{0}年{1}月{2}日", DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), DateTime.Now.Day.ToString()));
+            string forMat = ".doc";
+            if (saveFormat == Aspose.Words.SaveFormat.Pdf)
+                forMat = ".pdf";
+            string fileName = savePath + "//" + ArchID + "-" + Name+"死亡" + forMat;
             try
             {
-                doc.Save(savePath + "//" + ArchID + "-" + Name + ".doc");
+                doc.Save(fileName,saveFormat);
+                return fileName;
             }
             catch (Exception e)
             {
                 PersonnelChecklist.CreateInstrance().WriteErrorInfo(Location.ToString(), "", e.Message);
+                return null;
             }
         }
 
-        public void RetireInfo(string modePath, string savePath, bool workID)
+        public string RetireInfo(string modePath, string savePath, bool workID, Aspose.Words.SaveFormat saveFormat = Aspose.Words.SaveFormat.Doc)
         {
-            Document doc = new Document(modePath);
-            DocumentBuilder builder = new DocumentBuilder(doc);
+            FontSettings.DefaultInstance.SetFontsFolder(@"C:\WINDOWS\Fonts", true);
+            Aspose.Words.Document doc = new Aspose.Words.Document(modePath);
+            Aspose.Words.DocumentBuilder builder = new Aspose.Words.DocumentBuilder(doc);
             builder.MoveToBookmark("name");
             builder.Underline = Underline.Single;
             builder.Write(Name);
@@ -1157,13 +1167,19 @@ namespace DataChecker_FilesMerger.Entities
                 builder.Underline = Underline.Single;
                 builder.Write(WorkID);
             }
+            string forMat = ".doc";
+            if (saveFormat == Aspose.Words.SaveFormat.Pdf)
+                forMat = ".pdf";
+            string fileName = savePath + "//" + ArchID + "-" + Name +"退休"+ forMat;
             try
             {
-                doc.Save(savePath + "//" + ArchID + "-" + Name + ".doc");
+                doc.Save(fileName,saveFormat);
+                return fileName;
             }
             catch (Exception e)
             {
                 PersonnelChecklist.CreateInstrance().WriteErrorInfo(Location.ToString(), "", e.Message);
+                return null;
             }
         }
 
@@ -1198,6 +1214,34 @@ namespace DataChecker_FilesMerger.Entities
             image.Format = MagickFormat.Jpg;
             image.Write(saveName);
             images.Dispose();
+        }
+
+        public void InsertPDF( string UnarchiveModel,string RetireModel, string DeadModel, string savePath,string pdfModel)
+        {
+            string UnArchivePdf = UnArchiveLicences(UnarchiveModel, savePath, Aspose.Words.SaveFormat.Pdf);
+            string RetirePdf = RetireInfo(RetireModel, savePath, false, Aspose.Words.SaveFormat.Pdf);
+            string DeadPdf= DeadInfo(DeadModel,savePath,false, Aspose.Words.SaveFormat.Pdf);
+
+            Aspose.Pdf.Document pdfdoc1 = new Aspose.Pdf.Document(UnArchivePdf);
+            Aspose.Pdf.Document pdfdoc2 = new Aspose.Pdf.Document(RetirePdf);
+            Aspose.Pdf.Document pdfdoc3 = new Aspose.Pdf.Document(DeadPdf);
+            if (File.Exists(pdfModel))
+            {
+                Aspose.Pdf.Document result;
+                result = new Aspose.Pdf.Document(pdfModel);
+                result.Pages.Add(pdfdoc1.Pages);
+                result.Pages.Add(pdfdoc2.Pages);
+                result.Pages.Add(pdfdoc3.Pages);
+                result.Save(pdfModel);
+            }
+            else
+            {
+                pdfdoc1.Pages.Add(pdfdoc2.Pages);
+                pdfdoc1.Pages.Add(pdfdoc3.Pages);
+                pdfdoc1.Save(pdfModel);
+            }
+
+            //pdfEditor.Append(pdfModel,strings,1,3, pdfModel);
         }
     }
 }

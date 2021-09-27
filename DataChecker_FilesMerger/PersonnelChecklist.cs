@@ -636,7 +636,7 @@ namespace DataChecker_FilesMerger
             bwgPrepareData.RunWorkerAsync();
             if (ControlHelper.NumberCheck(tbThread, true))
             {
-                ThreadHelper.ThreadCount = int.Parse(tbThread.Text.Trim()) - 1;
+                ThreadHelper.ThreadCount = int.Parse(tbThread.Text.Trim());
             }
         }
 
@@ -775,6 +775,22 @@ namespace DataChecker_FilesMerger
             info.Convert2PDF(@"D:\付正数据\人事档案核查表与情况说明生成工具\模板\人事档案核查表【缩小】.xls",
                 @"D:\付正数据\人事档案核查表与情况说明生成工具\模板\综合情况说明【带编号】.doc", 
                 @"D:\付正数据\人事档案核查表与情况说明生成工具\模板\无档证明【带档号】.doc", rootDir);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            StartProgress();
+            ThreadBaseControl<PersonalInfo> thfd = new ThreadBaseControl<PersonalInfo>(infoEntity_List, AllPDF);
+            thfd.OneCompleted += ShowOneDoneMsg;
+            thfd.AllCompleted += ShowAllDoneMsg;
+            thfd.Start();
+        }
+
+        private void AllPDF(PersonalInfo info)
+        {
+            info.InsertPDF(@"D:\付正数据\人事档案核查表与情况说明生成工具\模板\无档[1].doc",
+                @"D:\付正数据\人事档案核查表与情况说明生成工具\模板\退休[2].doc",
+                @"D:\付正数据\人事档案核查表与情况说明生成工具\模板\死亡[3].doc", rootDir,rootDir+@"\pdf\"+"结果.pdf");
         }
     }
 }

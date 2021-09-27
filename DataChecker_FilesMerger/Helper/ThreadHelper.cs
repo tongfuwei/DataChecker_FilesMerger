@@ -50,7 +50,7 @@ namespace DataChecker_FilesMerger.Helper
                     ThreadHelper.ThreadCount = value;
                 }
             }
-            private int m_ThreadCount = 8;
+            //private int m_ThreadCount = 8;
 
             /// <summary>
             /// 取消

@@ -67,6 +67,7 @@
             this.btnJPG = new System.Windows.Forms.Button();
             this.tbThread = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tbDataFile
@@ -412,11 +413,22 @@
             this.label2.TabIndex = 63;
             this.label2.Text = "线程数:";
             // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(750, 101);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(82, 25);
+            this.button4.TabIndex = 64;
+            this.button4.Text = "全部PDF";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
             // PersonnelChecklist
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(869, 495);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.tbThread);
             this.Controls.Add(this.btnJPG);
@@ -495,6 +507,7 @@
         private System.Windows.Forms.Button btnJPG;
         private System.Windows.Forms.TextBox tbThread;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button button4;
     }
 }
 
