@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\OpenCvSharp3-AnyCPU.4.0.0.20181129\build\OpenCvSharp3-AnyCPU.props" Condition="Exists('..\packages\OpenCvSharp3-AnyCPU.4.0.0.20181129\build\OpenCvSharp3-AnyCPU.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -13,6 +14,8 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,6 +35,26 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Aspose.Cells, Version=20.3.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
@@ -53,14 +76,32 @@
       <HintPath>..\packages\Ghostscript.NET.1.2.3\lib\net40\Ghostscript.NET.dll</HintPath>
     </Reference>
     <Reference Include="Magick.NET-Q16-AnyCPU, Version=8.3.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
-      <HintPath>..\packages\Magick.NET-Q16-AnyCPU.8.3.1\lib\net20\Magick.NET-Q16-AnyCPU.dll</HintPath>
+      <HintPath>..\packages\Magick.NET-Q16-AnyCPU.8.3.2\lib\net20\Magick.NET-Q16-AnyCPU.dll</HintPath>
     </Reference>
     <Reference Include="Magick.NET.Core, Version=8.3.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
-      <HintPath>..\packages\Magick.NET.Core.8.3.1\lib\net20\Magick.NET.Core.dll</HintPath>
+      <HintPath>..\packages\Magick.NET.Core.8.3.2\lib\net20\Magick.NET.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="O2S.Components.PDF4NET">
       <HintPath>DLL\O2S.Components.PDF4NET.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCvSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenCvSharp3-AnyCPU.4.0.0.20181129\lib\net461\OpenCvSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCvSharp.Blob, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenCvSharp3-AnyCPU.4.0.0.20181129\lib\net461\OpenCvSharp.Blob.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCvSharp.Extensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenCvSharp3-AnyCPU.4.0.0.20181129\lib\net461\OpenCvSharp.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCvSharp.UserInterface, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenCvSharp3-AnyCPU.4.0.0.20181129\lib\net461\OpenCvSharp.UserInterface.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfiumViewer, Version=2.13.0.0, Culture=neutral, PublicKeyToken=91e4789cfb0609e0, processorArchitecture=MSIL">
+      <HintPath>..\packages\PdfiumViewer.2.13.0.0\lib\net20\PdfiumViewer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -76,108 +117,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commons.cs" />
-    <Compile Include="Dialog_Setting\MergeAddition.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialog_Setting\MergeAddition.Designer.cs">
-      <DependentUpon>MergeAddition.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialog_Setting\MergeFileName.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialog_Setting\MergeFileName.Designer.cs">
-      <DependentUpon>MergeFileName.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialog_Setting\MergeFolder.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialog_Setting\MergeFolder.Designer.cs">
-      <DependentUpon>MergeFolder.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialog_Setting\ColumnSetting.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialog_Setting\ColumnSetting.Designer.cs">
-      <DependentUpon>ColumnSetting.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialog_Setting\OneToManySetting.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialog_Setting\OneToManySetting.Designer.cs">
-      <DependentUpon>OneToManySetting.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialog_Setting\Setting.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialog_Setting\Setting.Designer.cs">
-      <DependentUpon>Setting.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Entities\AJEntity.cs" />
-    <Compile Include="Dialog_Setting\DemergeSetting.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialog_Setting\DemergeSetting.Designer.cs">
-      <DependentUpon>DemergeSetting.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Entities\PersonalInfo.cs" />
+    <Compile Include="Entities\Data.cs" />
     <Compile Include="Helper\ControlHelper.cs" />
     <Compile Include="Helper\ExcelReader.cs" />
     <Compile Include="Helper\ExcelSaver.cs" />
     <Compile Include="Helper\MergeUtil.cs" />
+    <Compile Include="Helper\OcrHelper.cs" />
+    <Compile Include="Helper\OcrItem.cs" />
     <Compile Include="Helper\ThreadHelper.cs" />
-    <Compile Include="PersonnelChecklist.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include=".Designer.cs">
-      <DependentUpon>PersonnelChecklist.cs</DependentUpon>
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include=".Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Entities\JNEntity.cs" />
-    <Compile Include="Dialog_Setting\FolderSetting.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialog_Setting\FolderSetting.Designer.cs">
-      <DependentUpon>FolderSetting.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Dialog_Setting\DemergeSetting.resx">
-      <DependentUpon>DemergeSetting.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialog_Setting\MergeAddition.resx">
-      <DependentUpon>MergeAddition.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialog_Setting\MergeFileName.resx">
-      <DependentUpon>MergeFileName.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialog_Setting\MergeFolder.resx">
-      <DependentUpon>MergeFolder.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialog_Setting\ColumnSetting.resx">
-      <DependentUpon>ColumnSetting.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialog_Setting\OneToManySetting.resx">
-      <DependentUpon>OneToManySetting.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialog_Setting\Setting.resx">
-      <DependentUpon>Setting.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PersonnelChecklist.resx">
-      <DependentUpon>PersonnelChecklist.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialog_Setting\FolderSetting.resx">
-      <DependentUpon>FolderSetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -203,5 +162,14 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\OpenCvSharp3-AnyCPU.4.0.0.20181129\build\OpenCvSharp3-AnyCPU.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCvSharp3-AnyCPU.4.0.0.20181129\build\OpenCvSharp3-AnyCPU.props'))" />
+    <Error Condition="!Exists('..\packages\ImageResizer.Plugins.PdfiumRenderer.Pdfium.Dll.1.0.1\build\ImageResizer.Plugins.PdfiumRenderer.Pdfium.Dll.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ImageResizer.Plugins.PdfiumRenderer.Pdfium.Dll.1.0.1\build\ImageResizer.Plugins.PdfiumRenderer.Pdfium.Dll.targets'))" />
+  </Target>
+  <Import Project="..\packages\ImageResizer.Plugins.PdfiumRenderer.Pdfium.Dll.1.0.1\build\ImageResizer.Plugins.PdfiumRenderer.Pdfium.Dll.targets" Condition="Exists('..\packages\ImageResizer.Plugins.PdfiumRenderer.Pdfium.Dll.1.0.1\build\ImageResizer.Plugins.PdfiumRenderer.Pdfium.Dll.targets')" />
 </Project>

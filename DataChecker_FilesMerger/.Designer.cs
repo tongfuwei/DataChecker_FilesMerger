@@ -1,6 +1,6 @@
 ﻿namespace DataChecker_FilesMerger
 {
-    partial class PersonnelChecklist
+    partial class MainForm
     {
         /// <summary>
         /// 必需的设计器变量。
@@ -46,28 +46,19 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.btnExportError = new System.Windows.Forms.Button();
             this.lblPercent = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.tbModeFile = new System.Windows.Forms.TextBox();
-            this.btnSelectJNExcel = new System.Windows.Forms.Button();
-            this.cbJNSheets = new System.Windows.Forms.ComboBox();
-            this.label7 = new System.Windows.Forms.Label();
             this.UpdatePercent = new System.Windows.Forms.Timer(this.components);
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnLoad = new System.Windows.Forms.Button();
             this.tbColuNameRow = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.bwgPrepareData = new System.ComponentModel.BackgroundWorker();
-            this.btnTurn = new System.Windows.Forms.Button();
-            this.btnLicen = new System.Windows.Forms.Button();
-            this.cbJianjie = new System.Windows.Forms.CheckBox();
-            this.cbRetire = new System.Windows.Forms.CheckBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.cbWorkID = new System.Windows.Forms.CheckBox();
-            this.btnUnArchive = new System.Windows.Forms.Button();
-            this.btnJPG = new System.Windows.Forms.Button();
             this.tbThread = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
+            this.btnWork = new System.Windows.Forms.Button();
+            this.tbConfig = new System.Windows.Forms.TextBox();
+            this.btnConfig = new System.Windows.Forms.Button();
+            this.tbSavePath = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // tbDataFile
@@ -136,6 +127,7 @@
             this.tbFilesPath.Name = "tbFilesPath";
             this.tbFilesPath.Size = new System.Drawing.Size(489, 25);
             this.tbFilesPath.TabIndex = 27;
+            this.tbFilesPath.TextChanged += new System.EventHandler(this.tbFilesPath_TextChanged);
             // 
             // label3
             // 
@@ -213,71 +205,21 @@
             this.lblPercent.TabIndex = 41;
             this.lblPercent.Text = "工作进度";
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(13, 43);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(75, 15);
-            this.label5.TabIndex = 43;
-            this.label5.Text = "选择模板:";
-            // 
-            // tbModeFile
-            // 
-            this.tbModeFile.Location = new System.Drawing.Point(94, 40);
-            this.tbModeFile.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tbModeFile.Name = "tbModeFile";
-            this.tbModeFile.Size = new System.Drawing.Size(489, 25);
-            this.tbModeFile.TabIndex = 44;
-            // 
-            // btnSelectJNExcel
-            // 
-            this.btnSelectJNExcel.Location = new System.Drawing.Point(589, 40);
-            this.btnSelectJNExcel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btnSelectJNExcel.Name = "btnSelectJNExcel";
-            this.btnSelectJNExcel.Size = new System.Drawing.Size(82, 25);
-            this.btnSelectJNExcel.TabIndex = 45;
-            this.btnSelectJNExcel.Text = "查看";
-            this.btnSelectJNExcel.UseVisualStyleBackColor = true;
-            this.btnSelectJNExcel.Click += new System.EventHandler(this.btnSelectJNExcel_Click);
-            // 
-            // cbJNSheets
-            // 
-            this.cbJNSheets.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbJNSheets.Enabled = false;
-            this.cbJNSheets.FormattingEnabled = true;
-            this.cbJNSheets.Location = new System.Drawing.Point(743, 42);
-            this.cbJNSheets.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.cbJNSheets.Name = "cbJNSheets";
-            this.cbJNSheets.Size = new System.Drawing.Size(114, 23);
-            this.cbJNSheets.TabIndex = 49;
-            this.cbJNSheets.SelectedIndexChanged += new System.EventHandler(this.cbJNSheets_SelectedIndexChanged);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Enabled = false;
-            this.label7.Location = new System.Drawing.Point(677, 45);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(60, 15);
-            this.label7.TabIndex = 48;
-            this.label7.Text = "工作簿:";
-            // 
             // UpdatePercent
             // 
             this.UpdatePercent.Enabled = true;
             this.UpdatePercent.Interval = 50;
             this.UpdatePercent.Tick += new System.EventHandler(this.UpdatePercent_work);
             // 
-            // button1
+            // btnLoad
             // 
-            this.button1.Location = new System.Drawing.Point(134, 101);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(82, 25);
-            this.button1.TabIndex = 50;
-            this.button1.Text = "加载";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnLoad.Location = new System.Drawing.Point(134, 101);
+            this.btnLoad.Name = "btnLoad";
+            this.btnLoad.Size = new System.Drawing.Size(82, 25);
+            this.btnLoad.TabIndex = 50;
+            this.btnLoad.Text = "加载";
+            this.btnLoad.UseVisualStyleBackColor = true;
+            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
             // 
             // tbColuNameRow
             // 
@@ -302,97 +244,8 @@
             // 
             this.bwgPrepareData.WorkerReportsProgress = true;
             this.bwgPrepareData.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwgPrepareData_DoWork);
+            this.bwgPrepareData.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bwgPrepareData_ProgressChanged);
             this.bwgPrepareData.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bwgPrepareData_RunWorkerCompleted);
-            // 
-            // btnTurn
-            // 
-            this.btnTurn.Location = new System.Drawing.Point(222, 101);
-            this.btnTurn.Name = "btnTurn";
-            this.btnTurn.Size = new System.Drawing.Size(82, 25);
-            this.btnTurn.TabIndex = 53;
-            this.btnTurn.Text = "生成核查表";
-            this.btnTurn.UseVisualStyleBackColor = true;
-            this.btnTurn.Click += new System.EventHandler(this.btnTurn_Click);
-            // 
-            // btnLicen
-            // 
-            this.btnLicen.Location = new System.Drawing.Point(310, 101);
-            this.btnLicen.Name = "btnLicen";
-            this.btnLicen.Size = new System.Drawing.Size(82, 25);
-            this.btnLicen.TabIndex = 54;
-            this.btnLicen.Text = "生成说明";
-            this.btnLicen.UseVisualStyleBackColor = true;
-            this.btnLicen.Click += new System.EventHandler(this.btnLicen_Click);
-            // 
-            // cbJianjie
-            // 
-            this.cbJianjie.AutoSize = true;
-            this.cbJianjie.Location = new System.Drawing.Point(310, 132);
-            this.cbJianjie.Name = "cbJianjie";
-            this.cbJianjie.Size = new System.Drawing.Size(89, 19);
-            this.cbJianjie.TabIndex = 55;
-            this.cbJianjie.Text = "间接说明";
-            this.cbJianjie.UseVisualStyleBackColor = true;
-            // 
-            // cbRetire
-            // 
-            this.cbRetire.AutoSize = true;
-            this.cbRetire.Location = new System.Drawing.Point(405, 132);
-            this.cbRetire.Name = "cbRetire";
-            this.cbRetire.Size = new System.Drawing.Size(89, 19);
-            this.cbRetire.TabIndex = 56;
-            this.cbRetire.Text = "追加退休";
-            this.cbRetire.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(398, 101);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(82, 25);
-            this.button2.TabIndex = 57;
-            this.button2.Text = "死亡信息";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(486, 101);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(82, 25);
-            this.button3.TabIndex = 58;
-            this.button3.Text = "退休信息";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // cbWorkID
-            // 
-            this.cbWorkID.AutoSize = true;
-            this.cbWorkID.Location = new System.Drawing.Point(500, 132);
-            this.cbWorkID.Name = "cbWorkID";
-            this.cbWorkID.Size = new System.Drawing.Size(74, 19);
-            this.cbWorkID.TabIndex = 59;
-            this.cbWorkID.Text = "带工号";
-            this.cbWorkID.UseVisualStyleBackColor = true;
-            // 
-            // btnUnArchive
-            // 
-            this.btnUnArchive.Location = new System.Drawing.Point(574, 101);
-            this.btnUnArchive.Name = "btnUnArchive";
-            this.btnUnArchive.Size = new System.Drawing.Size(82, 25);
-            this.btnUnArchive.TabIndex = 60;
-            this.btnUnArchive.Text = "无档证明";
-            this.btnUnArchive.UseVisualStyleBackColor = true;
-            this.btnUnArchive.Click += new System.EventHandler(this.btnUnArchive_Click);
-            // 
-            // btnJPG
-            // 
-            this.btnJPG.Location = new System.Drawing.Point(662, 101);
-            this.btnJPG.Name = "btnJPG";
-            this.btnJPG.Size = new System.Drawing.Size(82, 25);
-            this.btnJPG.TabIndex = 61;
-            this.btnJPG.Text = "生成jpg";
-            this.btnJPG.UseVisualStyleBackColor = true;
-            this.btnJPG.Click += new System.EventHandler(this.btnJPG_Click);
             // 
             // tbThread
             // 
@@ -402,6 +255,7 @@
             this.tbThread.Size = new System.Drawing.Size(33, 25);
             this.tbThread.TabIndex = 62;
             this.tbThread.Text = "4";
+            this.tbThread.TextChanged += new System.EventHandler(this.tbThread_TextChanged);
             // 
             // label2
             // 
@@ -413,41 +267,79 @@
             this.label2.TabIndex = 63;
             this.label2.Text = "线程数:";
             // 
-            // button4
+            // btnWork
             // 
-            this.button4.Location = new System.Drawing.Point(750, 101);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(82, 25);
-            this.button4.TabIndex = 64;
-            this.button4.Text = "全部PDF";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.btnWork.Location = new System.Drawing.Point(222, 101);
+            this.btnWork.Name = "btnWork";
+            this.btnWork.Size = new System.Drawing.Size(82, 25);
+            this.btnWork.TabIndex = 64;
+            this.btnWork.Text = "执行";
+            this.btnWork.UseVisualStyleBackColor = true;
+            this.btnWork.Click += new System.EventHandler(this.btnWork_Click);
             // 
-            // PersonnelChecklist
+            // tbConfig
+            // 
+            this.tbConfig.Location = new System.Drawing.Point(94, 40);
+            this.tbConfig.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tbConfig.Name = "tbConfig";
+            this.tbConfig.Size = new System.Drawing.Size(489, 25);
+            this.tbConfig.TabIndex = 65;
+            this.tbConfig.TextChanged += new System.EventHandler(this.tbConfig_TextChanged);
+            // 
+            // btnConfig
+            // 
+            this.btnConfig.Location = new System.Drawing.Point(589, 40);
+            this.btnConfig.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnConfig.Name = "btnConfig";
+            this.btnConfig.Size = new System.Drawing.Size(82, 25);
+            this.btnConfig.TabIndex = 66;
+            this.btnConfig.Text = "查看";
+            this.btnConfig.UseVisualStyleBackColor = true;
+            this.btnConfig.Click += new System.EventHandler(this.btnConfig_Click);
+            // 
+            // tbSavePath
+            // 
+            this.tbSavePath.Location = new System.Drawing.Point(310, 103);
+            this.tbSavePath.Name = "tbSavePath";
+            this.tbSavePath.Size = new System.Drawing.Size(361, 25);
+            this.tbSavePath.TabIndex = 67;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(222, 132);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(82, 25);
+            this.textBox1.TabIndex = 68;
+            this.textBox1.Text = "1000";
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(135, 136);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(75, 15);
+            this.label5.TabIndex = 69;
+            this.label5.Text = "线程等待:";
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(869, 495);
-            this.Controls.Add(this.button4);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.tbSavePath);
+            this.Controls.Add(this.btnConfig);
+            this.Controls.Add(this.tbConfig);
+            this.Controls.Add(this.btnWork);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.tbThread);
-            this.Controls.Add(this.btnJPG);
-            this.Controls.Add(this.btnUnArchive);
-            this.Controls.Add(this.cbWorkID);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.cbRetire);
-            this.Controls.Add(this.cbJianjie);
-            this.Controls.Add(this.btnLicen);
-            this.Controls.Add(this.btnTurn);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.tbColuNameRow);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.cbJNSheets);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.btnSelectJNExcel);
-            this.Controls.Add(this.tbModeFile);
-            this.Controls.Add(this.label5);
+            this.Controls.Add(this.btnLoad);
             this.Controls.Add(this.lblPercent);
             this.Controls.Add(this.btnExportError);
             this.Controls.Add(this.progressBar1);
@@ -460,8 +352,8 @@
             this.Controls.Add(this.btnSelectAJExcel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbDataFile);
-            this.Name = "PersonnelChecklist";
-            this.Text = "检测+案卷拆分+合并pdf";
+            this.Name = "MainForm";
+            this.Text = "PDF批量转图片";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -485,29 +377,20 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button btnExportError;
         private System.Windows.Forms.Label lblPercent;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox tbModeFile;
-        private System.Windows.Forms.Button btnSelectJNExcel;
-        private System.Windows.Forms.ComboBox cbJNSheets;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.Timer UpdatePercent;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.TextBox tbColuNameRow;
         private System.Windows.Forms.Label label4;
         private System.ComponentModel.BackgroundWorker bwgPrepareData;
-        private System.Windows.Forms.Button btnTurn;
-        private System.Windows.Forms.Button btnLicen;
-        private System.Windows.Forms.CheckBox cbJianjie;
-        private System.Windows.Forms.CheckBox cbRetire;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.CheckBox cbWorkID;
-        private System.Windows.Forms.Button btnUnArchive;
-        private System.Windows.Forms.Button btnJPG;
         private System.Windows.Forms.TextBox tbThread;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button btnWork;
+        private System.Windows.Forms.TextBox tbConfig;
+        private System.Windows.Forms.Button btnConfig;
+        private System.Windows.Forms.TextBox tbSavePath;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label5;
     }
 }
 

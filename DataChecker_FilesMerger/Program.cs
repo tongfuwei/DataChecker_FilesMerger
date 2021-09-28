@@ -14,7 +14,7 @@ namespace DataChecker_FilesMerger
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(MainForm.CreateInstrance());
-            Application.Run(PersonnelChecklist.CreateInstrance());
+            Application.Run(MainForm.CreateInstrance());
             //Application.Run(new Form1());
         }
     }

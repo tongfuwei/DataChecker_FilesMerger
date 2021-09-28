@@ -6,11 +6,20 @@ namespace DataChecker_FilesMerger.Helper
 {
     internal class ThreadHelper
     {
+
         public static int ThreadCount
         {
             get;
             set;
         } = 4;
+        /// <summary>
+        /// 线程等待时间
+        /// </summary>
+        public static int Wait
+        {
+            get;
+            set;
+        } = 0;
         public class ThreadBaseControl<T>
         {
             #region 变量&属性
@@ -223,9 +232,7 @@ namespace DataChecker_FilesMerger.Helper
                     Thread t = new Thread(new ThreadStart(InnerDoWork));
                     m_ThreadList.Add(t);
                     t.IsBackground = true;
-                    t.Start();
-                    //等待1ms让所有线程错开工作                    
-                    Thread.Sleep(1);
+                    t.Start(); 
                 }
             }
 
@@ -247,6 +254,9 @@ namespace DataChecker_FilesMerger.Helper
                     //初始化状态
                     Exception doWorkEx = null;
                     DoWorkResult doworkResult = DoWorkResult.ContinueThread;
+                    //等待1ms让所有线程错开工作
+                    if (Wait != 0)
+                        Thread.Sleep(Wait);
                     //获取队列中的第一项
                     var t = CurrentPendingQueue;
                     //循环取工作内容

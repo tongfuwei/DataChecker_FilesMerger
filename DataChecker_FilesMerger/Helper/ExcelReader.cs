@@ -12,6 +12,12 @@ namespace DataChecker_FilesMerger
 
         private Worksheet _workSheet;
 
+        public bool HasValue
+        {
+            get;
+            set;
+        } = false;
+
         /// <summary>
         /// <列名,索引号>
         /// </summary>
@@ -56,6 +62,7 @@ namespace DataChecker_FilesMerger
                     SheetsName.Add(sheet.Name);
                 }
                 _workSheet = _workBook.Worksheets[sheetIndex];
+                HasValue = true;
                 Loaded = true;
             }
             catch (Exception ex)
