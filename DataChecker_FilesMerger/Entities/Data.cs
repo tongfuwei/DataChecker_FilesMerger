@@ -100,7 +100,10 @@ namespace DataChecker_FilesMerger.Entities
                 {
                     if (OcrHelper.OCR(fi.FullName, configPath, out Mat mat))
                     {
-                        mat.ImWrite(SavePath + "\\" + "JN-" + jn + ".jpg");
+                        if (!File.Exists(SavePath + "\\" + "JN-" + attach + ".jpg"))
+                        {
+                            mat.ImWrite(SavePath + "\\" + "JN-" + jn + ".jpg");
+                        }
                         mat.Dispose();
                         jn++;
                     }
@@ -108,30 +111,42 @@ namespace DataChecker_FilesMerger.Entities
                     {
                         if (attach == 1)
                         {
-                            mat.ImWrite(SavePath + "\\" + "FM-" + attach + ".jpg");
+                            if(!File.Exists(SavePath + "\\" + "FM-" + attach + ".jpg"))
+                            {
+                                mat.ImWrite(SavePath + "\\" + "FM-" + attach + ".jpg");
+                            }
                             mat.Dispose();
                             attach++;
                         }
                         else if (attach == 2)
                         {
-                            mat.ImWrite(SavePath + "\\" + "FM-" + attach + ".jpg");
+                            if (!File.Exists(SavePath + "\\" + "FM-" + attach + ".jpg"))
+                            {
+                                mat.ImWrite(SavePath + "\\" + "FM-" + attach + ".jpg");
+                            }
                             mat.Dispose();
                             attach++;
                         }
                         else if (attach == 3)
                         {
-                            mat.ImWrite(SavePath + "\\" + "FD.jpg");
+                            if (!File.Exists(SavePath + "\\" + "FD" + attach + ".jpg"))
+                            {
+                                mat.ImWrite(SavePath + "\\" + "FD" + attach + ".jpg");
+                            }
                             mat.Dispose();
                         }
                     }
                 }
                 else
                 {
-                    Stream stream = OcrHelper.ConvertPDF2Image(fi.FullName);
-                    Mat mat = Mat.FromStream(stream, ImreadModes.AnyColor);
-                    mat.ImWrite(SavePath + "\\" + main.ToString().PadLeft(3, '0') + ".jpg");
-                    mat.Dispose();
-                    stream.Dispose();
+                    if (!File.Exists(SavePath + "\\" + main.ToString().PadLeft(3, '0') + ".jpg"))
+                    {
+                        Stream stream = OcrHelper.ConvertPDF2Image(fi.FullName);
+                        Mat mat = Mat.FromStream(stream, ImreadModes.AnyColor);
+                        mat.ImWrite(SavePath + "\\" + main.ToString().PadLeft(3, '0') + ".jpg");
+                        mat.Dispose();
+                        stream.Dispose();
+                    }
                     main++;
                 }
             }
