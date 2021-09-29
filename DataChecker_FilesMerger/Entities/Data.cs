@@ -64,9 +64,9 @@ namespace DataChecker_FilesMerger.Entities
                 else
                 {
                     if (!string.IsNullOrEmpty(saveParent))
-                        _SavePath = saveParent+"\\" + Value["身份证号"].Trim();
+                        _SavePath = saveParent + "\\" + Value["身份证号"].Trim();
                     else
-                        _SavePath = ParentPath+"\\" + Value["身份证号"].Trim();
+                        _SavePath = ParentPath + "\\" + Value["身份证号"].Trim();
                     if (!Directory.Exists(_SavePath))
                         Directory.CreateDirectory(_SavePath);
                     return _SavePath;
@@ -90,6 +90,9 @@ namespace DataChecker_FilesMerger.Entities
             int jn = 1;
             int attach = 1;
             int main = 1;
+            DirectoryInfo s = new DirectoryInfo(SavePath);
+            if (s.GetFiles($"*.{"jpg"}").Length == fis.Length)
+                return;
             for (int i = 0; i < fis.Length; i++)
             {
                 FileInfo fi = fis[i];
@@ -97,7 +100,7 @@ namespace DataChecker_FilesMerger.Entities
                 {
                     if (OcrHelper.OCR(fi.FullName, configPath, out Mat mat))
                     {
-                        mat.ImWrite(SavePath + "\\" +"JN-" + jn + ".jpg");
+                        mat.ImWrite(SavePath + "\\" + "JN-" + jn + ".jpg");
                         mat.Dispose();
                         jn++;
                     }
@@ -111,7 +114,7 @@ namespace DataChecker_FilesMerger.Entities
                         }
                         else if (attach == 2)
                         {
-                            mat.ImWrite(SavePath + "\\"+"FM-" + attach + ".jpg");
+                            mat.ImWrite(SavePath + "\\" + "FM-" + attach + ".jpg");
                             mat.Dispose();
                             attach++;
                         }
