@@ -1,7 +1,10 @@
 ﻿using DataChecker_FilesMerger.Helper;
 using OpenCvSharp;
+using PdfiumViewer;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -87,65 +90,47 @@ namespace DataChecker_FilesMerger.Entities
             }
             DirectoryInfo di = new DirectoryInfo(FilePath);
             FileInfo[] fis = di.GetFiles($"*.{"pdf"}");//文件类型
+                                                       //DirectoryInfo s = new DirectoryInfo(SavePath);
             int jn = 1;
             int attach = 1;
             int main = 1;
-            DirectoryInfo s = new DirectoryInfo(SavePath);
-            if (s.GetFiles($"*.{"jpg"}").Length == fis.Length)
-                return;
             for (int i = 0; i < fis.Length; i++)
             {
                 FileInfo fi = fis[i];
-                if (IsMatch(fi.Name, @"[a-zA-z0-9-]{0,}-0\([0-9]{1}(.pdf){1}"))
+                if (Commons.IsMatch(fi.Name, @"[a-zA-z0-9-]{0,}-0\([0-9]{1}(.pdf){1}"))
                 {
-                    if (OcrHelper.OCR(fi.FullName, configPath, out Mat mat))
+                    if (OcrHelper.OCR(fi.FullName, SavePath + "\\temp.jpg", configPath, attach))
                     {
-                        if (!File.Exists(SavePath + "\\" + "JN-" + attach + ".jpg"))
-                        {
-                            mat.ImWrite(SavePath + "\\" + "JN-" + jn + ".jpg");
-                        }
-                        mat.Dispose();
-                        jn++;
-                    }
-                    else
-                    {
-                        if (attach == 1)
-                        {
-                            if(!File.Exists(SavePath + "\\" + "FM-" + attach + ".jpg"))
-                            {
-                                mat.ImWrite(SavePath + "\\" + "FM-" + attach + ".jpg");
-                            }
-                            mat.Dispose();
-                            attach++;
-                        }
-                        else if (attach == 2)
+                        if (attach == 1 || attach == 2)
                         {
                             if (!File.Exists(SavePath + "\\" + "FM-" + attach + ".jpg"))
                             {
-                                mat.ImWrite(SavePath + "\\" + "FM-" + attach + ".jpg");
+                                File.Move(SavePath + "\\temp.jpg", SavePath + "\\" + "FM-" + attach + ".jpg");
                             }
-                            mat.Dispose();
-                            attach++;
                         }
                         else if (attach == 3)
                         {
-                            if (!File.Exists(SavePath + "\\" + "FD" + attach + ".jpg"))
+                            if (!File.Exists(SavePath + "\\" + "FD.jpg"))
                             {
-                                mat.ImWrite(SavePath + "\\" + "FD" + attach + ".jpg");
+                                File.Move(SavePath + "\\temp.jpg", SavePath + "\\" + "FD.jpg");
                             }
-                            mat.Dispose();
                         }
+                        attach++;
+                    }
+                    else
+                    {
+                        if (!File.Exists(SavePath + "\\" + "JN-" + jn + ".jpg"))
+                        {
+                            File.Move(SavePath + "\\temp.jpg", SavePath + "\\" + "JN-" + jn + ".jpg");
+                        }
+                        jn++;
                     }
                 }
                 else
                 {
                     if (!File.Exists(SavePath + "\\" + main.ToString().PadLeft(3, '0') + ".jpg"))
                     {
-                        Stream stream = OcrHelper.ConvertPDF2Image(fi.FullName);
-                        Mat mat = Mat.FromStream(stream, ImreadModes.AnyColor);
-                        mat.ImWrite(SavePath + "\\" + main.ToString().PadLeft(3, '0') + ".jpg");
-                        mat.Dispose();
-                        stream.Dispose();
+                        OcrHelper.RenderPage(fi.FullName, SavePath + "\\" + main.ToString().PadLeft(3, '0') + ".jpg");
                     }
                     main++;
                 }
@@ -153,12 +138,7 @@ namespace DataChecker_FilesMerger.Entities
             GC.Collect();
         }
 
-        public static bool IsMatch(string inputStr, string patternStr)
-        {
-            if (string.IsNullOrWhiteSpace(inputStr))//.NET 4.0 新增IsNullOrWhiteSpace 方法，便于对用户做处理
-                return false;//如果不要求验证空白字符串而此时传入的待验证字符串为空白字符串，则不匹配  
-            Regex regex = new Regex(patternStr);
-            return regex.IsMatch(inputStr);
-        }
+       
+
     }
 }

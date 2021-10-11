@@ -11,6 +11,10 @@ using System.Threading.Tasks;
 using System.Drawing;
 using OpenCvSharp.Extensions;
 using System.Collections;
+using System.Drawing.Imaging;
+using PdfiumViewer;
+using DataChecker_FilesMerger.Entities;
+using Newtonsoft.Json;
 
 namespace DataChecker_FilesMerger.Helper
 {
@@ -49,24 +53,40 @@ namespace DataChecker_FilesMerger.Helper
 			}
 		}
 
-		public static bool OCR(string filePath, string configPath,out Mat mat)
+		public static void RenderPage(string pdfPath, string outputPath, int dpi = 300)
+		{
+			PdfDocument pdf = PdfDocument.Load(pdfPath);
+			//string P_str_path = pdfPath.Substring(0, pdfPath.LastIndexOf("\\") + 1); // 文件路径
+			var pagesizes = pdf.PageSizes;
+
+			System.Drawing.Size size = new System.Drawing.Size();
+			size.Height = (int)pagesizes[(1 - 1)].Height * 3;
+			size.Width = (int)pagesizes[(1 - 1)].Width * 3;
+			
+			using (var stream = new FileStream(outputPath, FileMode.Create))
+			using (var image = GetPageImage(1, size, pdf, dpi))
+			{
+				image.Save(stream, ImageFormat.Jpeg);
+			}
+		}
+		static Image GetPageImage(int pageNumber, System.Drawing.Size size, PdfiumViewer.PdfDocument document, int dpi)
+		{
+			return document.Render(pageNumber - 1, size.Width, size.Height, dpi, dpi, PdfRenderFlags.Annotations);
+		}
+
+		public static bool OCR(string filePath, string outPath, string configPath, int sort)
 		{
 			#region 读取数据
 			if (!File.Exists(filePath))
 			{
-				mat = null;
 				return false;
 			}
-			//Mat mat;
+			Mat mat;
 			if (filePath.Substring(filePath.Length - 4) == ".pdf")
 			{
-				Stream stream = ConvertPDF2Image(filePath);
-				if (stream == null)
-				{
-					mat = null;
-					return false;
-				}
-				mat = Mat.FromStream(stream, ImreadModes.AnyColor);
+				RenderPage(filePath, outPath);
+				mat = Cv2.ImRead(outPath);
+				//mat = Mat.FromStream(stream, ImreadModes.AnyColor);
 			}
 			else
 				mat = Cv2.ImRead(filePath);
@@ -78,21 +98,39 @@ namespace DataChecker_FilesMerger.Helper
 			//float Y_times = (float)mat.Height / 1650;
 			//Box.InitTimes(X_times, Y_times);
 			StringBuilder stringBuilder = new StringBuilder(configPath);
-			IntPtr reconginzedStringPtr = Rec(source, mat.Height, mat.Width, stringBuilder);
-			byte[] bytes = System.Text.Encoding.Unicode.GetBytes(Marshal.PtrToStringUni(reconginzedStringPtr));//转成UNICODE编码
-			string result = System.Text.Encoding.UTF8.GetString(bytes);//转成UTF8
-			#endregion
-			GC.Collect();
-			if (result.Contains("档案目录"))
+			lock (GhostScriptLock)
 			{
-				return true;
-			}
-			else
-			{
-				return false;
+				IntPtr reconginzedStringPtr = Rec(source, mat.Height, mat.Width, stringBuilder);
+				byte[] bytes = System.Text.Encoding.Unicode.GetBytes(Marshal.PtrToStringUni(reconginzedStringPtr));//转成UNICODE编码
+				string result = System.Text.Encoding.UTF8.GetString(bytes);//转成UTF8
+				mat.Dispose();
+				#endregion
+				if (sort == 1)
+				{
+					if (result.Contains("\"str\":\"企业人事档案袋\""))
+						return true;
+					else
+						return false;
+				}
+				else if (sort == 2)
+				{
+					if (result.Contains("\"str\":\"企业人事档案\""))
+						return true;
+					else
+						return false;
+				}
+				else if (sort == 3)
+				{
+					if (result.Contains("\"str\":\"本卷情况说明\""))
+						return true;
+					else
+						return false;
+				}
+				else
+					return false;
+
 			}
 		}
-
 
 		public static byte[] GetBGRValues(Bitmap bmp, out int stride)
 		{

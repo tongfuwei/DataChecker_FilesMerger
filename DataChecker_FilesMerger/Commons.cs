@@ -3,11 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.RegularExpressions;
 
 namespace DataChecker_FilesMerger
 {
     public static class Commons
     {
+
+        public static bool IsMatch(string inputStr, string patternStr)
+        {
+            if (string.IsNullOrWhiteSpace(inputStr))//.NET 4.0 新增IsNullOrWhiteSpace 方法，便于对用户做处理
+                return false;//如果不要求验证空白字符串而此时传入的待验证字符串为空白字符串，则不匹配  
+            Regex regex = new Regex(patternStr);
+            return regex.IsMatch(inputStr);
+        }
+
         /// <summary>
         /// 判断两个集合是否是相等的(所有的元素及数量都相等)
         /// </summary>
