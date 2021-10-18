@@ -1,7 +1,6 @@
 ﻿using Aspose.Cells;
 using Aspose.Words;
 using Aspose.Words.Fonts;
-using ImageMagick;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Aspose.Pdf.Facades;
 using Aspose.Pdf;
+using ImageMagick;
 
 namespace DataChecker_FilesMerger.Entities
 {
@@ -972,7 +972,7 @@ namespace DataChecker_FilesMerger.Entities
             string forMat = ".xlsx";
             if (saveFormat == Aspose.Cells.SaveFormat.Pdf)
                 forMat = ".pdf";
-            string fileName = savePath + "//" + ArchID + "-" + Name + forMat;
+            string fileName = savePath + "\\"+"核查" + ArchID + "-" + Name + forMat;
             try
             {
                 mode.Save(fileName,saveFormat);
@@ -1036,7 +1036,7 @@ namespace DataChecker_FilesMerger.Entities
             string forMat = ".doc";
             if (saveFormat == Aspose.Words.SaveFormat.Pdf)
                 forMat = ".pdf";
-            string fileName = savePath + "//" + ArchID + "-" + Name + forMat;
+            string fileName = savePath + "\\"+"情况-" + ArchID + "-" + Name + forMat;
             try
             {
                 doc.Save(fileName,saveFormat);
@@ -1070,7 +1070,7 @@ namespace DataChecker_FilesMerger.Entities
             string forMat = ".doc";
             if (saveFormat == Aspose.Words.SaveFormat.Pdf)
                 forMat = ".pdf";
-            string fileName = savePath + "//" + ArchID + "-" + Name +"无档"+ forMat;
+            string fileName = savePath + "\\"+"无档" + ArchID + "-" + Name + forMat;
             try
             {                
                 doc.Save(fileName,saveFormat);
@@ -1238,6 +1238,42 @@ namespace DataChecker_FilesMerger.Entities
             {
                 pdfdoc1.Pages.Add(pdfdoc2.Pages);
                 pdfdoc1.Pages.Add(pdfdoc3.Pages);
+                pdfdoc1.Save(pdfModel);
+            }
+
+            //pdfEditor.Append(pdfModel,strings,1,3, pdfModel);
+        }
+
+        public void BuildPDF(string UnarchiveModel, string CheckTable, string LicenceModel, string savePath, string pdfModel)
+        {
+
+            string LicenPdf = Turn2Licen(LicenceModel, savePath, false, false, false, Aspose.Words.SaveFormat.Pdf);
+            string CheckPdf = Turn2Check(CheckTable, savePath, Aspose.Cells.SaveFormat.Pdf);
+            Aspose.Pdf.Document pdfdoc1 = new Aspose.Pdf.Document(CheckPdf);
+            Aspose.Pdf.Document pdfdoc2 = new Aspose.Pdf.Document(LicenPdf);
+            Aspose.Pdf.Document pdfdoc3 = new Aspose.Pdf.Document();
+            bool unarchive = Value["备注"].ToString() == "无档";
+            if (unarchive)
+            {
+                string UnArchivePdf = UnArchiveLicences(UnarchiveModel, savePath, Aspose.Words.SaveFormat.Pdf);
+                pdfdoc3 = new Aspose.Pdf.Document(UnArchivePdf);
+            }
+
+            if (File.Exists(pdfModel))
+            {
+                Aspose.Pdf.Document result;
+                result = new Aspose.Pdf.Document(pdfModel);
+                result.Pages.Add(pdfdoc1.Pages);
+                result.Pages.Add(pdfdoc2.Pages);
+                if (unarchive)
+                    result.Pages.Add(pdfdoc3.Pages);
+                result.Save(pdfModel);
+            }
+            else
+            {
+                pdfdoc1.Pages.Add(pdfdoc2.Pages);
+                if (unarchive)
+                    pdfdoc1.Pages.Add(pdfdoc3.Pages);
                 pdfdoc1.Save(pdfModel);
             }
 

@@ -788,9 +788,9 @@ namespace DataChecker_FilesMerger
 
         private void AllPDF(PersonalInfo info)
         {
-            info.InsertPDF(@"D:\付正数据\人事档案核查表与情况说明生成工具\模板\无档[1].doc",
-                @"D:\付正数据\人事档案核查表与情况说明生成工具\模板\退休[2].doc",
-                @"D:\付正数据\人事档案核查表与情况说明生成工具\模板\死亡[3].doc", rootDir,rootDir+@"\pdf\"+"结果.pdf");
+            info.BuildPDF(@"D:\付正数据\人事档案核查表与情况说明生成工具\模板\无档证明【带档号】.doc",
+                @"D:\付正数据\人事档案核查表与情况说明生成工具\模板\人事档案核查表【缩小无勾】.xls",
+                @"D:\付正数据\人事档案核查表与情况说明生成工具\模板\综合情况说明【带编号】.doc", rootDir,rootDir+@"\pdf\"+"结果.pdf");
         }
     }
 }
